@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Meal Planner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #1a1a2e;
+      --bg-card: #16213e;
+      --bg-card-hover: #1f2b47;
+      --accent-gold: #e8b923;
+      --accent-coral: #ff6b6b;
+      --accent-teal: #4ecdc4;
+      --accent-purple: #a855f7;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0a0;
+      --text-muted: #6b7280;
+      --border-subtle: rgba(255,255,255,0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Source Sans Pro', sans-serif;
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(ellipse at 20% 20%, rgba(232, 185, 35, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(78, 205, 196, 0.06) 0%, transparent 50%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 300;
+    }
+
+    .main-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Source Sans Pro', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold), #d4a520);
+      color: var(--bg-dark);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(232, 185, 35, 0.3);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--accent-teal), #3db8b0);
+      color: var(--bg-dark);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-icon {
+      padding: 0.5rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .btn-icon:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-primary);
+    }
+
+    .week-plan {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .meal-section {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .meal-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .meal-section.entrees h2 { color: var(--accent-gold); }
+    .meal-section.appetizers h2 { color: var(--accent-teal); }
+    .meal-section.desserts h2 { color: var(--accent-coral); }
+
+    .meal-card {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .meal-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .meal-card.family {
+      border-left: 3px solid var(--accent-purple);
+    }
+
+    .meal-card.in-shortlist {
+      border: 2px solid var(--accent-teal);
+      background: rgba(78, 205, 196, 0.08);
+    }
+
+    .meal-card.in-shortlist::after {
+      content: '✓ In Shortlist';
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: var(--accent-teal);
+      color: var(--bg-dark);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .add-to-shortlist-btn {
+      width: 100%;
+      margin-top: 0.75rem;
+      padding: 0.6rem 1rem;
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(78, 205, 196, 0.05));
+      border: 1px solid rgba(78, 205, 196, 0.4);
+      border-radius: 8px;
+      color: var(--accent-teal);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .add-to-shortlist-btn:hover {
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.25), rgba(78, 205, 196, 0.1));
+      border-color: var(--accent-teal);
+      transform: translateY(-1px);
+    }
+
+    .add-to-shortlist-btn.added {
+      background: var(--accent-teal);
+      color: var(--bg-dark);
+      border-color: var(--accent-teal);
+    }
+
+    .add-to-shortlist-btn.added:hover {
+      background: #3db8b0;
+    }
+
+    .meal-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .meal-title {
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .meal-actions {
+      display: flex;
+      gap: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .meal-meta {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .meal-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .protein-badge {
+      background: rgba(78, 205, 196, 0.15);
+      color: var(--accent-teal);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      text-transform: capitalize;
+    }
+
+    .family-badge {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--accent-purple);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    /* Expandable details dropdown */
+    .meal-details-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .meal-details-toggle:hover {
+      color: var(--text-primary);
+    }
+
+    .meal-details-toggle .arrow {
+      transition: transform 0.3s ease;
+      font-size: 0.7rem;
+    }
+
+    .meal-details-toggle.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    .meal-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+
+    .meal-details.open {
+      max-height: 800px;
+      padding-top: 1rem;
+    }
+
+    .meal-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .meal-description:empty {
+      display: none;
+    }
+
+    .ingredients-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-teal);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .ingredients-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .ingredient-chip {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-subtle);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .directions-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-coral);
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .directions-list {
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .directions-list li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .directions-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      width: 1.4rem;
+      height: 1.4rem;
+      background: rgba(255, 107, 107, 0.15);
+      color: var(--accent-coral);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .no-data {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.85rem;
+    }
+
+
+    /* SHORTLIST: This week's meals */
+    .shortlist-section {
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(78, 205, 196, 0.03));
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 2px solid rgba(78, 205, 196, 0.4);
+      margin-bottom: 2rem;
+    }
+
+    .shortlist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .shortlist-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent-teal);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .shortlist-count {
+      background: var(--accent-teal);
+      color: var(--bg-dark);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .shortlist-meals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .shortlist-meal {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .shortlist-meal-type {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .shortlist-remove {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .shortlist-remove:hover {
+      color: var(--accent-coral);
+    }
+
+    .shortlist-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 1rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* FAVORITES: Long-term saved recipes */
+    .favorites-section {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--border-subtle);
+      margin-top: 2rem;
+    }
+
+    .favorites-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .favorites-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .favorites-desc {
+      flex-basis: 100%;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .favorites-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .favorites-item {
+      background: rgba(255, 107, 107, 0.08);
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .favorites-item-title {
+      font-size: 0.9rem;
+      flex: 1;
+    }
+
+    .favorites-item-type {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .favorites-item .add-from-fav {
+      background: rgba(78, 205, 196, 0.15);
+      border: 1px solid rgba(78, 205, 196, 0.3);
+      color: var(--accent-teal);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .favorites-item .add-from-fav:hover {
+      background: var(--accent-teal);
+      color: var(--bg-dark);
+    }
+
+    /* SEARCH BAR */
+    .search-container {
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: 'Source Sans Pro', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(232, 185, 35, 0.15);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-results {
+      margin-top: 1rem;
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .search-results.show {
+      display: block;
+    }
+
+    .search-result-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-result-item:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .search-result-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .search-result-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-count {
+      text-align: center;
+      padding: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* HISTORY SECTION */
+    .history-section {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(168, 85, 247, 0.03));
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 2px solid rgba(168, 85, 247, 0.4);
+      margin-top: 2rem;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .history-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent-purple);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .history-week {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .history-week-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .history-week-date {
+      font-weight: 600;
+      color: var(--accent-purple);
+    }
+
+    .history-week-meals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .history-meal {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .history-meal-type {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .history-add-btn {
+      background: none;
+      border: none;
+      color: var(--accent-coral);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.2rem;
+      transition: transform 0.2s;
+    }
+
+    .history-add-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-subtle);
+      border-top-color: var(--accent-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-teal);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      h1 { font-size: 2rem; }
+      .week-plan { grid-template-columns: 1fr; }
+      .main-actions { flex-direction: column; align-items: stretch; }
+      .btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🍽️ Weekly Meal Planner</h1>
+      <p class="subtitle">Generate a week of delicious, high-protein meals</p>
+    </header>
+
+    <div class="stats-bar" id="stats">
+      <div class="stat">
+        <div class="stat-value" id="total-recipes">-</div>
+        <div class="stat-label">Total Recipes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="entree-count">-</div>
+        <div class="stat-label">Entrees</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="appetizer-count">-</div>
+        <div class="stat-label">Appetizers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="dessert-count">-</div>
+        <div class="stat-label">Desserts</div>
+      </div>
+    </div>
+
+    <div class="main-actions">
+      <button class="btn btn-primary" onclick="generateWeek()">
+        🎲 Generate New Week
+      </button>
+      <button class="btn btn-success" onclick="acceptWeek()" id="accept-btn" disabled>
+        ✅ Accept This Week → Shortlist
+      </button>
+      <button class="btn btn-secondary" onclick="toggleFavorites()">
+        ❤️ My Favorites (<span id="favorites-count">0</span>)
+      </button>
+      <button class="btn btn-secondary" onclick="toggleHistory()">
+        📜 History (<span id="history-count">0</span>)
+      </button>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="Search all recipes by name, ingredient, or protein..." oninput="handleSearch(event)">
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+
+    <!-- SHORTLIST: This week's accepted/selected meals -->
+    <div class="shortlist-section" id="shortlist-section" style="display: none;">
+      <div class="shortlist-header">
+        <h2>📋 My Shortlist (This Week)</h2>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span class="shortlist-count" id="shortlist-count">0 meals</span>
+          <button class="btn btn-small btn-success" onclick="markWeekDone()">✓ Week Done</button>
+          <button class="btn btn-small btn-secondary" onclick="clearShortlist()">Clear</button>
+        </div>
+      </div>
+      <div class="shortlist-meals" id="shortlist-meals">
+        <div class="shortlist-empty">No meals selected yet. Click "Add to shortlist" or "Accept This Week"!</div>
+      </div>
+    </div>
+
+    <div class="week-plan" id="week-plan">
+      <div class="empty-state">
+        <div class="icon">🍳</div>
+        <h3>Ready to Plan Your Week?</h3>
+        <p>Click "Generate New Week" to get started</p>
+      </div>
+    </div>
+
+    <!-- FAVORITES: Long-term saved recipes to pull from -->
+    <div class="favorites-section" id="favorites-section" style="display: none;">
+      <div class="favorites-header">
+        <h2>❤️ My Favorites</h2>
+        <p class="favorites-desc">Your saved recipes to pull from when nothing generated looks good</p>
+        <button class="btn btn-small btn-secondary" onclick="clearFavorites()">Clear All</button>
+      </div>
+      <div class="favorites-grid" id="favorites-grid">
+        <div class="favorites-empty">No favorites yet. Click ❤️ on meals you love!</div>
+      </div>
+    </div>
+
+    <!-- HISTORY: Past weekly meal plans -->
+    <div class="history-section" id="history-section" style="display: none;">
+      <div class="history-header">
+        <h2>📜 Meal History</h2>
+        <p class="favorites-desc">Past weeks' meals - add any to your favorites!</p>
+        <button class="btn btn-small btn-secondary" onclick="clearHistory()">Clear History</button>
+      </div>
+      <div class="history-weeks" id="history-weeks">
+        <div class="history-empty">No history yet. When you clear your shortlist or start a new week, meals will be saved here.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <span class="toast-icon">✅</span>
+    <span class="toast-message" id="toast-message">Saved to shortlist!</span>
+  </div>
+
+  <script>
+    let allRecipes = [];
+    let entrees = [];
+    let appetizers = [];
+    let desserts = [];
+    let currentWeek = { entrees: [], appetizers: [], desserts: [] };
+    
+    // SHORTLIST: This week's meals I'm actually cooking
+    let shortlist = JSON.parse(localStorage.getItem('weekShortlist') || '[]');
+    
+    // FAVORITES: Long-term saved recipes to pull from
+    let favorites = JSON.parse(localStorage.getItem('mealFavorites') || '[]');
+    
+    // HISTORY: Past weekly meal plans
+    let history = JSON.parse(localStorage.getItem('mealHistory') || '[]');
+
+    // Load recipes on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadRecipes();
+      updateFavoritesCount();
+      updateHistoryCount();
+      renderFavorites();
+      renderShortlist();
+      renderHistory();
+    });
+
+    async function loadRecipes() {
+      try {
+        const response = await fetch('curated_recipes.json');
+        allRecipes = await response.json();
+        
+        // Categorize recipes
+        entrees = allRecipes.filter(r => 
+          r.meal_type === 'entree' || 
+          r.protein_source && !['dessert', 'appetizer', 'breakfast'].includes(r.meal_type)
+        );
+        
+        appetizers = allRecipes.filter(r => 
+          r.meal_type === 'appetizer' || 
+          (r.categories && r.categories.some(c => 
+            c.toLowerCase().includes('appetizer') || 
+            c.toLowerCase().includes('starter') ||
+            c.toLowerCase().includes('side')
+          ))
+        );
+        
+        // For desserts, check categories and family recipes marked as dessert
+        desserts = allRecipes.filter(r => 
+          r.meal_type === 'dessert' ||
+          (r.categories && r.categories.some(c => 
+            c.toLowerCase().includes('dessert') || 
+            c.toLowerCase().includes('cake') ||
+            c.toLowerCase().includes('cookie') ||
+            c.toLowerCase().includes('pie') ||
+            c.toLowerCase().includes('sweet')
+          )) ||
+          (r.category && r.category.toLowerCase().includes('dessert'))
+        );
+
+        // If we don't have enough appetizers/desserts, be more lenient
+        if (appetizers.length < 10) {
+          appetizers = allRecipes.filter(r => 
+            r.meal_type === 'appetizer' || 
+            r.meal_type === 'salad' ||
+            (r.num_ingredients && r.num_ingredients <= 6)
+          );
+        }
+
+        // Update stats
+        document.getElementById('total-recipes').textContent = allRecipes.length;
+        document.getElementById('entree-count').textContent = entrees.length;
+        document.getElementById('appetizer-count').textContent = appetizers.length;
+        document.getElementById('dessert-count').textContent = desserts.length;
+        
+        console.log(`Loaded: ${entrees.length} entrees, ${appetizers.length} appetizers, ${desserts.length} desserts`);
+      } catch (error) {
+        console.error('Failed to load recipes:', error);
+        document.getElementById('week-plan').innerHTML = `
+          <div class="empty-state">
+            <div class="icon">❌</div>
+            <h3>Failed to Load Recipes</h3>
+            <p>Make sure curated_recipes.json is available</p>
+          </div>
+        `;
+      }
+    }
+
+    function getRandomItems(array, count) {
+      const shuffled = [...array].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, count);
+    }
+
+    function generateWeek() {
+      if (entrees.length === 0) {
+        showToast('❌', 'No recipes loaded yet!');
+        return;
+      }
+
+      // Get 3 entrees with diverse proteins if possible
+      const proteinTypes = ['chicken', 'beef', 'seafood', 'pork', 'lamb', 'turkey'];
+      let selectedEntrees = [];
+      
+      // Try to get variety in proteins
+      for (const protein of proteinTypes) {
+        if (selectedEntrees.length >= 3) break;
+        const proteinEntrees = entrees.filter(e => 
+          e.protein_source === protein && 
+          !selectedEntrees.some(s => s.title === e.title)
+        );
+        if (proteinEntrees.length > 0) {
+          selectedEntrees.push(proteinEntrees[Math.floor(Math.random() * proteinEntrees.length)]);
+        }
+      }
+      
+      // Fill remaining slots randomly
+      while (selectedEntrees.length < 3) {
+        const remaining = entrees.filter(e => !selectedEntrees.some(s => s.title === e.title));
+        if (remaining.length === 0) break;
+        selectedEntrees.push(remaining[Math.floor(Math.random() * remaining.length)]);
+      }
+
+      currentWeek = {
+        entrees: selectedEntrees,
+        appetizers: getRandomItems(appetizers, 2),
+        desserts: getRandomItems(desserts, 2)
+      };
+
+      renderWeek();
+      document.getElementById('accept-btn').disabled = false;
+    }
+
+    function renderWeek() {
+      const html = `
+        <div class="meal-section entrees">
+          <h2>🍖 Main Entrees (3)</h2>
+          ${currentWeek.entrees.map((meal, i) => renderMealCard(meal, 'entree', i)).join('')}
+        </div>
+        <div class="meal-section appetizers">
+          <h2>🥗 Appetizers (2)</h2>
+          ${currentWeek.appetizers.map((meal, i) => renderMealCard(meal, 'appetizer', i)).join('')}
+        </div>
+        <div class="meal-section desserts">
+          <h2>🍰 Desserts (2)</h2>
+          ${currentWeek.desserts.map((meal, i) => renderMealCard(meal, 'dessert', i)).join('')}
+        </div>
+      `;
+      document.getElementById('week-plan').innerHTML = html;
+    }
+
+    function renderMealCard(meal, type, index) {
+      const isFamily = meal.is_family_recipe;
+      const rating = meal.rating ? `${meal.rating.toFixed(1)}⭐` : '';
+      const protein = meal.protein ? `${meal.protein.toFixed(0)}g` : '';
+      const difficulty = meal.difficulty || 'medium';
+      const proteinSource = meal.protein_source;
+      const cardId = `${type}-${index}`;
+      
+      // Check if this meal is already in the shortlist (this week's meals)
+      const isInShortlist = shortlist.some(m => m.title === meal.title);
+      
+      // Get ingredients - handle both array and string formats
+      let ingredients = meal.ingredients || [];
+      if (typeof ingredients === 'string') {
+        ingredients = ingredients.split('\n').filter(i => i.trim());
+      }
+      
+      // Get directions - handle both array and string formats
+      let directions = meal.directions || [];
+      if (typeof directions === 'string') {
+        directions = directions.split('\n').filter(d => d.trim());
+      }
+      
+      // Get description
+      const description = meal.desc || meal.description || '';
+      
+      return `
+        <div class="meal-card ${isFamily ? 'family' : ''} ${isInShortlist ? 'in-shortlist' : ''}">
+          <div class="meal-card-header">
+            <div class="meal-title">${meal.title}</div>
+            <div class="meal-actions">
+              <button class="btn btn-icon" onclick="swapMeal('${type}', ${index})" title="Swap this meal">
+                🔄
+              </button>
+              <button class="btn btn-icon" onclick="addToFavorites('${type}', ${index})" title="Add to favorites (long-term)">
+                ❤️
+              </button>
+            </div>
+          </div>
+          <div class="meal-meta">
+            ${rating ? `<span>${rating}</span>` : ''}
+            ${protein ? `<span>${protein} protein</span>` : ''}
+            <span>${difficulty}</span>
+            ${proteinSource && proteinSource !== 'other' ? `<span class="protein-badge">${proteinSource}</span>` : ''}
+            ${isFamily ? `<span class="family-badge">Family Recipe</span>` : ''}
+          </div>
+          
+          <button class="add-to-shortlist-btn ${isInShortlist ? 'added' : ''}" onclick="toggleShortlist('${type}', ${index})">
+            ${isInShortlist ? '✓ In Shortlist' : '➕ Add to shortlist'}
+          </button>
+          
+          <div class="meal-details-toggle" onclick="toggleDetails('${cardId}')">
+            <span class="arrow">▼</span>
+            <span>View details</span>
+          </div>
+          
+          <div class="meal-details" id="details-${cardId}">
+            ${description ? `<div class="meal-description">"${description}"</div>` : ''}
+            
+            <div class="ingredients-label">📝 Ingredients (${ingredients.length})</div>
+            ${ingredients.length > 0 ? `
+              <div class="ingredients-list">
+                ${ingredients.slice(0, 15).map(ing => `<span class="ingredient-chip">${ing}</span>`).join('')}
+                ${ingredients.length > 15 ? `<span class="ingredient-chip">+${ingredients.length - 15} more</span>` : ''}
+              </div>
+            ` : '<div class="no-data">No ingredients listed</div>'}
+            
+            ${directions.length > 0 ? `
+              <div class="directions-label">👨‍🍳 Directions</div>
+              <ol class="directions-list">
+                ${directions.slice(0, 8).map(step => `<li>${step}</li>`).join('')}
+                ${directions.length > 8 ? `<li style="color: var(--text-muted); font-style: italic;">...and ${directions.length - 8} more steps</li>` : ''}
+              </ol>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+    
+    function toggleDetails(cardId) {
+      const details = document.getElementById(`details-${cardId}`);
+      const toggle = details.previousElementSibling;
+      details.classList.toggle('open');
+      toggle.classList.toggle('open');
+      toggle.querySelector('span:last-child').textContent = details.classList.contains('open') ? 'Hide details' : 'View details';
+    }
+
+    // SHORTLIST FUNCTIONS (This Week's Meals)
+    
+    function toggleShortlist(type, index) {
+      let meal;
+      if (type === 'entree') meal = currentWeek.entrees[index];
+      else if (type === 'appetizer') meal = currentWeek.appetizers[index];
+      else meal = currentWeek.desserts[index];
+
+      const existingIndex = shortlist.findIndex(m => m.title === meal.title);
+      
+      if (existingIndex >= 0) {
+        shortlist.splice(existingIndex, 1);
+        showToast('🗑️', 'Removed from shortlist');
+      } else {
+        shortlist.push({
+          ...meal,
+          mealType: type,
+          addedDate: new Date().toISOString()
+        });
+        showToast('📋', 'Added to this week\'s shortlist!');
+      }
+      
+      saveShortlist();
+      renderShortlist();
+      renderWeek();
+    }
+
+    function removeFromShortlist(index) {
+      shortlist.splice(index, 1);
+      saveShortlist();
+      renderShortlist();
+      renderWeek();
+      showToast('🗑️', 'Removed from shortlist');
+    }
+
+    function clearShortlist() {
+      if (confirm('Clear this week\'s shortlist? (Meals will be saved to history)')) {
+        // Save to history before clearing
+        saveToHistory();
+        shortlist = [];
+        saveShortlist();
+        renderShortlist();
+        renderWeek();
+        showToast('🗑️', 'Shortlist cleared and saved to history');
+      }
+    }
+    
+    function markWeekDone() {
+      if (shortlist.length === 0) {
+        showToast('ℹ️', 'No meals in shortlist to mark as done');
+        return;
+      }
+      saveToHistory();
+      shortlist = [];
+      saveShortlist();
+      renderShortlist();
+      renderWeek();
+      showToast('✅', 'Week marked as done! Meals saved to history.');
+    }
+
+    function saveShortlist() {
+      localStorage.setItem('weekShortlist', JSON.stringify(shortlist));
+    }
+
+    function renderShortlist() {
+      const section = document.getElementById('shortlist-section');
+      const mealsContainer = document.getElementById('shortlist-meals');
+      const countEl = document.getElementById('shortlist-count');
+      
+      if (shortlist.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+      
+      section.style.display = 'block';
+      countEl.textContent = `${shortlist.length} meal${shortlist.length !== 1 ? 's' : ''}`;
+      
+      mealsContainer.innerHTML = shortlist.map((meal, i) => `
+        <div class="shortlist-meal">
+          <div>
+            <div>${meal.title}</div>
+            <div class="shortlist-meal-type">${meal.mealType || 'meal'}</div>
+          </div>
+          <button class="shortlist-remove" onclick="removeFromShortlist(${i})" title="Remove">✕</button>
+        </div>
+      `).join('');
+    }
+    
+    // Accept entire generated week into shortlist
+    function acceptWeek() {
+      const allMeals = [
+        ...currentWeek.entrees.map(m => ({ ...m, mealType: 'entree' })),
+        ...currentWeek.appetizers.map(m => ({ ...m, mealType: 'appetizer' })),
+        ...currentWeek.desserts.map(m => ({ ...m, mealType: 'dessert' }))
+      ];
+
+      let addedCount = 0;
+      allMeals.forEach(meal => {
+        if (!shortlist.some(s => s.title === meal.title)) {
+          shortlist.push({
+            ...meal,
+            addedDate: new Date().toISOString()
+          });
+          addedCount++;
+        }
+      });
+
+      saveShortlist();
+      renderShortlist();
+      renderWeek();
+      showToast('✅', `Week accepted! Added ${addedCount} meals to shortlist.`);
+    }
+
+    function swapMeal(type, index) {
+      let pool, current;
+      
+      if (type === 'entree') {
+        pool = entrees;
+        current = currentWeek.entrees;
+      } else if (type === 'appetizer') {
+        pool = appetizers;
+        current = currentWeek.appetizers;
+      } else {
+        pool = desserts;
+        current = currentWeek.desserts;
+      }
+
+      // Get a new random meal that's not already in the current selection
+      const available = pool.filter(m => !current.some(c => c.title === m.title));
+      if (available.length > 0) {
+        const newMeal = available[Math.floor(Math.random() * available.length)];
+        current[index] = newMeal;
+        renderWeek();
+        showToast('🔄', 'Swapped meal!');
+      } else {
+        showToast('❌', 'No more alternatives available');
+      }
+    }
+
+    // FAVORITES FUNCTIONS (Long-term saved recipes)
+    
+    function addToFavorites(type, index) {
+      let meal;
+      if (type === 'entree') meal = currentWeek.entrees[index];
+      else if (type === 'appetizer') meal = currentWeek.appetizers[index];
+      else meal = currentWeek.desserts[index];
+
+      if (favorites.some(f => f.title === meal.title)) {
+        showToast('ℹ️', 'Already in favorites!');
+        return;
+      }
+
+      favorites.push({
+        ...meal,
+        mealType: type,
+        addedDate: new Date().toISOString()
+      });
+      
+      saveFavorites();
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('❤️', 'Added to favorites!');
+    }
+
+    function addFavoriteToShortlist(index) {
+      const meal = favorites[index];
+      
+      if (shortlist.some(s => s.title === meal.title)) {
+        showToast('ℹ️', 'Already in this week\'s shortlist!');
+        return;
+      }
+
+      shortlist.push({
+        ...meal,
+        addedDate: new Date().toISOString()
+      });
+      
+      saveShortlist();
+      renderShortlist();
+      renderFavorites();
+      renderWeek();
+      showToast('📋', 'Added to this week\'s shortlist!');
+    }
+
+    function removeFromFavorites(index) {
+      favorites.splice(index, 1);
+      saveFavorites();
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('🗑️', 'Removed from favorites');
+    }
+
+    function clearFavorites() {
+      if (confirm('Clear all favorites? This cannot be undone.')) {
+        favorites = [];
+        saveFavorites();
+        updateFavoritesCount();
+        renderFavorites();
+        showToast('🗑️', 'Favorites cleared');
+      }
+    }
+
+    function saveFavorites() {
+      localStorage.setItem('mealFavorites', JSON.stringify(favorites));
+    }
+
+    function updateFavoritesCount() {
+      document.getElementById('favorites-count').textContent = favorites.length;
+    }
+
+    function toggleFavorites() {
+      const section = document.getElementById('favorites-section');
+      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function renderFavorites() {
+      const grid = document.getElementById('favorites-grid');
+      
+      if (favorites.length === 0) {
+        grid.innerHTML = '<div class="favorites-empty">No favorites yet. Click ❤️ on meals you love!</div>';
+        return;
+      }
+
+      grid.innerHTML = favorites.map((meal, i) => {
+        const isInShortlist = shortlist.some(s => s.title === meal.title);
+        return `
+          <div class="favorites-item">
+            <div>
+              <div class="favorites-item-title">${meal.title}</div>
+              <div class="favorites-item-type">${meal.mealType || 'meal'}</div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              ${isInShortlist ? 
+                '<span style="color: var(--accent-teal); font-size: 0.75rem;">✓ In shortlist</span>' :
+                `<button class="add-from-fav" onclick="addFavoriteToShortlist(${i})" title="Add to this week">
+                  + This Week
+                </button>`
+              }
+              <button class="btn btn-icon" onclick="removeFromFavorites(${i})" title="Remove from favorites">
+                ✕
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // SEARCH FUNCTIONS
+    
+    let searchTimeout = null;
+    
+    function handleSearch(event) {
+      const query = event.target.value.trim().toLowerCase();
+      const resultsEl = document.getElementById('search-results');
+      
+      // Clear previous timeout
+      if (searchTimeout) clearTimeout(searchTimeout);
+      
+      if (query.length < 2) {
+        resultsEl.classList.remove('show');
+        return;
+      }
+      
+      // Debounce search
+      searchTimeout = setTimeout(() => {
+        const results = allRecipes.filter(recipe => {
+          const title = (recipe.title || '').toLowerCase();
+          const ingredients = Array.isArray(recipe.ingredients) 
+            ? recipe.ingredients.join(' ').toLowerCase() 
+            : (recipe.ingredients || '').toLowerCase();
+          const proteinSource = (recipe.protein_source || '').toLowerCase();
+          const categories = Array.isArray(recipe.categories)
+            ? recipe.categories.join(' ').toLowerCase()
+            : '';
+          
+          return title.includes(query) || 
+                 ingredients.includes(query) || 
+                 proteinSource.includes(query) ||
+                 categories.includes(query);
+        }).slice(0, 20); // Limit to 20 results
+        
+        renderSearchResults(results, query);
+      }, 200);
+    }
+    
+    function renderSearchResults(results, query) {
+      const resultsEl = document.getElementById('search-results');
+      
+      if (results.length === 0) {
+        resultsEl.innerHTML = `<div class="search-count">No recipes found for "${query}"</div>`;
+        resultsEl.classList.add('show');
+        return;
+      }
+      
+      resultsEl.innerHTML = `
+        <div class="search-count">${results.length} recipe${results.length !== 1 ? 's' : ''} found</div>
+        ${results.map((recipe, i) => {
+          const rating = recipe.rating ? `${recipe.rating.toFixed(1)}⭐` : '';
+          const protein = recipe.protein ? `${recipe.protein.toFixed(0)}g protein` : '';
+          const difficulty = recipe.difficulty || '';
+          const proteinSource = recipe.protein_source || '';
+          const mealType = recipe.meal_type || 'entree';
+          
+          return `
+            <div class="search-result-item">
+              <div>
+                <div class="search-result-title">${recipe.title}</div>
+                <div class="search-result-meta">
+                  ${rating ? `<span>${rating}</span>` : ''}
+                  ${protein ? `<span>${protein}</span>` : ''}
+                  ${difficulty ? `<span>${difficulty}</span>` : ''}
+                  ${proteinSource && proteinSource !== 'other' ? `<span>${proteinSource}</span>` : ''}
+                </div>
+              </div>
+              <div class="search-result-actions">
+                <button class="btn btn-small btn-success" onclick="addSearchResultToShortlist(${i})" title="Add to this week">
+                  📋 Shortlist
+                </button>
+                <button class="btn btn-small btn-secondary" onclick="addSearchResultToFavorites(${i})" title="Add to favorites">
+                  ❤️
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      `;
+      resultsEl.classList.add('show');
+      
+      // Store results for button handlers
+      window.currentSearchResults = results;
+    }
+    
+    function addSearchResultToShortlist(index) {
+      const recipe = window.currentSearchResults[index];
+      if (!recipe) return;
+      
+      if (shortlist.some(s => s.title === recipe.title)) {
+        showToast('ℹ️', 'Already in shortlist!');
+        return;
+      }
+      
+      shortlist.push({
+        ...recipe,
+        mealType: recipe.meal_type || 'entree',
+        addedDate: new Date().toISOString()
+      });
+      
+      saveShortlist();
+      renderShortlist();
+      renderWeek();
+      showToast('📋', 'Added to shortlist!');
+    }
+    
+    function addSearchResultToFavorites(index) {
+      const recipe = window.currentSearchResults[index];
+      if (!recipe) return;
+      
+      if (favorites.some(f => f.title === recipe.title)) {
+        showToast('ℹ️', 'Already in favorites!');
+        return;
+      }
+      
+      favorites.push({
+        ...recipe,
+        mealType: recipe.meal_type || 'entree',
+        addedDate: new Date().toISOString()
+      });
+      
+      saveFavorites();
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('❤️', 'Added to favorites!');
+    }
+    
+    // Close search results when clicking outside
+    document.addEventListener('click', (e) => {
+      const searchContainer = document.querySelector('.search-container');
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        document.getElementById('search-results').classList.remove('show');
+      }
+    });
+
+    // HISTORY FUNCTIONS
+    
+    function saveToHistory() {
+      if (shortlist.length === 0) return;
+      
+      const weekEntry = {
+        date: new Date().toISOString(),
+        weekLabel: getWeekLabel(new Date()),
+        meals: [...shortlist]
+      };
+      
+      // Don't add duplicate entries for same week
+      const existingIndex = history.findIndex(h => h.weekLabel === weekEntry.weekLabel);
+      if (existingIndex >= 0) {
+        // Merge meals into existing week
+        weekEntry.meals.forEach(meal => {
+          if (!history[existingIndex].meals.some(m => m.title === meal.title)) {
+            history[existingIndex].meals.push(meal);
+          }
+        });
+      } else {
+        history.unshift(weekEntry); // Add to beginning
+      }
+      
+      // Keep only last 12 weeks
+      if (history.length > 12) {
+        history = history.slice(0, 12);
+      }
+      
+      saveHistory();
+      updateHistoryCount();
+      renderHistory();
+    }
+    
+    function getWeekLabel(date) {
+      const startOfWeek = new Date(date);
+      startOfWeek.setDate(date.getDate() - date.getDay());
+      const options = { month: 'short', day: 'numeric' };
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      return `${startOfWeek.toLocaleDateString('en-US', options)} - ${endOfWeek.toLocaleDateString('en-US', options)}`;
+    }
+    
+    function saveHistory() {
+      localStorage.setItem('mealHistory', JSON.stringify(history));
+    }
+    
+    function updateHistoryCount() {
+      const totalMeals = history.reduce((sum, week) => sum + week.meals.length, 0);
+      document.getElementById('history-count').textContent = totalMeals;
+    }
+    
+    function toggleHistory() {
+      const section = document.getElementById('history-section');
+      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function renderHistory() {
+      const container = document.getElementById('history-weeks');
+      
+      if (history.length === 0) {
+        container.innerHTML = '<div class="history-empty">No history yet. When you clear your shortlist or start a new week, meals will be saved here.</div>';
+        return;
+      }
+      
+      container.innerHTML = history.map((week, weekIndex) => `
+        <div class="history-week">
+          <div class="history-week-header">
+            <span class="history-week-date">📅 ${week.weekLabel}</span>
+            <span style="color: var(--text-muted); font-size: 0.85rem;">${week.meals.length} meal${week.meals.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="history-week-meals">
+            ${week.meals.map((meal, mealIndex) => `
+              <div class="history-meal">
+                <div>
+                  <div>${meal.title}</div>
+                  <div class="history-meal-type">${meal.mealType || 'meal'}</div>
+                </div>
+                <button class="history-add-btn" onclick="addHistoryMealToFavorites(${weekIndex}, ${mealIndex})" title="Add to favorites">
+                  ❤️
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function addHistoryMealToFavorites(weekIndex, mealIndex) {
+      const meal = history[weekIndex]?.meals[mealIndex];
+      if (!meal) return;
+      
+      if (favorites.some(f => f.title === meal.title)) {
+        showToast('ℹ️', 'Already in favorites!');
+        return;
+      }
+      
+      favorites.push({
+        ...meal,
+        addedDate: new Date().toISOString()
+      });
+      
+      saveFavorites();
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('❤️', 'Added to favorites from history!');
+    }
+    
+    function clearHistory() {
+      if (confirm('Clear all meal history? This cannot be undone.')) {
+        history = [];
+        saveHistory();
+        updateHistoryCount();
+        renderHistory();
+        showToast('🗑️', 'History cleared');
+      }
+    }
+
+    function showToast(icon, message) {
+      const toast = document.getElementById('toast');
+      document.querySelector('.toast-icon').textContent = icon;
+      document.getElementById('toast-message').textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
+
+

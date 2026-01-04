@@ -1,0 +1,1631 @@
+[
+  {
+    "title": "Cuppa Cuppa Cuppa (Artichoke Dip)",
+    "source": "Aunt Leslie",
+    "ingredients": [
+      "1 cup artichoke hearts, cut into bite size pieces",
+      "1 cup parmesan cheese",
+      "1 cup mayonnaise"
+    ],
+    "directions": [
+      "Mix everything together",
+      "Sprinkle a little extra parmesan cheese on top",
+      "Warm in the oven at 325 degrees for about 20 minutes",
+      "Serve with crackers, crusty bread slices, or whatever suits"
+    ],
+    "categories": [
+      "appetizer",
+      "dip",
+      "family recipe"
+    ],
+    "meal_type": "appetizer",
+    "num_ingredients": 3,
+    "num_steps": 4,
+    "difficulty": "easy",
+    "rating": 5.0,
+    "is_family_recipe": true,
+    "protein_source": "other"
+  },
+  {
+    "title": "Aunt Heidi's Fondue",
+    "source": "Aunt Heidi",
+    "ingredients": [
+      "1 bottle dry white wine",
+      "3/4 lbs goat gouda",
+      "3/4 lbs emanthaler",
+      "1 clove garlic",
+      "1 lemon",
+      "2-6 TBSP flour",
+      "Small pour of kirsch (optional)",
+      "Nutmeg to taste",
+      "White pepper to taste",
+      "Crusty bread for dipping"
+    ],
+    "directions": [
+      "Rub garlic on the bottom and side of pot",
+      "Add wine and heat",
+      "Add grated cheeses gradually, stirring constantly",
+      "Make a roux with flour and add to thicken",
+      "Add a few squeezes of lemon",
+      "Season with nutmeg and white pepper",
+      "Add kirsch if using",
+      "Serve with crusty bread"
+    ],
+    "categories": [
+      "appetizer",
+      "fondue",
+      "family recipe"
+    ],
+    "meal_type": "appetizer",
+    "num_ingredients": 10,
+    "num_steps": 8,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true,
+    "protein_source": "other"
+  },
+  {
+    "title": "Mak's Fart Soup (Chipotle Black Bean & Sweet Potato)",
+    "source": "Mak",
+    "ingredients": [
+      "1 tablespoon avocado oil",
+      "1 small red onion, diced",
+      "3 cloves garlic, minced",
+      "1 teaspoon ground cumin",
+      "1-2 tablespoons adobo sauce from canned chipotles",
+      "1 large sweet potato, peeled and finely diced",
+      "2 3/4 cups black beans, drained (about 2 cans)",
+      "3-4 cups vegetable broth",
+      "Juice of 1/2 lime",
+      "Salt to taste",
+      "Optional: cilantro, avocado, tortilla strips"
+    ],
+    "directions": [
+      "Heat oil in large pot over medium-high heat. Add onion and pinch of salt, saut\u00e9 3-5 minutes until translucent",
+      "Add garlic, cumin, and adobo sauce; saut\u00e9 1-2 minutes",
+      "Add sweet potato, beans, and vegetable broth. Bring to boil",
+      "Reduce heat to medium; simmer 12-15 minutes until sweet potatoes are tender",
+      "Transfer ~2 cups to blender and blend until smooth (or use immersion blender)",
+      "Stir in lime juice and season with salt",
+      "Top with cilantro, avocado, etc."
+    ],
+    "categories": [
+      "soup",
+      "vegan",
+      "family recipe"
+    ],
+    "meal_type": "soup",
+    "protein_source": "other",
+    "num_ingredients": 11,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Creamy Cauliflower Soup with Rosemary Oil",
+    "source": "Fran Trafton",
+    "ingredients": [
+      "1 cup olive oil",
+      "4 sprigs fresh rosemary",
+      "2 Tbsps olive oil",
+      "1 medium yellow onion, chopped",
+      "2 garlic cloves, minced",
+      "1 quart low-sodium vegetable stock",
+      "1 medium head cauliflower, broken into florets",
+      "2 tsp salt",
+      "1 tsp black pepper",
+      "Zest of 1 lemon",
+      "3 cups diced rustic country bread"
+    ],
+    "directions": [
+      "Make rosemary oil: combine olive oil and rosemary in skillet, cook on low 5 minutes. Pour into bowl to cool",
+      "In dutch oven, heat 2 tbsp olive oil. Add onions, cook 6-8 minutes until tender",
+      "Add garlic, cook 30 seconds",
+      "Add stock, cauliflower, salt and pepper. Bring to boil, then simmer 10 minutes",
+      "Make croutons with remaining rosemary oil and bread cubes",
+      "Blend soup in batches with 1/4 cup rosemary oil until creamy",
+      "Serve with rosemary oil swirl, croutons, and lemon zest"
+    ],
+    "categories": [
+      "soup",
+      "vegetarian",
+      "family recipe"
+    ],
+    "meal_type": "soup",
+    "protein_source": "other",
+    "num_ingredients": 11,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Jack Bayley's Chili",
+    "source": "Jack Bayley",
+    "ingredients": [
+      "1 pound ground beef",
+      "1 onion, chopped",
+      "1 (15 oz) can tomato sauce",
+      "1 (15 oz) can kidney beans",
+      "1 (14.5 oz) can stewed tomatoes",
+      "1.5 cups water (optional)",
+      "1 teaspoon chili powder",
+      "1 pinch garlic powder",
+      "Salt and pepper to taste"
+    ],
+    "directions": [
+      "Cook ground beef and onion over medium heat until browned, about 5-7 minutes",
+      "Stir in tomato sauce, kidney beans, and stewed tomatoes with juice",
+      "Add water if you prefer thinner consistency",
+      "Season with chili powder, garlic powder, salt, and pepper",
+      "Bring to boil, reduce heat, cover and simmer 15 minutes"
+    ],
+    "categories": [
+      "soup",
+      "beef",
+      "family recipe"
+    ],
+    "meal_type": "soup",
+    "protein_source": "beef",
+    "notes": "Stupid easy chili ready in less than an hour. Can add adobo chilies, frozen corn, black beans, diced tomatoes and green chilis.",
+    "num_ingredients": 9,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Heidi's Chicken Noodle Soup",
+    "source": "Aunt Heidi",
+    "ingredients": [
+      "1/2 Tablespoon butter",
+      "4-5 celery stalks, diced",
+      "3-4 large carrots, diced",
+      "1 clove garlic, minced",
+      "10 cups chicken stock (low sodium)",
+      "1 teaspoon salt",
+      "1/2 teaspoon black pepper",
+      "1/8 teaspoon dried rosemary",
+      "1/8 teaspoon dried sage",
+      "1/8 teaspoon crushed red pepper flakes",
+      "3 cups dry egg noodles",
+      "3 cups rotisserie chicken",
+      "1 teaspoon Better than Bouillon"
+    ],
+    "directions": [
+      "Add butter, celery and carrots to stock pot over medium-high heat. Saut\u00e9 3 minutes",
+      "Add garlic and cook 30 seconds",
+      "Add chicken stock and season with rosemary, sage, red pepper, salt and pepper",
+      "Bring to boil",
+      "Add chicken from rotisserie chicken. Taste and adjust seasonings",
+      "Cook egg noodles separately according to package (leave al dente)",
+      "Add noodles to soup when serving to prevent sogginess"
+    ],
+    "categories": [
+      "soup",
+      "chicken",
+      "family recipe"
+    ],
+    "meal_type": "soup",
+    "protein_source": "chicken",
+    "num_ingredients": 13,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Chicken Quinoa Wild Rice Salad",
+    "source": "Carmen Evrard",
+    "ingredients": [
+      "1 package Seeds of Change Quinoa Brown and Red Rice",
+      "1 package Uncle Ben's Wild Rice",
+      "2 cups diced chicken",
+      "1/2 English cucumber, diced",
+      "1/4 cup chopped red onion",
+      "1/4 cup chopped Kalamata olives",
+      "1/4 cup shredded Parmesan",
+      "3 oz feta cheese crumbles",
+      "8 oz balsamic vinaigrette"
+    ],
+    "directions": [
+      "Microwave quinoa and rice, let cool",
+      "Add diced chicken, cucumber, onion, olives, feta and parmesan. Mix",
+      "Add balsamic vinaigrette and toss",
+      "Serve hot or cold"
+    ],
+    "categories": [
+      "salad",
+      "chicken",
+      "family recipe"
+    ],
+    "meal_type": "salad",
+    "protein_source": "chicken",
+    "num_ingredients": 9,
+    "num_steps": 4,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Chicken Pecan Salad",
+    "source": "Aunt Kristen",
+    "ingredients": [
+      "1 tsp Worcestershire sauce",
+      "1 TBSP lemon juice",
+      "1 lb coarsely chopped pecans",
+      "1/2 cup butter, melted",
+      "2/3 cup brown sugar",
+      "2 TBSP hot sauce",
+      "6 chicken breasts, halved",
+      "Olive oil",
+      "Greek seasoning",
+      "1 lb romaine lettuce, chopped",
+      "3/4 cup strawberries, chopped",
+      "3/4 cup grapes, chopped",
+      "1/4 cup raspberries",
+      "1/4 cup blueberries",
+      "Honey mustard dressing"
+    ],
+    "directions": [
+      "Mix pecans with pepper sauce, butter, sugar, Worcestershire, lemon, salt. Spread on baking sheet",
+      "Bake pecans at 350F for 10 minutes, stirring often (watch closely - easy to burn!)",
+      "Rub chicken with olive oil and Greek seasoning",
+      "Bake chicken at 350F for 20+ minutes until done",
+      "Cut chicken into strips",
+      "Mix with romaine, chopped fruit, and pecans",
+      "Drizzle with honey mustard dressing"
+    ],
+    "categories": [
+      "salad",
+      "chicken",
+      "family recipe"
+    ],
+    "meal_type": "salad",
+    "protein_source": "chicken",
+    "num_ingredients": 15,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Napa Cabbage Salad",
+    "source": "Brooke James",
+    "ingredients": [
+      "1 large Napa cabbage",
+      "1/2 cup chopped scallions",
+      "2 packages ramen noodles (without seasoning)",
+      "1/2 cup sliced almonds",
+      "1/2 cup sunflower seeds",
+      "1 cup safflower oil",
+      "1/2 cup apple cider vinegar",
+      "3/4 cup sugar",
+      "2 Tablespoons soy sauce"
+    ],
+    "directions": [
+      "Chop scallions and shred cabbage. Set aside",
+      "Crush ramen noodles. Brown in 1-2 tbsp vegetable oil with almonds and sunflower seeds",
+      "Mix all dressing ingredients in a jar, making sure sugar is dissolved",
+      "Combine cabbage, scallions, ramen mix and add dressing before serving"
+    ],
+    "categories": [
+      "salad",
+      "vegetarian",
+      "family recipe"
+    ],
+    "meal_type": "salad",
+    "protein_source": "other",
+    "num_ingredients": 9,
+    "num_steps": 4,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Vegan Dan Dan Noodles",
+    "source": "Benny & Mak",
+    "ingredients": [
+      "1/2 cup soy sauce or tamari",
+      "2 tablespoon chili oil",
+      "2 tablespoon black vinegar",
+      "1/2 cup ketchup",
+      "1/4 cup shaoxing cooking wine",
+      "2 teaspoon sugar",
+      "1 tablespoon cornstarch",
+      "6.5 oz vegan chow mein noodles",
+      "4 stalks bok choy",
+      "2 tablespoon vegetable oil",
+      "1/4 cup shallot, diced",
+      "1/2 teaspoon ground szechuan peppercorn",
+      "2 garlic cloves, minced",
+      "1.5 cups veggie ground round",
+      "1 green onion, sliced",
+      "1/4 cup fried soy beans or peanuts"
+    ],
+    "directions": [
+      "Make sauce: combine soy sauce, chili oil, black vinegar, ketchup, wine, sugar, and cornstarch",
+      "Boil noodles according to package, drain but don't rinse",
+      "In large pan, cook shallot in oil 3-4 minutes. Add peppercorn, garlic, and veggie ground",
+      "Break up veggie ground and cook 8-10 minutes until browned",
+      "Add sauce, simmer 2 minutes. Add bok choy, cover and cook 4-5 minutes",
+      "Toss with noodles, garnish with green onion and peanuts"
+    ],
+    "categories": [
+      "entree",
+      "vegan",
+      "noodles",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "num_ingredients": 16,
+    "num_steps": 6,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Julie's Party Mash Potatoes",
+    "source": "Aunt Julie",
+    "ingredients": [
+      "10 medium potatoes (red works best)",
+      "8 oz cream cheese, softened",
+      "1 cup sour cream",
+      "2 tsp onion salt",
+      "1/4 tsp pepper",
+      "2 TBSP butter, room temp",
+      "Paprika for top"
+    ],
+    "directions": [
+      "Boil and mash the potatoes",
+      "Cream in cream cheese, sour cream, and butter",
+      "Add onion salt and pepper",
+      "Spread in 9x13 casserole dish, top with paprika",
+      "Heat in oven before serving"
+    ],
+    "categories": [
+      "side dish",
+      "vegetarian",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "notes": "Thanksgiving at the farm wouldn't be the same!",
+    "num_ingredients": 7,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Jack's Cauliflower Cheese",
+    "source": "Jack Bayley",
+    "ingredients": [
+      "1 head cauliflower",
+      "Large knob of butter",
+      "Couple heaped tablespoons flour",
+      "Milk",
+      "Block of strong cheddar",
+      "1 teaspoon Dijon mustard (optional)"
+    ],
+    "directions": [
+      "Chop cauliflower into florets and boil until al dente. Set aside",
+      "Grate all cheese and set aside",
+      "Melt butter in large non-stick pan on low/medium heat",
+      "Add flour and stir to make a creamy roux. Add mustard if using",
+      "Add milk 1/4 cup at a time, stirring constantly to prevent lumps",
+      "Add 2/3 to 3/4 of cheese and stir until melted",
+      "Put cauliflower in oven-proof dish, pour cheese sauce over",
+      "Top with remaining cheese",
+      "Broil or bake to brown the cheese"
+    ],
+    "categories": [
+      "side dish",
+      "vegetarian",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "notes": "Jack Bayley's favorite - can be a side or meal on its own",
+    "num_ingredients": 6,
+    "num_steps": 9,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Nick Bayley's Mushroom Risotto",
+    "source": "Nick Bayley",
+    "ingredients": [
+      "1.5 cups Arborio rice",
+      "4 tablespoons extra virgin olive oil",
+      "1 medium yellow onion, chopped",
+      "3 cloves garlic, chopped",
+      "Herbs to taste (thyme, rosemary, or Italian seasoning)",
+      "Black pepper and salt to taste",
+      "2/3 cup white wine",
+      "5 cups vegetable or chicken broth",
+      "At least 1/2 cup grated parmesan",
+      "1 pound mushrooms",
+      "Optional: frozen peas or red peppers"
+    ],
+    "directions": [
+      "Cook onions and garlic in olive oil until soft and translucent",
+      "Add rice and stir while cooking for 1 minute. Make sure oil coats the rice",
+      "Add white wine and cook until absorbed",
+      "Add stock about a cup at a time, stirring while it absorbs",
+      "Add mushrooms, peas, herbs and anything else you fancy",
+      "Keep adding stock and stir while it absorbs. Rice is done when soft",
+      "Turn off heat and stir in cheese. Add butter if desired",
+      "Let sit 5 mins. Garnish with parsley if you want to impress"
+    ],
+    "categories": [
+      "entree",
+      "vegetarian",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "notes": "Serves 4 normal people or 2 Marc Kannegiesers",
+    "num_ingredients": 11,
+    "num_steps": 8,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Jack Bayley's Red Thai Curry",
+    "source": "Jack Bayley",
+    "ingredients": [
+      "1 small (4 oz) can Thai red curry paste (Maesri brand)",
+      "1 cup (8 oz) coconut cream",
+      "1 (15 oz) can coconut milk",
+      "1 (5 inch) piece lemongrass",
+      "1 clove garlic",
+      "1 (3 inch) knob galangal (or 2-3x ginger)",
+      "2 kaffir lime leaves",
+      "Lime juice",
+      "Fish sauce",
+      "Salt"
+    ],
+    "directions": [
+      "Reduce coconut cream over medium-high heat until it breaks and oil separates (looks like melted marshmallows)",
+      "Add curry paste and whisk. Reduce again until oil slick appears on top",
+      "Add coconut milk and whisk. Add galangal, lemongrass, garlic, and kaffir leaf",
+      "Simmer 20 minutes until thickened",
+      "Add meat/veggies and cook until tender",
+      "Pull off heat and add fish sauce, lime juice, and salt to taste",
+      "Note: Fish sauce should always be added at end - if heated too much it turns bitter"
+    ],
+    "categories": [
+      "entree",
+      "thai",
+      "curry",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "num_ingredients": 10,
+    "num_steps": 7,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Chicken Enchilada Suizas",
+    "source": "Millay Family",
+    "ingredients": [
+      "6 boneless skinless chicken breast halves (1.5 lbs)",
+      "1 tbsp butter or olive oil",
+      "1 cup chopped onion",
+      "1 green bell pepper, chopped",
+      "1 red bell pepper, chopped",
+      "8 oz grated white cheddar",
+      "1 (4 oz) can diced green chiles",
+      "1 cup green chile salsa",
+      "1/2 cup chopped cilantro",
+      "4 tsp ground cumin",
+      "2-3 canned chipotle chiles in adobo (optional)",
+      "Salt and pepper",
+      "12-15 flour tortillas",
+      "10 oz Monterey Jack, grated",
+      "1 cup whipping cream",
+      "1/2 cup chicken broth"
+    ],
+    "directions": [
+      "Poach chicken in boiling water 15-20 minutes. Drain, cool, and shred",
+      "Saut\u00e9 onion and peppers in butter until soft, 5-8 minutes",
+      "Mix with chicken, cheddar, green chiles, salsa, cilantro, cumin. Season to taste",
+      "Grease 9x15 baking pan. Fill tortillas with 1/3 cup mixture, roll up and place seam-down",
+      "Sprinkle Monterey Jack over enchiladas",
+      "Combine cream and broth, pour over enchiladas",
+      "Cover with foil, bake at 350F for 30 minutes",
+      "Remove foil, bake 10 more minutes. Garnish with avocado, tomato, cilantro"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "mexican",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "notes": "This is a Millay Christmas Eve tradition",
+    "num_ingredients": 16,
+    "num_steps": 8,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Butter Chicken",
+    "source": "Jack Bayley",
+    "ingredients": [
+      "1 tablespoon olive oil",
+      "1/4 cup grated yellow onion",
+      "4 garlic cloves, minced",
+      "2 tablespoons grated ginger",
+      "2 tablespoons butter",
+      "3/4 cup chicken stock",
+      "8 oz tomato paste",
+      "2 tsp ground cinnamon",
+      "1.5 tsp kosher salt",
+      "2 tsp cumin",
+      "2 tsp garam masala",
+      "1 tsp turmeric",
+      "2.5 lbs boneless skinless chicken breasts, cubed",
+      "1.5 tbsp fresh lemon juice",
+      "1 cup heavy cream",
+      "Fresh cilantro",
+      "6 cups cooked basmati rice"
+    ],
+    "directions": [
+      "Heat olive oil. Cook onion, garlic, ginger 2-3 minutes until fragrant",
+      "Stir in butter, stock, tomato paste, cinnamon, salt, cumin, garam masala, turmeric",
+      "Bring to simmer, add chicken and coat. Cover and cook 15 minutes",
+      "Stir in lemon juice and heavy cream. Simmer 2 more minutes",
+      "Serve over rice, sprinkle with cilantro"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "indian",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "num_ingredients": 17,
+    "num_steps": 5,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Middle Eastern Black Beans, Chickpeas and Rice",
+    "source": "Aunt Kristen",
+    "ingredients": [
+      "1 TBSP olive oil",
+      "1 clove garlic, minced",
+      "1 cup basmati rice, uncooked",
+      "2 tsp ground cumin",
+      "2 tsp ground coriander",
+      "1 tsp ground turmeric",
+      "3/4 tsp cayenne pepper",
+      "1 quart chicken stock",
+      "1 lb ground turkey",
+      "15 oz chickpeas",
+      "15 oz black beans",
+      "Chopped cilantro",
+      "Chopped parsley",
+      "Salt & pepper"
+    ],
+    "directions": [
+      "Heat oil, cook garlic 1 minute",
+      "Add rice and spices, cook 3 minutes until rice is coated",
+      "Add chicken stock, bring to boil. Reduce heat, cover, simmer 20+ minutes",
+      "Brown turkey in skillet (add onion if desired)",
+      "Drain and rinse beans, fold into rice with turkey",
+      "Add herbs and serve. Add cholula and greek yogurt on top!"
+    ],
+    "categories": [
+      "entree",
+      "turkey",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "turkey",
+    "notes": "Izzy makes this at least 1x/month. Great to make on Sunday for the week!",
+    "num_ingredients": 14,
+    "num_steps": 6,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Chicken Divan (Memother's Recipe)",
+    "source": "Mom/Memother",
+    "ingredients": [
+      "3 chicken breasts or 1 rotisserie chicken",
+      "2-3 heads broccoli, steamed",
+      "1 can cream of celery soup",
+      "1/2 cup mayonnaise",
+      "3/4 cup evaporated milk",
+      "1 cup+ shredded cheese (cheddar and mozzarella)",
+      "3 tablespoons curry",
+      "Crushed potato chips for topping"
+    ],
+    "directions": [
+      "Cook chicken breasts or use rotisserie chicken, cut into pieces",
+      "Steam broccoli and cut into small pieces",
+      "Mix sauce: soup, mayo, evaporated milk, cheese, and curry",
+      "Layer in baking dish: chicken on bottom, broccoli on top",
+      "Pour sauce over everything, mix slightly",
+      "Top with crushed potato chips",
+      "Bake at 350F for 30 minutes until bubbling",
+      "Serve with rice!"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "casserole",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "num_ingredients": 8,
+    "num_steps": 8,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Heidi's Slow Cooker Shredded Chicken",
+    "source": "Aunt Heidi",
+    "ingredients": [
+      "3 pounds boneless skinless chicken breasts",
+      "1.5 cups low-sodium chicken broth",
+      "1 tablespoon olive oil",
+      "1/2 teaspoon garlic powder",
+      "1/2 teaspoon onion powder",
+      "3 strips lemon peel (optional)",
+      "1 bay leaf (optional)",
+      "Kosher salt and pepper"
+    ],
+    "directions": [
+      "Layer chicken in slow cooker. Add broth, oil, garlic powder, onion powder, lemon peel, bay leaf",
+      "Season with 1 tsp salt and pepper. Cook high 3 hours or low 6 hours",
+      "Transfer to bowl, shred with 2 forks",
+      "Drizzle with 1/2 cup cooking broth, season and toss"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "slow cooker",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "notes": "Variations: Buffalo (butter + hot sauce), Lemon Herb (parsley + lemon + dill), Barbecue (BBQ sauce)",
+    "num_ingredients": 8,
+    "num_steps": 4,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Heidi's Chicken Pot Pie",
+    "source": "Aunt Heidi",
+    "ingredients": [
+      "4 tablespoons unsalted butter",
+      "1 medium onion, diced",
+      "1 large carrot (or more), diced",
+      "1/2 cup all-purpose flour",
+      "Salt and pepper",
+      "4 cups low-sodium chicken broth",
+      "3 cups cooked chicken, 1-inch pieces",
+      "1 cup frozen peas (or more)",
+      "1.5 tsp fresh thyme",
+      "1 sheet frozen puff pastry, thawed",
+      "1 large egg yolk"
+    ],
+    "directions": [
+      "Melt butter, cook onion and carrot until soft, about 6 minutes",
+      "Add flour and 1/2 tsp salt. Cook until pale golden, about 5 minutes",
+      "Whisk in broth, bring to boil, stir until thick (8 min). Simmer 10 minutes",
+      "Stir in chicken, peas, thyme. Season. Pour into 2-quart baking dish, refrigerate 20 min",
+      "Roll pastry to 1/8 inch thick, cut 1 inch larger than dish",
+      "Top dish with pastry, cut vents. Brush with egg wash",
+      "Refrigerate 15 min. Bake at 375F until deep golden, about 35 minutes"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "pot pie",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "num_ingredients": 11,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Gigi's Fancy Pants Chicken",
+    "source": "Aunt Gigi",
+    "ingredients": [
+      "5-6 thinly sliced chicken breasts",
+      "Prosciutto to top each breast",
+      "10 oz fresh spinach",
+      "8 oz sliced fresh mushrooms",
+      "2 red peppers",
+      "1 envelope Lipton's Savory Herb soup mix",
+      "1/2 cup water",
+      "1/4 cup olive oil",
+      "8 oz shredded mozzarella"
+    ],
+    "directions": [
+      "Layer chicken and prosciutto in deep baking dish",
+      "Cover with spinach and chopped vegetables",
+      "Mix soup with water and oil, pour over dish",
+      "Cover loosely, bake at 375F for 30 minutes",
+      "Remove, top with mozzarella",
+      "Bake uncovered for 10 more minutes"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "num_ingredients": 9,
+    "num_steps": 6,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Miso-Honey Chicken and Asparagus",
+    "source": "Amy Stansfield",
+    "ingredients": [
+      "1 TBSP white miso",
+      "3 TBSP honey",
+      "3 TBSP soy sauce",
+      "1 tsp rice vinegar",
+      "2 tsp freshly grated ginger",
+      "1 tsp grated garlic",
+      "2 tsp chili-garlic sauce",
+      "1 TBSP + 2 tsp neutral oil",
+      "1.5-2 lbs boneless skinless chicken thighs",
+      "1 bunch asparagus",
+      "Salt and pepper",
+      "2 scallions, thinly sliced",
+      "Cooked rice"
+    ],
+    "directions": [
+      "Make marinade: whisk miso, honey, soy sauce, vinegar, ginger, garlic, chile sauce, 1 TBSP oil, 1 TBSP water",
+      "Refrigerate half for serving. Marinate chicken in remainder",
+      "Heat broiler with rack 6 inches below. Line baking sheet with foil",
+      "Place chicken on one side of sheet, asparagus on other. Drizzle asparagus with remaining oil",
+      "Broil until chicken is cooked with charred spots, about 20 minutes",
+      "Serve with reserved marinade and rice"
+    ],
+    "categories": [
+      "entree",
+      "chicken",
+      "asian",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "chicken",
+    "num_ingredients": 13,
+    "num_steps": 6,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Carmen's Easy Meatballs",
+    "source": "Carmen Evrard",
+    "ingredients": [
+      "1 lb hamburger",
+      "1 egg",
+      "1/4 cup Italian seasoned bread crumbs",
+      "1 slice bread",
+      "1/3 cup milk",
+      "Salt and pepper",
+      "Ketchup for topping (optional)"
+    ],
+    "directions": [
+      "Mix bread crumbs, bread pieces, and milk in bowl. Let sit to absorb",
+      "Add hamburger, beaten egg, and bread mixture to bowl",
+      "Mix by hand until just combined",
+      "Roll into tablespoon-sized balls, place on parchment-lined sheet",
+      "Swirl ketchup on top (optional)",
+      "Bake at 400F for 25 minutes"
+    ],
+    "categories": [
+      "entree",
+      "beef",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "beef",
+    "notes": "Makes ~20. Can also bake in sauce with mozzarella at 400F for 30 minutes.",
+    "num_ingredients": 7,
+    "num_steps": 6,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Izzy's Asian Slow Cooker Pulled Pork & Slaw",
+    "source": "Izzy",
+    "ingredients": [
+      "1 TBSP sesame oil",
+      "1 medium yellow onion, diced",
+      "8 small garlic cloves, minced",
+      "1/2 cup hoisin sauce",
+      "1/4 cup fish sauce",
+      "1 TBSP sriracha",
+      "4-5 lbs boneless pork shoulder",
+      "1/3 cup rice vinegar",
+      "2 tbsp minced ginger",
+      "1 TBSP sesame oil",
+      "2 TBSP peanut oil",
+      "10 oz shredded cabbage",
+      "1-2 cucumbers, julienned",
+      "1 bag shredded carrots",
+      "2 pears, sliced",
+      "Cilantro"
+    ],
+    "directions": [
+      "Saut\u00e9 sesame oil, onions, garlic, ginger over high heat",
+      "Take off heat, stir in hoisin sauce, fish sauce, 1/4 cup water, sriracha",
+      "Spoon some mixture into slow cooker, add pork, spoon rest on top",
+      "Cook on low 5-7 hours until pork shreds easily",
+      "Make slaw: mix rice vinegar, ginger, oils, then add cabbage, carrots, cucumber, pear",
+      "Shred pork with forks. Serve over rice with slaw and warm tortillas"
+    ],
+    "categories": [
+      "entree",
+      "pork",
+      "slow cooker",
+      "asian",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "pork",
+    "num_ingredients": 16,
+    "num_steps": 6,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Bucatini with Sausage and Peas",
+    "source": "Brooke James",
+    "ingredients": [
+      "2 Tablespoons olive oil",
+      "1 pound ground hot Italian sausage",
+      "2 garlic cloves, minced",
+      "1 small shallot, minced",
+      "1 jar tomato sauce",
+      "1/4 cup heavy cream",
+      "1/2 cup frozen peas",
+      "1/2 cup grated parmesan",
+      "2 Tablespoons shredded basil",
+      "Salt",
+      "1 pound bucatini pasta"
+    ],
+    "directions": [
+      "Heat olive oil, cook sausage over medium-high until browned, about 8 minutes",
+      "Add garlic and shallot, cook 2 minutes",
+      "Add tomato sauce, simmer partially covered for 30 minutes",
+      "Stir in cream and peas, simmer 10 more minutes. Season with salt",
+      "Cook pasta according to instructions, drain and return to pot",
+      "Add sauce and parmesan, toss to coat",
+      "Serve with more cheese and basil"
+    ],
+    "categories": [
+      "entree",
+      "pork",
+      "pasta",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "pork",
+    "notes": "Pete's favorite pasta dish!",
+    "num_ingredients": 11,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Pork Stir Fry with Green Beans",
+    "source": "Jack Bayley",
+    "ingredients": [
+      "10 oz green beans",
+      "7 oz pork mince",
+      "1/2 small onion, finely chopped",
+      "2 tsp garlic, finely chopped",
+      "2 tsp ginger, finely chopped",
+      "2.5 tbsp peanut oil",
+      "1 tbsp dark soy sauce",
+      "1 tbsp Chinese cooking wine",
+      "1 tsp sugar",
+      "1.5 tsp+ chili garlic sauce"
+    ],
+    "directions": [
+      "Mix sauce: soy sauce, cooking wine, sugar, chili garlic sauce",
+      "Trim and chop beans into 1-inch pieces",
+      "Heat 1.5 tbsp oil in skillet until smoking. Add beans, cook 2.5 minutes total until charred but tender-crisp. Remove",
+      "Turn heat to medium-high, add 1 tbsp oil. Cook onion, garlic, ginger 1 minute",
+      "Turn heat to high, add pork and cook 2 minutes, breaking up",
+      "Add sauce, cook 30 seconds. Add beans, stir 30 seconds",
+      "Serve over rice"
+    ],
+    "categories": [
+      "entree",
+      "pork",
+      "stir fry",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "pork",
+    "num_ingredients": 10,
+    "num_steps": 7,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Millay Family Chocolate Chip Cookies",
+    "source": "Millay Family",
+    "ingredients": [
+      "2 sticks butter, melted and cooled",
+      "1 1/4 cups brown sugar, packed",
+      "3/4 cup granulated sugar",
+      "2 tsp vanilla",
+      "2 eggs",
+      "2 1/2 cups flour",
+      "1 tsp baking soda",
+      "1 tsp kosher salt",
+      "1 bag chocolate chips"
+    ],
+    "directions": [
+      "Melt butter and let cool",
+      "Whisk in sugars until well combined",
+      "Beat in eggs and vanilla",
+      "Add salt, flour, baking soda, mix until just combined",
+      "Add chocolate chips",
+      "Chill dough overnight (or else you get flat cookies!)",
+      "Bake at 370F for 10-15 minutes"
+    ],
+    "categories": [
+      "dessert",
+      "cookies",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 9,
+    "num_steps": 7,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Joanne Chang's Ginger Molasses Cookies",
+    "source": "Flour Bakery Boston",
+    "ingredients": [
+      "3/4 cup unsalted butter, melted and cooled",
+      "1 cup packed light brown sugar",
+      "1/4 cup molasses",
+      "1 egg",
+      "2 cups all-purpose flour",
+      "1 tsp baking soda",
+      "1 tsp ground ginger",
+      "1/2 tsp ground cinnamon",
+      "1/4 tsp ground cloves",
+      "1/2 tsp kosher salt",
+      "Granulated sugar for rolling"
+    ],
+    "directions": [
+      "Combine butter, brown sugar, molasses, and egg until well mixed",
+      "Mix flour, baking soda, ginger, cinnamon, cloves, and salt",
+      "Stir dry ingredients into butter mixture",
+      "Refrigerate overnight (or 3-4 hours)",
+      "Scoop 1/4-cup balls, roll in granulated sugar",
+      "Place 2 inches apart on baking sheet",
+      "Bake at 350F for 16-18 minutes until crackly on top"
+    ],
+    "categories": [
+      "dessert",
+      "cookies",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 11,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Gingersnap Cookies",
+    "source": "Sharon Gatz / Ruthie Weeks",
+    "ingredients": [
+      "2 cups flour",
+      "1 TBSP ginger",
+      "1 tsp cinnamon",
+      "2 tsp baking soda",
+      "1/2 tsp salt",
+      "3/4 cup butter",
+      "1 cup sugar (plus more for rolling)",
+      "2 eggs",
+      "1/4 cup molasses"
+    ],
+    "directions": [
+      "Cream together butter and sugar",
+      "Add eggs and molasses",
+      "Gently mix in dry ingredients",
+      "Roll into 1 inch balls and roll in sugar",
+      "Bake at 350F for 8-9 minutes"
+    ],
+    "categories": [
+      "dessert",
+      "cookies",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 9,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Hermit Bars",
+    "source": "Mom",
+    "ingredients": [
+      "1 cup raisins",
+      "1/2 cup water",
+      "1/2 cup molasses",
+      "1 cup sugar",
+      "1 cup butter",
+      "1 egg",
+      "3 cups flour",
+      "1 tsp baking soda",
+      "1 tsp cloves",
+      "1 tsp cinnamon",
+      "1 tsp vanilla",
+      "3/4 tsp salt"
+    ],
+    "directions": [
+      "Boil raisins with water, cool, and drain",
+      "Cream butter and sugar, then add egg",
+      "Add dry ingredients",
+      "Fold in raisins last",
+      "Spread in greased 9x13 pan",
+      "Bake at 350F for 30 minutes",
+      "Sprinkle with sugar after baking"
+    ],
+    "categories": [
+      "dessert",
+      "bars",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "notes": "The real champion of every ski race",
+    "num_ingredients": 12,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Jeanne's Brownies",
+    "source": "Aunt Jeanne",
+    "ingredients": [
+      "2 sticks butter, softened",
+      "5 oz unsweetened chocolate",
+      "5 eggs",
+      "1 3/4 cups packed brown sugar",
+      "1 cup flour"
+    ],
+    "directions": [
+      "Cream softened butter, eggs, and brown sugar together",
+      "Microwave chocolate 1:15, let cool",
+      "Add flour and cooled chocolate to the butter mixture",
+      "Optional add-ins: walnuts, chocolate chips, instant coffee, cinnamon, citrus zest, coconut",
+      "Pour into buttered 9x13 pan",
+      "Bake at 350F for 25-30 minutes"
+    ],
+    "categories": [
+      "dessert",
+      "brownies",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 5,
+    "num_steps": 6,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Peanut Blossoms",
+    "source": "Mom",
+    "ingredients": [
+      "1 3/4 cups flour",
+      "1 tsp baking soda",
+      "1/2 tsp salt",
+      "1/2 cup butter (1 stick)",
+      "1/2 cup peanut butter",
+      "1/2 cup white sugar (plus extra for rolling)",
+      "1/2 cup brown sugar",
+      "1 egg",
+      "1 tsp vanilla",
+      "Hershey's chocolate kisses"
+    ],
+    "directions": [
+      "Preheat oven to 375F",
+      "Mix wet ingredients first, then fold in dry ingredients",
+      "Roll mixture into balls and roll in white sugar",
+      "Cook for 10 minutes",
+      "When done, place chocolate kiss on top"
+    ],
+    "categories": [
+      "dessert",
+      "cookies",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 10,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Virginia Trafton's Carrot Cake",
+    "source": "Virginia Trafton",
+    "ingredients": [
+      "1 1/2 cups safflower oil",
+      "2 cups sugar",
+      "4 eggs",
+      "2 cups flour",
+      "2 tsp baking soda",
+      "2 tsp cinnamon",
+      "1 tsp salt",
+      "3 cups grated carrots",
+      "8 oz cream cheese",
+      "1/2 stick butter",
+      "1 box confectioners sugar",
+      "2 tsp vanilla"
+    ],
+    "directions": [
+      "Beat oil and sugar on top speed for 5 minutes",
+      "Add eggs one at a time and beat",
+      "Sift dry ingredients and fold in, mixing minimally",
+      "Fold in grated carrots",
+      "Pour into greased pans (two 9-inch rounds or 9x12 sheet)",
+      "Bake at 350F for 55-60 minutes",
+      "Make frosting: combine cream cheese, butter, confectioners sugar, vanilla until smooth",
+      "Let cake cool 20 minutes, then frost"
+    ],
+    "categories": [
+      "dessert",
+      "cake",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 12,
+    "num_steps": 8,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Heidi's Blueberry Cake",
+    "source": "Aunt Heidi / Mom",
+    "ingredients": [
+      "1 cup sugar",
+      "1/4 cup shortening (butter)",
+      "1 egg",
+      "1 tsp cinnamon",
+      "1 1/2 cups flour",
+      "1 1/2 tsp baking powder",
+      "1/2 cup milk",
+      "1 cup blueberries",
+      "Extra sugar for topping"
+    ],
+    "directions": [
+      "Mix dry ingredients together",
+      "Cream butter and sugar, then add egg",
+      "Add dry ingredients to wet mixture",
+      "Add milk",
+      "Coat blueberries with 1 tbsp flour, gently fold in last",
+      "Sprinkle extra sugar on top",
+      "Bake at 350F in 8x8 pan for 30ish minutes until toothpick comes out clean"
+    ],
+    "categories": [
+      "dessert",
+      "cake",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 9,
+    "num_steps": 7,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Moo Moo Chocolate Cake with Coffee Frosting",
+    "source": "Mom",
+    "ingredients": [
+      "2 cups flour",
+      "2 cups sugar",
+      "3/4 cup cocoa",
+      "1 tsp baking powder",
+      "2 tsp baking soda",
+      "2 eggs",
+      "1 cup milk",
+      "1 cup oil",
+      "1 tsp vanilla",
+      "1 cup hot coffee",
+      "2 1/2 Tablespoons instant coffee",
+      "2 Tablespoons milk or cream",
+      "1 1/2 stick butter",
+      "1 box confectioner's sugar",
+      "1 tsp cocoa powder",
+      "2 tsp vanilla"
+    ],
+    "directions": [
+      "Grease and flour cake pan",
+      "Mix wet ingredients (minus coffee)",
+      "Slowly fold in dry ingredients",
+      "Add cup of hot coffee",
+      "Bake at 350F for an hour",
+      "Let cake cool completely before icing",
+      "Frosting: Mix instant coffee with milk, set aside",
+      "Beat butter, confectioner's sugar, cocoa powder, vanilla until smooth",
+      "Add coffee mixture and frost cake"
+    ],
+    "categories": [
+      "dessert",
+      "cake",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "notes": "4th of July favorite - goes well with strawberry ice cream",
+    "num_ingredients": 16,
+    "num_steps": 9,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Apple Cake",
+    "source": "Mom",
+    "ingredients": [
+      "1 1/2 cups flour",
+      "1 cup sugar",
+      "1/2 cup mayo",
+      "3 Tablespoons milk",
+      "1 egg",
+      "1 tsp baking soda",
+      "3/4 tsp cinnamon",
+      "1/4 tsp nutmeg",
+      "1/8 tsp cloves",
+      "1 1/2 cup chopped apples (peeled and cored)",
+      "1/2 cup raisins"
+    ],
+    "directions": [
+      "Grease an 8x8 inch pan",
+      "Mix sugar, mayo, milk, and egg together",
+      "Add flour, baking soda, cinnamon, nutmeg, and cloves",
+      "Add peeled & chopped apples and raisins",
+      "Bake for 35-40 minutes at 350F"
+    ],
+    "categories": [
+      "dessert",
+      "cake",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 11,
+    "num_steps": 5,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Julie's Fruit Glaz\u00e9 Pie",
+    "source": "Aunt Julie",
+    "ingredients": [
+      "4 cups fresh fruit",
+      "1 cup sugar",
+      "3 level TBSP cornstarch",
+      "1/2 cup water",
+      "1 pie shell (Pillsbury)"
+    ],
+    "directions": [
+      "Bake pie shell according to instructions",
+      "Let pie shell cool, pour in 3 cups of fruit (halve strawberries, peaches sliced)",
+      "In saucepan, mash remaining 1 cup fruit. Add sugar, water, cornstarch",
+      "Cook on medium heat, stirring constantly until thickened",
+      "Spread mixture over fruit in pie shell",
+      "Refrigerate at least 1 hour to set"
+    ],
+    "categories": [
+      "dessert",
+      "pie",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "notes": "A farm classic",
+    "num_ingredients": 5,
+    "num_steps": 6,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Gigi's Blueberry Crumb Pie",
+    "source": "Aunt Gigi",
+    "ingredients": [
+      "4 1/2 cups blueberries",
+      "1/2 cup sugar",
+      "3 TBSP tapioca",
+      "1 tsp cinnamon",
+      "1 TBSP apple cider vinegar",
+      "2/3 cup flour",
+      "2/3 cup oatmeal",
+      "2/3 cup brown sugar",
+      "1/3 cup cold margarine",
+      "1 pie crust"
+    ],
+    "directions": [
+      "Press pie dough into 9 inch pie plate, crimp edges",
+      "Mix blueberries, sugar, tapioca, cinnamon, vinegar. Pour over pie shell",
+      "Blend crumble ingredients (flour, oatmeal, brown sugar, margarine). Spread over filling",
+      "Bake at 350F for ~50 minutes. Cover edges with foil if browning too fast"
+    ],
+    "categories": [
+      "dessert",
+      "pie",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "notes": "A Saturday night dinner favorite",
+    "num_ingredients": 10,
+    "num_steps": 4,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Cliff Dweller's Pie",
+    "source": "Cliff Dweller's Lodge, Grand Canyon",
+    "ingredients": [
+      "1 large avocado",
+      "1 (14 oz) can sweetened condensed milk",
+      "8 oz cream cheese",
+      "1 TBSP lemon juice",
+      "1 TBSP lime juice",
+      "Zest of lemon and lime",
+      "Graham cracker crust"
+    ],
+    "directions": [
+      "Whip cream cheese and add sweetened condensed milk (mix until almost doubled in volume)",
+      "Blend avocado with lemon and lime juice, fold in zests",
+      "Add avocado mixture to cream cheese mixture and blend well",
+      "Pour into graham cracker pie shell",
+      "Chill and serve"
+    ],
+    "categories": [
+      "dessert",
+      "pie",
+      "family recipe"
+    ],
+    "meal_type": "dessert",
+    "protein_source": "other",
+    "num_ingredients": 7,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Sophia's Famous Banana Bread",
+    "source": "Sophia",
+    "ingredients": [
+      "1 2/3 cups all-purpose flour",
+      "1 tsp baking soda",
+      "1/4 tsp ground cinnamon",
+      "1/2 tsp salt",
+      "1 cup plus 2 tablespoons sugar",
+      "2 eggs",
+      "1/2 cup oil",
+      "3 1/2 bananas, very ripe, mashed",
+      "2 tablespoons creme fraiche or sour cream",
+      "1 tsp vanilla extract",
+      "2/3 cup walnuts, toasted and chopped"
+    ],
+    "directions": [
+      "Set oven to 350F. Line loaf pan with parchment",
+      "Sift together flour, baking soda, cinnamon, salt",
+      "Beat sugar and eggs with whisk until light and fluffy, about 10 minutes",
+      "Drizzle in oil. Add mashed bananas, creme fraiche, vanilla",
+      "Fold in dry ingredients and nuts",
+      "Pour into lined loaf pan",
+      "Bake for 45 minutes to 1 hour"
+    ],
+    "categories": [
+      "bread",
+      "breakfast",
+      "family recipe"
+    ],
+    "meal_type": "breakfast",
+    "protein_source": "other",
+    "notes": "This stuff is crack",
+    "num_ingredients": 11,
+    "num_steps": 7,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Jack Bayley's Dutch Oven Crusty Bread",
+    "source": "Jack Bayley",
+    "ingredients": [
+      "2 1/4 teaspoons active dry yeast",
+      "1 teaspoon sugar (or honey)",
+      "1 1/4 cups warm water",
+      "1 1/4 teaspoons kosher salt",
+      "2 1/2 to 3 1/2 cups all-purpose flour"
+    ],
+    "directions": [
+      "Combine yeast, sugar, and warm water. Let proof 5 minutes until foamy",
+      "Add flour, mix until dough comes together. Add salt and mix until incorporated",
+      "Cover and let rise 1 hour until doubled",
+      "Tip dough onto floured board. Shape by folding corners toward center, flip and pull into round loaf",
+      "Place seam-down in floured bowl, cover and let rise 30 minutes",
+      "Preheat oven to 460F with dutch oven inside",
+      "Tip dough onto parchment, seam side up. Transfer to hot dutch oven, cover",
+      "Bake covered 30 minutes. Remove lid, bake 10-15 more minutes until brown",
+      "Cool on rack at least 30 minutes before cutting"
+    ],
+    "categories": [
+      "bread",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "num_ingredients": 5,
+    "num_steps": 9,
+    "difficulty": "involved",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Cornbread",
+    "source": "Mom",
+    "ingredients": [
+      "1/4 cup molasses",
+      "1 cup buttermilk (or 1 cup milk + 1 TBSP vinegar)",
+      "1 egg",
+      "1 cup cornmeal",
+      "1 cup flour",
+      "2 tsp baking powder",
+      "1/2 tsp baking soda",
+      "1/2 tsp salt",
+      "3 TBSP melted butter"
+    ],
+    "directions": [
+      "Beat molasses, buttermilk and egg together",
+      "Add dry ingredients",
+      "Add melted butter",
+      "Spread into buttered 8x8 pan",
+      "Bake for 15-20 minutes at 400F - check at 15 mins"
+    ],
+    "categories": [
+      "bread",
+      "side dish",
+      "family recipe"
+    ],
+    "meal_type": "entree",
+    "protein_source": "other",
+    "notes": "A must-have for soup night!",
+    "num_ingredients": 9,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Mom's Date Bread",
+    "source": "Mom",
+    "ingredients": [
+      "1/2 cup flour",
+      "1/2 cup sugar",
+      "1 tsp baking powder",
+      "1 tsp vanilla",
+      "2 eggs",
+      "1 package pitted whole dates",
+      "1 cup whole pecans"
+    ],
+    "directions": [
+      "Beat egg and vanilla",
+      "Add dry ingredients",
+      "Add dates and pecans",
+      "Bake at 350F for 35 minutes"
+    ],
+    "categories": [
+      "bread",
+      "family recipe"
+    ],
+    "meal_type": "breakfast",
+    "protein_source": "other",
+    "notes": "The best part about Christmas morning",
+    "num_ingredients": 7,
+    "num_steps": 4,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  },
+  {
+    "title": "Aunt Leslie's Pumpkin Bread",
+    "source": "Aunt Leslie",
+    "ingredients": [
+      "2/3 cup shortening (or butter)",
+      "4 eggs",
+      "2 cups plain canned pumpkin",
+      "2/3 cup water",
+      "3 1/3 cups all purpose flour",
+      "2 tsp baking soda",
+      "1/2 tsp baking powder",
+      "1 1/2 tsp salt",
+      "1 tsp ground cloves",
+      "1 tsp ground cinnamon"
+    ],
+    "directions": [
+      "Cream shortening and sugar thoroughly",
+      "Add eggs, pumpkin and water; blend thoroughly",
+      "Blend in dry ingredients gradually",
+      "Pour into two greased tins",
+      "Bake at 350F for 50-60 minutes"
+    ],
+    "categories": [
+      "bread",
+      "family recipe"
+    ],
+    "meal_type": "breakfast",
+    "protein_source": "other",
+    "notes": "Makes 2 large tins",
+    "num_ingredients": 10,
+    "num_steps": 5,
+    "difficulty": "medium",
+    "rating": 5.0,
+    "is_family_recipe": true
+  }
+]

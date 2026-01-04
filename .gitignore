@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.env
+
+# Google API credentials (keep private!)
+credentials.json
+service_account.json
+token.json
+token.pickle
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large data files (optional - comment out if you want to include)
+# full_format_recipes.json
