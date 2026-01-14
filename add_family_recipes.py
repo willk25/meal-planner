@@ -312,7 +312,7 @@ FAMILY_RECIPES = [
             "Heat in oven before serving"
         ],
         "categories": ["side dish", "vegetarian", "family recipe"],
-        "meal_type": "entree",
+        "meal_type": "side",
         "protein_source": "other",
         "notes": "Thanksgiving at the farm wouldn't be the same!"
     },
@@ -339,7 +339,7 @@ FAMILY_RECIPES = [
             "Broil or bake to brown the cheese"
         ],
         "categories": ["side dish", "vegetarian", "family recipe"],
-        "meal_type": "entree",
+        "meal_type": "side",
         "protein_source": "other",
         "notes": "Jack Bayley's favorite - can be a side or meal on its own"
     },
@@ -1175,7 +1175,7 @@ FAMILY_RECIPES = [
             "Cool on rack at least 30 minutes before cutting"
         ],
         "categories": ["bread", "family recipe"],
-        "meal_type": "entree",
+        "meal_type": "side",
         "protein_source": "other"
     },
     {
@@ -1200,7 +1200,7 @@ FAMILY_RECIPES = [
             "Bake for 15-20 minutes at 400F - check at 15 mins"
         ],
         "categories": ["bread", "side dish", "family recipe"],
-        "meal_type": "entree",
+        "meal_type": "side",
         "protein_source": "other",
         "notes": "A must-have for soup night!"
     },

@@ -768,6 +768,337 @@
       font-style: italic;
     }
 
+    /* PANTRY SECTION */
+    .pantry-section {
+      background: linear-gradient(135deg, rgba(232, 185, 35, 0.12), rgba(232, 185, 35, 0.03));
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 2px solid rgba(232, 185, 35, 0.4);
+      margin-bottom: 2rem;
+    }
+
+    .pantry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pantry-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pantry-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .pantry-input-area {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .pantry-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    .pantry-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    .pantry-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .pantry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      min-height: 40px;
+    }
+
+    .pantry-tag {
+      background: rgba(232, 185, 35, 0.15);
+      border: 1px solid rgba(232, 185, 35, 0.3);
+      color: var(--accent-gold);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pantry-tag-remove {
+      background: none;
+      border: none;
+      color: var(--accent-gold);
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .pantry-tag-remove:hover {
+      opacity: 1;
+    }
+
+    .pantry-suggestions {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .pantry-suggestions-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .suggestion-chip {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .suggestion-chip:hover {
+      background: rgba(232, 185, 35, 0.15);
+      border-color: rgba(232, 185, 35, 0.3);
+      color: var(--accent-gold);
+    }
+
+    /* INGREDIENT MATCH BADGE */
+    .ingredient-match {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+    }
+
+    .match-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .match-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .match-fill.low { background: var(--accent-coral); }
+    .match-fill.medium { background: var(--accent-gold); }
+    .match-fill.high { background: var(--accent-teal); }
+
+    .match-score {
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-width: 45px;
+      text-align: right;
+    }
+
+    .match-score.low { color: var(--accent-coral); }
+    .match-score.medium { color: var(--accent-gold); }
+    .match-score.high { color: var(--accent-teal); }
+
+    .missing-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* GROCERY LIST SECTION */
+    .grocery-section {
+      background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(168, 85, 247, 0.08));
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 2px solid rgba(78, 205, 196, 0.4);
+      margin-top: 2rem;
+    }
+
+    .grocery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .grocery-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--accent-teal);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .grocery-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .grocery-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+    }
+
+    .grocery-stat {
+      text-align: center;
+    }
+
+    .grocery-stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent-teal);
+    }
+
+    .grocery-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .grocery-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .grocery-category {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .grocery-category-title {
+      font-weight: 600;
+      color: var(--accent-gold);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .grocery-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .grocery-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .grocery-item:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .grocery-item.checked {
+      opacity: 0.5;
+    }
+
+    .grocery-item.checked .grocery-item-text {
+      text-decoration: line-through;
+    }
+
+    .grocery-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-subtle);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .grocery-checkbox:hover {
+      border-color: var(--accent-teal);
+    }
+
+    .grocery-checkbox.checked {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+    }
+
+    .grocery-item-text {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    .grocery-item-source {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.05);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .grocery-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .grocery-empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
     .empty-state {
       text-align: center;
       padding: 4rem 2rem;
@@ -852,6 +1183,112 @@
       font-size: 1.5rem;
     }
 
+    /* Confirmation Modal */
+    .confirm-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .confirm-modal.show {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .confirm-modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .confirm-modal-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .confirm-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .confirm-modal-message {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .confirm-modal-buttons {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--accent-coral), #e05555);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    }
+
+    /* Delete button for history items */
+    .history-delete-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.2rem;
+      transition: color 0.2s;
+      opacity: 0.6;
+    }
+
+    .history-delete-btn:hover {
+      color: var(--accent-coral);
+      opacity: 1;
+    }
+
+    .history-meal-actions {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
     @media (max-width: 768px) {
       body { padding: 1rem; }
       h1 { font-size: 2rem; }
@@ -894,12 +1331,60 @@
       <button class="btn btn-success" onclick="acceptWeek()" id="accept-btn" disabled>
         ✅ Accept This Week → Shortlist
       </button>
+      <button class="btn btn-secondary" onclick="togglePantry()">
+        🥫 My Pantry (<span id="pantry-count">0</span>)
+      </button>
+      <button class="btn btn-secondary" onclick="toggleGroceryList()">
+        🛒 Grocery List (<span id="grocery-count">0</span>)
+      </button>
       <button class="btn btn-secondary" onclick="toggleFavorites()">
         ❤️ My Favorites (<span id="favorites-count">0</span>)
       </button>
       <button class="btn btn-secondary" onclick="toggleHistory()">
         📜 History (<span id="history-count">0</span>)
       </button>
+    </div>
+
+    <!-- PANTRY: What ingredients you have on hand -->
+    <div class="pantry-section" id="pantry-section">
+      <div class="pantry-header">
+        <h2>🥫 My Pantry</h2>
+        <button class="btn btn-small btn-secondary" onclick="clearPantry()">Clear All</button>
+      </div>
+      <p class="pantry-desc">Add ingredients you have on hand. Meals will show how many ingredients you already have!</p>
+      
+      <div class="pantry-input-area">
+        <input type="text" class="pantry-input" id="pantry-input" placeholder="Type an ingredient (e.g., chicken, olive oil, garlic)..." onkeypress="handlePantryKeypress(event)">
+        <button class="btn btn-small btn-primary" onclick="addPantryItem()">Add</button>
+      </div>
+      
+      <div class="pantry-tags" id="pantry-tags">
+        <span style="color: var(--text-muted); font-style: italic;">No ingredients added yet</span>
+      </div>
+      
+      <div class="pantry-suggestions">
+        <div class="pantry-suggestions-label">Quick add common ingredients:</div>
+        <div class="suggestion-chips">
+          <span class="suggestion-chip" onclick="addPantryItemDirect('chicken')">chicken</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('beef')">beef</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('salmon')">salmon</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('eggs')">eggs</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('rice')">rice</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('pasta')">pasta</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('olive oil')">olive oil</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('butter')">butter</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('garlic')">garlic</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('onion')">onion</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('salt')">salt</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('pepper')">pepper</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('tomatoes')">tomatoes</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('cheese')">cheese</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('milk')">milk</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('flour')">flour</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('sugar')">sugar</span>
+          <span class="suggestion-chip" onclick="addPantryItemDirect('lemon')">lemon</span>
+        </div>
+      </div>
     </div>
 
     <!-- SEARCH BAR -->
@@ -912,7 +1397,7 @@
     </div>
 
     <!-- SHORTLIST: This week's accepted/selected meals -->
-    <div class="shortlist-section" id="shortlist-section" style="display: none;">
+    <div class="shortlist-section" id="shortlist-section">
       <div class="shortlist-header">
         <h2>📋 My Shortlist (This Week)</h2>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -935,7 +1420,7 @@
     </div>
 
     <!-- FAVORITES: Long-term saved recipes to pull from -->
-    <div class="favorites-section" id="favorites-section" style="display: none;">
+    <div class="favorites-section" id="favorites-section">
       <div class="favorites-header">
         <h2>❤️ My Favorites</h2>
         <p class="favorites-desc">Your saved recipes to pull from when nothing generated looks good</p>
@@ -947,7 +1432,7 @@
     </div>
 
     <!-- HISTORY: Past weekly meal plans -->
-    <div class="history-section" id="history-section" style="display: none;">
+    <div class="history-section" id="history-section">
       <div class="history-header">
         <h2>📜 Meal History</h2>
         <p class="favorites-desc">Past weeks' meals - add any to your favorites!</p>
@@ -957,11 +1442,59 @@
         <div class="history-empty">No history yet. When you clear your shortlist or start a new week, meals will be saved here.</div>
       </div>
     </div>
+
+    <!-- GROCERY LIST: Missing ingredients from shortlisted meals -->
+    <div class="grocery-section" id="grocery-section">
+      <div class="grocery-header">
+        <h2>🛒 Grocery List</h2>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-small btn-primary" onclick="copyGroceryList()">📋 Copy List</button>
+          <button class="btn btn-small btn-secondary" onclick="clearGroceryChecks()">Uncheck All</button>
+        </div>
+      </div>
+      <p class="grocery-desc">Missing ingredients from your shortlisted meals (based on what's in your pantry)</p>
+      
+      <div class="grocery-stats" id="grocery-stats">
+        <div class="grocery-stat">
+          <div class="grocery-stat-value" id="grocery-total">0</div>
+          <div class="grocery-stat-label">Items to Buy</div>
+        </div>
+        <div class="grocery-stat">
+          <div class="grocery-stat-value" id="grocery-checked">0</div>
+          <div class="grocery-stat-label">Checked Off</div>
+        </div>
+        <div class="grocery-stat">
+          <div class="grocery-stat-value" id="grocery-meals">0</div>
+          <div class="grocery-stat-label">Meals Covered</div>
+        </div>
+      </div>
+      
+      <div class="grocery-categories" id="grocery-categories">
+        <div class="grocery-empty">Add meals to your shortlist to generate a grocery list!</div>
+      </div>
+      
+      <div class="grocery-actions">
+        <button class="btn btn-small btn-secondary" onclick="regenerateGroceryList()">🔄 Regenerate List</button>
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast">
     <span class="toast-icon">✅</span>
     <span class="toast-message" id="toast-message">Saved to shortlist!</span>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="confirm-modal" id="confirm-modal">
+    <div class="confirm-modal-content">
+      <div class="confirm-modal-icon" id="confirm-modal-icon">🗑️</div>
+      <h3 class="confirm-modal-title" id="confirm-modal-title">Delete Item?</h3>
+      <p class="confirm-modal-message" id="confirm-modal-message">Are you sure you want to delete this item? This action cannot be undone.</p>
+      <div class="confirm-modal-buttons">
+        <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-modal-confirm" onclick="confirmModalAction()">Delete</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -979,15 +1512,25 @@
     
     // HISTORY: Past weekly meal plans
     let history = JSON.parse(localStorage.getItem('mealHistory') || '[]');
+    
+    // PANTRY: Ingredients on hand
+    let pantry = JSON.parse(localStorage.getItem('myPantry') || '[]');
+    
+    // GROCERY LIST: Items checked off
+    let groceryChecked = JSON.parse(localStorage.getItem('groceryChecked') || '[]');
 
     // Load recipes on page load
     document.addEventListener('DOMContentLoaded', async () => {
       await loadRecipes();
       updateFavoritesCount();
       updateHistoryCount();
+      updatePantryCount();
+      updateGroceryCount();
       renderFavorites();
       renderShortlist();
       renderHistory();
+      renderPantry();
+      generateGroceryList();
     });
 
     async function loadRecipes() {
@@ -1139,6 +1682,10 @@
       // Get description
       const description = meal.desc || meal.description || '';
       
+      // Calculate ingredient match
+      const matchInfo = calculateIngredientMatch(ingredients);
+      const matchClass = matchInfo.percentage >= 70 ? 'high' : matchInfo.percentage >= 40 ? 'medium' : 'low';
+      
       return `
         <div class="meal-card ${isFamily ? 'family' : ''} ${isInShortlist ? 'in-shortlist' : ''}">
           <div class="meal-card-header">
@@ -1160,6 +1707,16 @@
             ${isFamily ? `<span class="family-badge">Family Recipe</span>` : ''}
           </div>
           
+          ${pantry.length > 0 && ingredients.length > 0 ? `
+            <div class="ingredient-match">
+              <div class="match-bar">
+                <div class="match-fill ${matchClass}" style="width: ${matchInfo.percentage}%"></div>
+              </div>
+              <div class="match-score ${matchClass}">${matchInfo.score}/10</div>
+            </div>
+            <div class="missing-count">${matchInfo.have}/${ingredients.length} ingredients on hand • ${matchInfo.missing} to buy</div>
+          ` : ''}
+          
           <button class="add-to-shortlist-btn ${isInShortlist ? 'added' : ''}" onclick="toggleShortlist('${type}', ${index})">
             ${isInShortlist ? '✓ In Shortlist' : '➕ Add to shortlist'}
           </button>
@@ -1175,7 +1732,10 @@
             <div class="ingredients-label">📝 Ingredients (${ingredients.length})</div>
             ${ingredients.length > 0 ? `
               <div class="ingredients-list">
-                ${ingredients.slice(0, 15).map(ing => `<span class="ingredient-chip">${ing}</span>`).join('')}
+                ${ingredients.slice(0, 15).map(ing => {
+                  const inPantry = isIngredientInPantry(ing);
+                  return `<span class="ingredient-chip" style="${inPantry ? 'background: rgba(78, 205, 196, 0.2); border-color: var(--accent-teal); color: var(--accent-teal);' : ''}">${inPantry ? '✓ ' : ''}${ing}</span>`;
+                }).join('')}
                 ${ingredients.length > 15 ? `<span class="ingredient-chip">+${ingredients.length - 15} more</span>` : ''}
               </div>
             ` : '<div class="no-data">No ingredients listed</div>'}
@@ -1225,6 +1785,7 @@
       saveShortlist();
       renderShortlist();
       renderWeek();
+      updateGroceryCount();
     }
 
     function removeFromShortlist(index) {
@@ -1232,6 +1793,7 @@
       saveShortlist();
       renderShortlist();
       renderWeek();
+      updateGroceryCount();
       showToast('🗑️', 'Removed from shortlist');
     }
 
@@ -1243,6 +1805,9 @@
         saveShortlist();
         renderShortlist();
         renderWeek();
+        updateGroceryCount();
+        groceryChecked = []; // Clear checked items for new week
+        localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
         showToast('🗑️', 'Shortlist cleared and saved to history');
       }
     }
@@ -1257,6 +1822,9 @@
       saveShortlist();
       renderShortlist();
       renderWeek();
+      updateGroceryCount();
+      groceryChecked = []; // Clear checked items for new week
+      localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
       showToast('✅', 'Week marked as done! Meals saved to history.');
     }
 
@@ -1269,13 +1837,12 @@
       const mealsContainer = document.getElementById('shortlist-meals');
       const countEl = document.getElementById('shortlist-count');
       
+      countEl.textContent = `${shortlist.length} meal${shortlist.length !== 1 ? 's' : ''}`;
+      
       if (shortlist.length === 0) {
-        section.style.display = 'none';
+        mealsContainer.innerHTML = '<div class="shortlist-empty">No meals selected yet. Click "Add to shortlist" or "Accept This Week"!</div>';
         return;
       }
-      
-      section.style.display = 'block';
-      countEl.textContent = `${shortlist.length} meal${shortlist.length !== 1 ? 's' : ''}`;
       
       mealsContainer.innerHTML = shortlist.map((meal, i) => `
         <div class="shortlist-meal">
@@ -1310,6 +1877,7 @@
       saveShortlist();
       renderShortlist();
       renderWeek();
+      updateGroceryCount();
       showToast('✅', `Week accepted! Added ${addedCount} meals to shortlist.`);
     }
 
@@ -1385,11 +1953,21 @@
     }
 
     function removeFromFavorites(index) {
-      favorites.splice(index, 1);
-      saveFavorites();
-      updateFavoritesCount();
-      renderFavorites();
-      showToast('🗑️', 'Removed from favorites');
+      const meal = favorites[index];
+      if (!meal) return;
+
+      showConfirmModal(
+        'Remove from Favorites?',
+        `Are you sure you want to remove "${meal.title}" from your favorites?`,
+        '❤️',
+        () => {
+          favorites.splice(index, 1);
+          saveFavorites();
+          updateFavoritesCount();
+          renderFavorites();
+          showToast('🗑️', 'Removed from favorites');
+        }
+      );
     }
 
     function clearFavorites() {
@@ -1412,7 +1990,8 @@
 
     function toggleFavorites() {
       const section = document.getElementById('favorites-section');
-      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+      section.style.display = 'block';
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function renderFavorites() {
@@ -1445,6 +2024,384 @@
           </div>
         `;
       }).join('');
+    }
+
+    // PANTRY FUNCTIONS
+    
+    function togglePantry() {
+      const section = document.getElementById('pantry-section');
+      section.style.display = 'block';
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    function handlePantryKeypress(event) {
+      if (event.key === 'Enter') {
+        addPantryItem();
+      }
+    }
+    
+    function addPantryItem() {
+      const input = document.getElementById('pantry-input');
+      const item = input.value.trim().toLowerCase();
+      
+      if (!item) return;
+      if (pantry.includes(item)) {
+        showToast('ℹ️', 'Already in pantry!');
+        input.value = '';
+        return;
+      }
+      
+      pantry.push(item);
+      savePantry();
+      renderPantry();
+      updatePantryCount();
+      input.value = '';
+      
+      // Re-render meals to update match scores
+      if (currentWeek.entrees.length > 0) {
+        renderWeek();
+      }
+      
+      showToast('🥫', `Added "${item}" to pantry`);
+    }
+    
+    function addPantryItemDirect(item) {
+      if (pantry.includes(item.toLowerCase())) {
+        showToast('ℹ️', 'Already in pantry!');
+        return;
+      }
+      
+      pantry.push(item.toLowerCase());
+      savePantry();
+      renderPantry();
+      updatePantryCount();
+      
+      // Re-render meals to update match scores
+      if (currentWeek.entrees.length > 0) {
+        renderWeek();
+      }
+      
+      showToast('🥫', `Added "${item}" to pantry`);
+    }
+    
+    function removePantryItem(index) {
+      const removed = pantry.splice(index, 1)[0];
+      savePantry();
+      renderPantry();
+      updatePantryCount();
+      
+      // Re-render meals to update match scores
+      if (currentWeek.entrees.length > 0) {
+        renderWeek();
+      }
+      
+      showToast('🗑️', `Removed "${removed}" from pantry`);
+    }
+    
+    function clearPantry() {
+      if (confirm('Clear all pantry items?')) {
+        pantry = [];
+        savePantry();
+        renderPantry();
+        updatePantryCount();
+        
+        if (currentWeek.entrees.length > 0) {
+          renderWeek();
+        }
+        
+        showToast('🗑️', 'Pantry cleared');
+      }
+    }
+    
+    function savePantry() {
+      localStorage.setItem('myPantry', JSON.stringify(pantry));
+    }
+    
+    function updatePantryCount() {
+      document.getElementById('pantry-count').textContent = pantry.length;
+    }
+    
+    function renderPantry() {
+      const container = document.getElementById('pantry-tags');
+      
+      if (pantry.length === 0) {
+        container.innerHTML = '<span style="color: var(--text-muted); font-style: italic;">No ingredients added yet</span>';
+        return;
+      }
+      
+      container.innerHTML = pantry.map((item, i) => `
+        <span class="pantry-tag">
+          ${item}
+          <button class="pantry-tag-remove" onclick="removePantryItem(${i})">×</button>
+        </span>
+      `).join('');
+    }
+    
+    // INGREDIENT MATCHING FUNCTIONS
+    
+    function normalizeIngredient(ing) {
+      // Extract the main ingredient from a full ingredient string
+      // e.g., "2 cups chicken breast, diced" -> "chicken breast"
+      return ing.toLowerCase()
+        .replace(/^\d+[\s\/\d]*/, '') // Remove leading numbers
+        .replace(/\b(cups?|tbsp|tsp|tablespoons?|teaspoons?|pounds?|lbs?|oz|ounces?|g|kg|ml|l|liters?|pieces?|slices?|cloves?|heads?|bunche?s?|cans?|packages?|large|medium|small|fresh|dried|chopped|diced|minced|sliced|crushed|ground|whole|boneless|skinless)\b/gi, '')
+        .replace(/[,()]/g, '')
+        .trim();
+    }
+    
+    function isIngredientInPantry(ingredientStr) {
+      const normalized = normalizeIngredient(ingredientStr);
+      
+      return pantry.some(pantryItem => {
+        const pantryNorm = pantryItem.toLowerCase();
+        // Check if pantry item is contained in ingredient or vice versa
+        return normalized.includes(pantryNorm) || 
+               pantryNorm.includes(normalized) ||
+               // Check individual words
+               normalized.split(' ').some(word => word.length > 2 && pantryNorm.includes(word)) ||
+               pantryNorm.split(' ').some(word => word.length > 2 && normalized.includes(word));
+      });
+    }
+    
+    function calculateIngredientMatch(ingredients) {
+      if (!ingredients || ingredients.length === 0) {
+        return { have: 0, missing: 0, percentage: 0, score: 0 };
+      }
+      
+      let have = 0;
+      ingredients.forEach(ing => {
+        if (isIngredientInPantry(ing)) {
+          have++;
+        }
+      });
+      
+      const missing = ingredients.length - have;
+      const percentage = Math.round((have / ingredients.length) * 100);
+      const score = Math.round((have / ingredients.length) * 10);
+      
+      return { have, missing, percentage, score };
+    }
+    
+    // GROCERY LIST FUNCTIONS
+    
+    function toggleGroceryList() {
+      const section = document.getElementById('grocery-section');
+      section.style.display = 'block';
+      generateGroceryList();
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    function generateGroceryList() {
+      const container = document.getElementById('grocery-categories');
+      
+      if (shortlist.length === 0) {
+        container.innerHTML = '<div class="grocery-empty">Add meals to your shortlist to generate a grocery list!</div>';
+        updateGroceryStats(0, 0, 0);
+        return;
+      }
+      
+      // Collect all missing ingredients from shortlisted meals
+      const missingByCategory = {};
+      const ingredientSources = {}; // Track which meal each ingredient comes from
+      
+      shortlist.forEach(meal => {
+        let ingredients = meal.ingredients || [];
+        if (typeof ingredients === 'string') {
+          ingredients = ingredients.split('\n').filter(i => i.trim());
+        }
+        
+        ingredients.forEach(ing => {
+          if (!isIngredientInPantry(ing)) {
+            const category = categorizeIngredient(ing);
+            if (!missingByCategory[category]) {
+              missingByCategory[category] = new Set();
+            }
+            missingByCategory[category].add(ing);
+            
+            if (!ingredientSources[ing]) {
+              ingredientSources[ing] = [];
+            }
+            if (!ingredientSources[ing].includes(meal.title)) {
+              ingredientSources[ing].push(meal.title);
+            }
+          }
+        });
+      });
+      
+      // Calculate totals
+      let totalItems = 0;
+      Object.values(missingByCategory).forEach(set => totalItems += set.size);
+      
+      if (totalItems === 0) {
+        container.innerHTML = '<div class="grocery-empty">🎉 You have all the ingredients you need!</div>';
+        updateGroceryStats(0, 0, shortlist.length);
+        return;
+      }
+      
+      // Render categories
+      const categoryOrder = ['🥩 Proteins', '🥬 Produce', '🧀 Dairy', '🥫 Pantry Staples', '🌿 Herbs & Spices', '🍞 Bakery', '🧊 Frozen', '📦 Other'];
+      
+      container.innerHTML = categoryOrder
+        .filter(cat => missingByCategory[cat] && missingByCategory[cat].size > 0)
+        .map(category => {
+          const items = Array.from(missingByCategory[category]);
+          return `
+            <div class="grocery-category">
+              <div class="grocery-category-title">${category}</div>
+              <div class="grocery-items">
+                ${items.map(item => {
+                  const isChecked = groceryChecked.includes(item);
+                  const sources = ingredientSources[item] || [];
+                  const sourceText = sources.length > 0 ? sources[0].substring(0, 20) + (sources[0].length > 20 ? '...' : '') : '';
+                  return `
+                    <div class="grocery-item ${isChecked ? 'checked' : ''}">
+                      <div class="grocery-checkbox ${isChecked ? 'checked' : ''}" onclick="toggleGroceryItem('${item.replace(/'/g, "\\'")}')">
+                        ${isChecked ? '✓' : ''}
+                      </div>
+                      <span class="grocery-item-text">${item}</span>
+                      ${sourceText ? `<span class="grocery-item-source">${sourceText}</span>` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      
+      updateGroceryStats(totalItems, groceryChecked.length, shortlist.length);
+    }
+    
+    function categorizeIngredient(ing) {
+      const lower = ing.toLowerCase();
+      
+      // Proteins
+      if (/chicken|beef|pork|lamb|turkey|fish|salmon|shrimp|bacon|sausage|steak|ground|meat|seafood|tuna|crab|lobster|duck|veal|ham/.test(lower)) {
+        return '🥩 Proteins';
+      }
+      
+      // Dairy
+      if (/milk|cream|cheese|butter|yogurt|sour cream|egg|parmesan|mozzarella|cheddar|feta|ricotta/.test(lower)) {
+        return '🧀 Dairy';
+      }
+      
+      // Produce
+      if (/lettuce|tomato|onion|garlic|pepper|carrot|celery|potato|broccoli|spinach|kale|cucumber|zucchini|squash|mushroom|avocado|lemon|lime|orange|apple|banana|berry|grape|mango|cabbage|corn|bean|pea|asparagus|cauliflower|eggplant|ginger|scallion|shallot|leek/.test(lower)) {
+        return '🥬 Produce';
+      }
+      
+      // Herbs & Spices
+      if (/basil|oregano|thyme|rosemary|parsley|cilantro|dill|mint|sage|bay leaf|cumin|paprika|cinnamon|nutmeg|turmeric|curry|chili|cayenne|coriander|fennel|cardamom|clove|allspice/.test(lower)) {
+        return '🌿 Herbs & Spices';
+      }
+      
+      // Bakery
+      if (/bread|roll|bun|tortilla|pita|bagel|croissant|muffin|biscuit/.test(lower)) {
+        return '🍞 Bakery';
+      }
+      
+      // Frozen
+      if (/frozen|ice cream/.test(lower)) {
+        return '🧊 Frozen';
+      }
+      
+      // Pantry Staples
+      if (/oil|vinegar|sauce|paste|stock|broth|flour|sugar|salt|pepper|rice|pasta|noodle|can|bean|lentil|chickpea|honey|syrup|mustard|ketchup|mayo|soy sauce|worcestershire|hot sauce|sriracha|tahini|peanut butter|jam|jelly|oat|cereal|bread crumb|panko/.test(lower)) {
+        return '🥫 Pantry Staples';
+      }
+      
+      return '📦 Other';
+    }
+    
+    function toggleGroceryItem(item) {
+      const index = groceryChecked.indexOf(item);
+      if (index >= 0) {
+        groceryChecked.splice(index, 1);
+      } else {
+        groceryChecked.push(item);
+      }
+      
+      localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
+      generateGroceryList();
+    }
+    
+    function clearGroceryChecks() {
+      groceryChecked = [];
+      localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
+      generateGroceryList();
+      showToast('🔄', 'All items unchecked');
+    }
+    
+    function updateGroceryStats(total, checked, meals) {
+      document.getElementById('grocery-total').textContent = total;
+      document.getElementById('grocery-checked').textContent = checked;
+      document.getElementById('grocery-meals').textContent = meals;
+    }
+    
+    function updateGroceryCount() {
+      // Count missing ingredients from shortlist
+      let count = 0;
+      shortlist.forEach(meal => {
+        let ingredients = meal.ingredients || [];
+        if (typeof ingredients === 'string') {
+          ingredients = ingredients.split('\n').filter(i => i.trim());
+        }
+        ingredients.forEach(ing => {
+          if (!isIngredientInPantry(ing)) count++;
+        });
+      });
+      document.getElementById('grocery-count').textContent = count;
+    }
+    
+    function regenerateGroceryList() {
+      groceryChecked = [];
+      localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
+      generateGroceryList();
+      showToast('🔄', 'Grocery list regenerated');
+    }
+    
+    function copyGroceryList() {
+      if (shortlist.length === 0) {
+        showToast('ℹ️', 'No meals in shortlist');
+        return;
+      }
+      
+      const missingByCategory = {};
+      
+      shortlist.forEach(meal => {
+        let ingredients = meal.ingredients || [];
+        if (typeof ingredients === 'string') {
+          ingredients = ingredients.split('\n').filter(i => i.trim());
+        }
+        
+        ingredients.forEach(ing => {
+          if (!isIngredientInPantry(ing) && !groceryChecked.includes(ing)) {
+            const category = categorizeIngredient(ing);
+            if (!missingByCategory[category]) {
+              missingByCategory[category] = new Set();
+            }
+            missingByCategory[category].add(ing);
+          }
+        });
+      });
+      
+      let text = '🛒 GROCERY LIST\n\n';
+      const categoryOrder = ['🥩 Proteins', '🥬 Produce', '🧀 Dairy', '🥫 Pantry Staples', '🌿 Herbs & Spices', '🍞 Bakery', '🧊 Frozen', '📦 Other'];
+      
+      categoryOrder.forEach(category => {
+        if (missingByCategory[category] && missingByCategory[category].size > 0) {
+          text += `${category}\n`;
+          Array.from(missingByCategory[category]).forEach(item => {
+            text += `  □ ${item}\n`;
+          });
+          text += '\n';
+        }
+      });
+      
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋', 'Grocery list copied to clipboard!');
+      }).catch(() => {
+        showToast('❌', 'Failed to copy');
+      });
     }
 
     // SEARCH FUNCTIONS
@@ -1636,7 +2593,8 @@
     
     function toggleHistory() {
       const section = document.getElementById('history-section');
-      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+      section.style.display = 'block';
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
     function renderHistory() {
@@ -1651,7 +2609,12 @@
         <div class="history-week">
           <div class="history-week-header">
             <span class="history-week-date">📅 ${week.weekLabel}</span>
-            <span style="color: var(--text-muted); font-size: 0.85rem;">${week.meals.length} meal${week.meals.length !== 1 ? 's' : ''}</span>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <span style="color: var(--text-muted); font-size: 0.85rem;">${week.meals.length} meal${week.meals.length !== 1 ? 's' : ''}</span>
+              <button class="history-delete-btn" onclick="removeWeekFromHistory(${weekIndex})" title="Delete entire week">
+                🗑️
+              </button>
+            </div>
           </div>
           <div class="history-week-meals">
             ${week.meals.map((meal, mealIndex) => `
@@ -1660,9 +2623,14 @@
                   <div>${meal.title}</div>
                   <div class="history-meal-type">${meal.mealType || 'meal'}</div>
                 </div>
-                <button class="history-add-btn" onclick="addHistoryMealToFavorites(${weekIndex}, ${mealIndex})" title="Add to favorites">
-                  ❤️
-                </button>
+                <div class="history-meal-actions">
+                  <button class="history-add-btn" onclick="addHistoryMealToFavorites(${weekIndex}, ${mealIndex})" title="Add to favorites">
+                    ❤️
+                  </button>
+                  <button class="history-delete-btn" onclick="removeFromHistory(${weekIndex}, ${mealIndex})" title="Remove from history">
+                    ✕
+                  </button>
+                </div>
               </div>
             `).join('')}
           </div>
@@ -1706,6 +2674,87 @@
       document.getElementById('toast-message').textContent = message;
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // CONFIRMATION MODAL FUNCTIONS
+    let pendingConfirmAction = null;
+
+    function showConfirmModal(title, message, icon, onConfirm) {
+      document.getElementById('confirm-modal-title').textContent = title;
+      document.getElementById('confirm-modal-message').textContent = message;
+      document.getElementById('confirm-modal-icon').textContent = icon;
+      pendingConfirmAction = onConfirm;
+      document.getElementById('confirm-modal').classList.add('show');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-modal').classList.remove('show');
+      pendingConfirmAction = null;
+    }
+
+    function confirmModalAction() {
+      if (pendingConfirmAction) {
+        pendingConfirmAction();
+      }
+      closeConfirmModal();
+    }
+
+    // Close modal on outside click
+    document.getElementById('confirm-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'confirm-modal') {
+        closeConfirmModal();
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.getElementById('confirm-modal').classList.contains('show')) {
+        closeConfirmModal();
+      }
+    });
+
+    // DELETE FROM HISTORY FUNCTION
+    function removeFromHistory(weekIndex, mealIndex) {
+      const meal = history[weekIndex]?.meals[mealIndex];
+      if (!meal) return;
+
+      showConfirmModal(
+        'Remove from History?',
+        `Are you sure you want to remove "${meal.title}" from your meal history?`,
+        '📜',
+        () => {
+          history[weekIndex].meals.splice(mealIndex, 1);
+          
+          // If week has no more meals, remove the week
+          if (history[weekIndex].meals.length === 0) {
+            history.splice(weekIndex, 1);
+          }
+          
+          saveHistory();
+          updateHistoryCount();
+          renderHistory();
+          showToast('🗑️', 'Removed from history');
+        }
+      );
+    }
+
+    // DELETE ENTIRE WEEK FROM HISTORY
+    function removeWeekFromHistory(weekIndex) {
+      const week = history[weekIndex];
+      if (!week) return;
+
+      showConfirmModal(
+        'Remove Entire Week?',
+        `Are you sure you want to remove the week of "${week.weekLabel}" and all ${week.meals.length} meals from your history?`,
+        '📅',
+        () => {
+          history.splice(weekIndex, 1);
+          saveHistory();
+          updateHistoryCount();
+          renderHistory();
+          showToast('🗑️', 'Week removed from history');
+        }
+      );
     }
   </script>
 </body>
