@@ -76809,7 +76809,7 @@
       "vegetarian",
       "family recipe"
     ],
-    "meal_type": "entree",
+    "meal_type": "side",
     "protein_source": "other",
     "notes": "Thanksgiving at the farm wouldn't be the same!",
     "num_ingredients": 7,
@@ -76845,7 +76845,7 @@
       "vegetarian",
       "family recipe"
     ],
-    "meal_type": "entree",
+    "meal_type": "side",
     "protein_source": "other",
     "notes": "Jack Bayley's favorite - can be a side or meal on its own",
     "num_ingredients": 6,
@@ -77938,7 +77938,7 @@
       "bread",
       "family recipe"
     ],
-    "meal_type": "entree",
+    "meal_type": "side",
     "protein_source": "other",
     "num_ingredients": 5,
     "num_steps": 9,
@@ -77972,7 +77972,7 @@
       "side dish",
       "family recipe"
     ],
-    "meal_type": "entree",
+    "meal_type": "side",
     "protein_source": "other",
     "notes": "A must-have for soup night!",
     "num_ingredients": 9,
