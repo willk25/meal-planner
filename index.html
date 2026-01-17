@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Meal Planner</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      background: white;
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: #718096;
+      margin-bottom: 3rem;
+    }
+
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .app-card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .app-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-color: #667eea;
+    }
+
+    .app-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .app-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-description {
+      color: #4a5568;
+      font-size: 0.95rem;
+    }
+
+    .footer {
+      margin-top: 3rem;
+      color: #a0aec0;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍽️ Meal Planner</h1>
+    <p class="subtitle">Your weekly recipe companion</p>
+    
+    <div class="apps">
+      <a href="/meal_planner.html" class="app-card">
+        <div class="app-icon">📅</div>
+        <div class="app-title">Meal Planner</div>
+        <div class="app-description">Browse recipes, build your weekly meal plan, and manage favorites</div>
+      </a>
+
+      <a href="/recipe_curator.html" class="app-card">
+        <div class="app-icon">📖</div>
+        <div class="app-title">Recipe Curator</div>
+        <div class="app-description">Curate and manage your recipe collection with advanced filters</div>
+      </a>
+    </div>
+
+    <div class="footer">
+      Made with ❤️ by willk25
+    </div>
+  </div>
+</body>
+</html>
