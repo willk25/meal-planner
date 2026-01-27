@@ -485,6 +485,38 @@
         main {
             padding-bottom: 100px;
         }
+        
+        /* Import recipe modal tabs */
+        .import-tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .import-tab-btn:hover {
+            color: var(--text);
+        }
+        
+        .import-tab-btn.active {
+            color: var(--accent-light);
+            border-bottom-color: var(--accent-light);
+        }
+        
+        .import-tab-content {
+            animation: fadeIn 0.2s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -555,6 +587,7 @@
             </div>
             
             <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showImportRecipeModal()" style="background: #60a5fa;">📥 Import Recipe</button>
                 <button class="btn btn-primary" onclick="showAddRecipeModal()" style="background: var(--accent-light);">📸 Add Recipe from Photo</button>
                 <button class="btn btn-outline" onclick="selectAll()">Select All Visible</button>
                 <button class="btn btn-outline" onclick="clearSelection()">Clear Selection</button>
@@ -570,6 +603,9 @@
     </main>
     
     <div class="quick-actions">
+        <button class="btn btn-primary" onclick="showImportRecipeModal()" style="background: #60a5fa;">
+            📥 Import Recipe
+        </button>
         <button class="btn btn-primary" onclick="showAddRecipeModal()" style="background: var(--accent-light);">
             📸 Add Recipe from Photo
         </button>
@@ -589,6 +625,69 @@
                 <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="copyExport()">Copy to Clipboard</button>
                 <button class="btn btn-success" onclick="downloadExport()">Download JSON</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="importRecipeModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2>📥 Import Recipe</h2>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
+                <button type="button" class="import-tab-btn active" onclick="switchImportTab('text')" id="importTabText">
+                    📋 Paste Recipe Text
+                </button>
+                <button type="button" class="import-tab-btn" onclick="switchImportTab('url')" id="importTabUrl">
+                    🔗 Paste URL
+                </button>
+            </div>
+            
+            <!-- Text Paste Tab -->
+            <div id="importTextTab" class="import-tab-content">
+                <form id="importTextForm" onsubmit="importFromText(event)">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Paste Recipe Text *
+                        </label>
+                        <textarea id="pastedRecipeText" rows="15" required
+                                  style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; font-family: inherit; resize: vertical;"
+                                  placeholder="Paste your recipe here...&#10;&#10;Example:&#10;Chicken Parmesan&#10;&#10;Ingredients:&#10;2 chicken breasts&#10;1 cup breadcrumbs&#10;1/2 cup parmesan cheese&#10;&#10;Directions:&#10;1. Preheat oven to 375°F&#10;2. Coat chicken in breadcrumbs&#10;3. Bake for 25 minutes"></textarea>
+                        <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                            The recipe will be automatically parsed. Make sure to include a title, ingredients, and directions.
+                        </p>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn btn-outline" onclick="closeImportRecipeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Parse & Import Recipe</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- URL Tab -->
+            <div id="importUrlTab" class="import-tab-content" style="display: none;">
+                <form id="importUrlForm" onsubmit="importFromUrl(event)">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Recipe URL *
+                        </label>
+                        <input type="url" id="recipeUrl" required
+                               style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem;"
+                               placeholder="https://www.allrecipes.com/recipe/...">
+                        <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                            Paste a URL from a recipe website. The recipe will be automatically extracted.
+                        </p>
+                    </div>
+                    <div id="urlLoading" style="display: none; text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <p>⏳ Extracting recipe from URL...</p>
+                    </div>
+                    <div id="urlPreview" style="display: none; margin-bottom: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px; border: 1px solid var(--border);">
+                        <h3 style="color: var(--accent-light); margin-bottom: 0.5rem;" id="urlPreviewTitle"></h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;" id="urlPreviewInfo"></p>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn btn-outline" onclick="closeImportRecipeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="urlImportBtn">Extract & Import Recipe</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1124,6 +1223,332 @@
         document.getElementById('addRecipeModal').addEventListener('click', (e) => {
             if (e.target.id === 'addRecipeModal') closeAddRecipeModal();
         });
+        
+        document.getElementById('importRecipeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'importRecipeModal') closeImportRecipeModal();
+        });
+        
+        // Import recipe functionality
+        function showImportRecipeModal() {
+            document.getElementById('importRecipeModal').classList.add('active');
+            switchImportTab('text');
+        }
+        
+        function closeImportRecipeModal() {
+            document.getElementById('importRecipeModal').classList.remove('active');
+            document.getElementById('pastedRecipeText').value = '';
+            document.getElementById('recipeUrl').value = '';
+            document.getElementById('urlPreview').style.display = 'none';
+            document.getElementById('urlLoading').style.display = 'none';
+            const importBtn = document.getElementById('urlImportBtn');
+            importBtn.disabled = false;
+            importBtn.textContent = 'Extract & Import Recipe';
+            importBtn.setAttribute('data-recipe-extracted', 'false');
+            window.extractedRecipeData = null;
+        }
+        
+        function switchImportTab(tab) {
+            // Update tab buttons
+            document.getElementById('importTabText').classList.toggle('active', tab === 'text');
+            document.getElementById('importTabUrl').classList.toggle('active', tab === 'url');
+            
+            // Update tab content
+            document.getElementById('importTextTab').style.display = tab === 'text' ? 'block' : 'none';
+            document.getElementById('importUrlTab').style.display = tab === 'url' ? 'block' : 'none';
+        }
+        
+        function parseRecipeText(text) {
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            
+            let title = '';
+            let ingredients = [];
+            let directions = [];
+            let currentSection = null;
+            
+            // Common section headers
+            const ingredientHeaders = ['ingredients', 'ingredient', 'what you need'];
+            const directionHeaders = ['directions', 'instructions', 'steps', 'method', 'how to make', 'preparation'];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].toLowerCase();
+                
+                // Check if this is a section header
+                if (ingredientHeaders.some(h => line.includes(h))) {
+                    currentSection = 'ingredients';
+                    continue;
+                }
+                if (directionHeaders.some(h => line.includes(h))) {
+                    currentSection = 'directions';
+                    continue;
+                }
+                
+                // First non-empty line is usually the title
+                if (!title && lines[i] && !lines[i].match(/^\d+[\.\)]/) && !lines[i].match(/^[•\-\*]/)) {
+                    title = lines[i];
+                    continue;
+                }
+                
+                // Parse based on current section
+                if (currentSection === 'ingredients') {
+                    // Remove common prefixes
+                    let ingredient = lines[i].replace(/^[•\-\*\d+\.\)]\s*/, '').trim();
+                    if (ingredient) ingredients.push(ingredient);
+                } else if (currentSection === 'directions') {
+                    // Remove common prefixes
+                    let direction = lines[i].replace(/^\d+[\.\)]\s*/, '').replace(/^[•\-\*]\s*/, '').trim();
+                    if (direction) directions.push(direction);
+                } else {
+                    // Try to auto-detect: lines with numbers or bullets are usually directions
+                    // Lines with measurements (cups, tsp, etc.) are usually ingredients
+                    if (lines[i].match(/\d+\s*(cup|tbsp|tsp|oz|lb|g|kg|ml|l|pound|ounce|gram|kilogram|liter|milliliter)/i)) {
+                        ingredients.push(lines[i].replace(/^[•\-\*\d+\.\)]\s*/, '').trim());
+                    } else if (lines[i].match(/^\d+[\.\)]/) || lines[i].match(/^[•\-\*]/)) {
+                        directions.push(lines[i].replace(/^\d+[\.\)]\s*/, '').replace(/^[•\-\*]\s*/, '').trim());
+                    } else if (ingredients.length === 0 && directions.length === 0) {
+                        // If we haven't found ingredients yet, assume it's an ingredient
+                        ingredients.push(lines[i]);
+                    } else {
+                        // Otherwise assume it's a direction
+                        directions.push(lines[i]);
+                    }
+                }
+            }
+            
+            return { title, ingredients, directions };
+        }
+        
+        function importFromText(event) {
+            event.preventDefault();
+            
+            const text = document.getElementById('pastedRecipeText').value.trim();
+            if (!text) {
+                showToast('Please paste some recipe text');
+                return;
+            }
+            
+            const parsed = parseRecipeText(text);
+            
+            if (!parsed.title) {
+                showToast('Could not find recipe title. Please make sure the first line is the recipe name.');
+                return;
+            }
+            
+            // Populate the add recipe form with parsed data
+            document.getElementById('recipeTitle').value = parsed.title;
+            document.getElementById('recipeIngredients').value = parsed.ingredients.join('\n');
+            document.getElementById('recipeDirections').value = parsed.directions.join('\n');
+            
+            // Close import modal and open add recipe modal
+            closeImportRecipeModal();
+            showAddRecipeModal();
+            
+            showToast('Recipe parsed! Please review and fill in any missing details.');
+        }
+        
+        async function importFromUrl(event) {
+            event.preventDefault();
+            
+            // Check if we already extracted a recipe and should import it
+            const importBtn = document.getElementById('urlImportBtn');
+            if (importBtn.getAttribute('data-recipe-extracted') === 'true' && window.extractedRecipeData) {
+                importExtractedRecipe(window.extractedRecipeData);
+                return;
+            }
+            
+            const url = document.getElementById('recipeUrl').value.trim();
+            if (!url) {
+                showToast('Please enter a recipe URL');
+                return;
+            }
+            
+            // Validate URL
+            try {
+                new URL(url);
+            } catch (e) {
+                showToast('Please enter a valid URL');
+                return;
+            }
+            
+            const loadingDiv = document.getElementById('urlLoading');
+            const previewDiv = document.getElementById('urlPreview');
+            
+            loadingDiv.style.display = 'block';
+            previewDiv.style.display = 'none';
+            importBtn.disabled = true;
+            importBtn.textContent = 'Extracting...';
+            importBtn.setAttribute('data-recipe-extracted', 'false');
+            
+            try {
+                // Use a CORS proxy to fetch the recipe page
+                // Note: In production, you'd want to use your own backend or a recipe extraction API
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                
+                if (!data.contents) {
+                    throw new Error('Could not fetch recipe page');
+                }
+                
+                // Parse HTML to extract recipe data
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data.contents, 'text/html');
+                
+                // Try to find JSON-LD structured data (Schema.org Recipe)
+                let recipeData = null;
+                const jsonLdScripts = doc.querySelectorAll('script[type="application/ld+json"]');
+                
+                for (const script of jsonLdScripts) {
+                    try {
+                        const json = JSON.parse(script.textContent);
+                        if (json['@type'] === 'Recipe' || (Array.isArray(json['@type']) && json['@type'].includes('Recipe'))) {
+                            recipeData = json;
+                            break;
+                        }
+                        // Sometimes it's wrapped in @graph
+                        if (json['@graph']) {
+                            const recipe = json['@graph'].find(item => 
+                                item['@type'] === 'Recipe' || 
+                                (Array.isArray(item['@type']) && item['@type'].includes('Recipe'))
+                            );
+                            if (recipe) {
+                                recipeData = recipe;
+                                break;
+                            }
+                        }
+                    } catch (e) {
+                        // Skip invalid JSON
+                    }
+                }
+                
+                // If no structured data, try to extract from common HTML patterns
+                if (!recipeData) {
+                    recipeData = extractRecipeFromHTML(doc, url);
+                }
+                
+                if (!recipeData || !recipeData.name) {
+                    throw new Error('Could not extract recipe data from this URL');
+                }
+                
+                // Show preview
+                document.getElementById('urlPreviewTitle').textContent = recipeData.name;
+                const info = [];
+                if (recipeData.recipeIngredient && recipeData.recipeIngredient.length) {
+                    info.push(`${recipeData.recipeIngredient.length} ingredients`);
+                }
+                if (recipeData.recipeInstructions && recipeData.recipeInstructions.length) {
+                    info.push(`${recipeData.recipeInstructions.length} steps`);
+                }
+                document.getElementById('urlPreviewInfo').textContent = info.join(' • ') || 'Recipe found';
+                
+                previewDiv.style.display = 'block';
+                
+                // Store recipe data for import
+                window.extractedRecipeData = recipeData;
+                importBtn.disabled = false;
+                importBtn.textContent = 'Import Recipe';
+                importBtn.setAttribute('data-recipe-extracted', 'true');
+                
+            } catch (error) {
+                console.error('Error extracting recipe:', error);
+                showToast(`Error: ${error.message}. Try pasting the recipe text instead.`);
+                importBtn.disabled = false;
+                importBtn.textContent = 'Extract & Import Recipe';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+        
+        function extractRecipeFromHTML(doc, url) {
+            // Fallback extraction from common HTML patterns
+            const recipe = {
+                name: '',
+                recipeIngredient: [],
+                recipeInstructions: []
+            };
+            
+            // Try to find title
+            recipe.name = doc.querySelector('h1')?.textContent?.trim() || 
+                         doc.querySelector('[class*="recipe-title"]')?.textContent?.trim() ||
+                         doc.querySelector('[class*="recipe-name"]')?.textContent?.trim() ||
+                         '';
+            
+            // Try to find ingredients
+            const ingredientSelectors = [
+                '[class*="ingredient"]',
+                '[class*="recipe-ingredient"]',
+                '[itemprop="recipeIngredient"]',
+                'ul.ingredients li',
+                'ol.ingredients li'
+            ];
+            
+            for (const selector of ingredientSelectors) {
+                const elements = doc.querySelectorAll(selector);
+                if (elements.length > 0) {
+                    recipe.recipeIngredient = Array.from(elements)
+                        .map(el => el.textContent.trim())
+                        .filter(text => text && text.length > 2);
+                    if (recipe.recipeIngredient.length > 0) break;
+                }
+            }
+            
+            // Try to find instructions
+            const instructionSelectors = [
+                '[class*="instruction"]',
+                '[class*="recipe-step"]',
+                '[class*="direction"]',
+                '[itemprop="recipeInstructions"]',
+                'ol.instructions li',
+                'ol.directions li'
+            ];
+            
+            for (const selector of instructionSelectors) {
+                const elements = doc.querySelectorAll(selector);
+                if (elements.length > 0) {
+                    recipe.recipeInstructions = Array.from(elements)
+                        .map(el => el.textContent.trim())
+                        .filter(text => text && text.length > 2);
+                    if (recipe.recipeInstructions.length > 0) break;
+                }
+            }
+            
+            return recipe.name ? recipe : null;
+        }
+        
+        function importExtractedRecipe(recipeData) {
+            // Convert extracted recipe to our format
+            const ingredients = Array.isArray(recipeData.recipeIngredient) 
+                ? recipeData.recipeIngredient 
+                : [];
+            
+            let directions = [];
+            if (Array.isArray(recipeData.recipeInstructions)) {
+                directions = recipeData.recipeInstructions.map(inst => {
+                    if (typeof inst === 'string') return inst;
+                    if (inst.text) return inst.text;
+                    if (inst['@type'] === 'HowToStep' && inst.text) return inst.text;
+                    return String(inst);
+                }).filter(d => d);
+            }
+            
+            // Populate the add recipe form
+            document.getElementById('recipeTitle').value = recipeData.name || '';
+            document.getElementById('recipeIngredients').value = ingredients.join('\n');
+            document.getElementById('recipeDirections').value = directions.join('\n');
+            
+            // Try to extract additional info
+            if (recipeData.totalTime) {
+                // Could parse time if needed
+            }
+            if (recipeData.recipeYield) {
+                // Could parse servings if needed
+            }
+            
+            // Close import modal and open add recipe modal
+            closeImportRecipeModal();
+            showAddRecipeModal();
+            
+            showToast('Recipe extracted! Please review and fill in any missing details.');
+        }
         
         // Load recipes on page load
         loadRecipes();
