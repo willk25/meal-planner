@@ -555,6 +555,7 @@
             </div>
             
             <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showAddRecipeModal()" style="background: var(--accent-light);">📸 Add Recipe from Photo</button>
                 <button class="btn btn-outline" onclick="selectAll()">Select All Visible</button>
                 <button class="btn btn-outline" onclick="clearSelection()">Clear Selection</button>
                 <button class="btn btn-primary" onclick="showExport()">Export Selected</button>
@@ -569,6 +570,9 @@
     </main>
     
     <div class="quick-actions">
+        <button class="btn btn-primary" onclick="showAddRecipeModal()" style="background: var(--accent-light);">
+            📸 Add Recipe from Photo
+        </button>
         <button class="btn btn-success" onclick="showExport()">
             📥 Export <span id="exportCount">0</span> Selected Recipes
         </button>
@@ -586,6 +590,133 @@
                 <button class="btn btn-primary" onclick="copyExport()">Copy to Clipboard</button>
                 <button class="btn btn-success" onclick="downloadExport()">Download JSON</button>
             </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="addRecipeModal">
+        <div class="modal-content" style="max-width: 700px;">
+            <h2>📸 Add Recipe from Photo</h2>
+            <form id="addRecipeForm" onsubmit="saveRecipeFromPhoto(event)">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                        Recipe Photo
+                    </label>
+                    <div style="position: relative;">
+                        <input type="file" id="recipePhoto" accept="image/*" capture="environment" 
+                               style="display: none;" onchange="handlePhotoSelect(event)">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button type="button" class="btn btn-outline" onclick="document.getElementById('recipePhoto').click()" style="flex: 1;">
+                                📷 Choose Photo
+                            </button>
+                            <button type="button" class="btn btn-outline" onclick="capturePhoto()" style="flex: 1;">
+                                📸 Take Photo
+                            </button>
+                        </div>
+                        <div id="photoPreview" style="margin-top: 1rem; display: none;">
+                            <img id="previewImage" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid var(--border);">
+                            <button type="button" class="btn btn-outline" onclick="clearPhoto()" style="margin-top: 0.5rem; width: 100%;">
+                                Remove Photo
+                            </button>
+                        </div>
+                        <video id="cameraVideo" style="display: none; width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid var(--border);"></video>
+                        <canvas id="cameraCanvas" style="display: none;"></canvas>
+                        <div id="cameraControls" style="display: none; margin-top: 0.5rem; text-align: center;">
+                            <button type="button" class="btn btn-primary" onclick="captureFromCamera()">📸 Capture</button>
+                            <button type="button" class="btn btn-outline" onclick="stopCamera()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                        Recipe Title *
+                    </label>
+                    <input type="text" id="recipeTitle" required
+                           style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Protein Source
+                        </label>
+                        <select id="recipeProtein" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                            <option value="">Select...</option>
+                            <option value="chicken">Chicken</option>
+                            <option value="beef">Beef</option>
+                            <option value="pork">Pork</option>
+                            <option value="seafood">Seafood</option>
+                            <option value="turkey">Turkey</option>
+                            <option value="lamb">Lamb</option>
+                            <option value="eggs">Eggs</option>
+                            <option value="other">Other/Veggie</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Meal Type
+                        </label>
+                        <select id="recipeMealType" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                            <option value="entree">Entree</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="soup">Soup</option>
+                            <option value="salad">Salad</option>
+                            <option value="appetizer">Appetizer</option>
+                            <option value="dessert">Dessert</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                        Ingredients (one per line)
+                    </label>
+                    <textarea id="recipeIngredients" rows="5"
+                              style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; font-family: inherit; resize: vertical;"
+                              placeholder="1 cup flour&#10;2 eggs&#10;1 tsp salt"></textarea>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                        Directions (one per line)
+                    </label>
+                    <textarea id="recipeDirections" rows="5"
+                              style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; font-family: inherit; resize: vertical;"
+                              placeholder="Mix ingredients together&#10;Cook for 30 minutes"></textarea>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Rating (0-5)
+                        </label>
+                        <input type="number" id="recipeRating" min="0" max="5" step="0.1"
+                               style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Protein (g)
+                        </label>
+                        <input type="number" id="recipeProteinGrams" min="0"
+                               style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
+                            Difficulty
+                        </label>
+                        <select id="recipeDifficulty" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="involved">Involved</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-outline" onclick="closeAddRecipeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Recipe</button>
+                </div>
+            </form>
         </div>
     </div>
     
@@ -703,6 +834,7 @@
                     <div class="recipe-card ${isSelected ? 'selected' : ''} ${isFamily ? 'family' : ''}" 
                          data-id="${recipe.id}"
                          onclick="toggleSelect(${recipe.id}, event)">
+                        ${recipe.photo ? `<div style="margin-bottom: 0.75rem; border-radius: 8px; overflow: hidden;"><img src="${recipe.photo}" style="width: 100%; height: 200px; object-fit: cover; display: block;"></div>` : ''}
                         <div class="recipe-header">
                             <span class="recipe-title">${escapeHtml(recipe.title || 'Untitled')}</span>
                             <div class="recipe-checkbox"></div>
@@ -720,6 +852,7 @@
                             ${recipe.protein ? `<span>💪 ${Math.round(recipe.protein)}g</span>` : ''}
                             ${recipe.num_ingredients ? `<span>🥬 ${recipe.num_ingredients} ing</span>` : ''}
                             ${recipe.num_steps ? `<span>📋 ${recipe.num_steps} steps</span>` : ''}
+                            ${recipe.estimated_price ? `<span>💰 $${recipe.estimated_price.toFixed(2)}</span>` : ''}
                         </div>
                         
                         ${recipe.ingredients || recipe.directions ? `
@@ -830,6 +963,151 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
         
+        // Photo upload functionality
+        let currentPhotoData = null;
+        let cameraStream = null;
+        
+        function showAddRecipeModal() {
+            document.getElementById('addRecipeModal').classList.add('active');
+            document.getElementById('addRecipeForm').reset();
+            clearPhoto();
+        }
+        
+        function closeAddRecipeModal() {
+            document.getElementById('addRecipeModal').classList.remove('active');
+            clearPhoto();
+            stopCamera();
+        }
+        
+        function handlePhotoSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    currentPhotoData = e.target.result;
+                    document.getElementById('previewImage').src = currentPhotoData;
+                    document.getElementById('photoPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function clearPhoto() {
+            currentPhotoData = null;
+            document.getElementById('photoPreview').style.display = 'none';
+            document.getElementById('recipePhoto').value = '';
+        }
+        
+        function capturePhoto() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                    .then(stream => {
+                        cameraStream = stream;
+                        const video = document.getElementById('cameraVideo');
+                        video.srcObject = stream;
+                        video.style.display = 'block';
+                        document.getElementById('cameraControls').style.display = 'block';
+                    })
+                    .catch(err => {
+                        console.error('Error accessing camera:', err);
+                        showToast('Could not access camera. Please use file upload instead.');
+                    });
+            } else {
+                showToast('Camera not supported. Please use file upload instead.');
+            }
+        }
+        
+        function captureFromCamera() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.getElementById('cameraCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            
+            currentPhotoData = canvas.toDataURL('image/jpeg', 0.8);
+            document.getElementById('previewImage').src = currentPhotoData;
+            document.getElementById('photoPreview').style.display = 'block';
+            
+            stopCamera();
+        }
+        
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            document.getElementById('cameraVideo').style.display = 'none';
+            document.getElementById('cameraControls').style.display = 'none';
+        }
+        
+        function saveRecipeFromPhoto(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('recipeTitle').value.trim();
+            if (!title) {
+                showToast('Please enter a recipe title');
+                return;
+            }
+            
+            const ingredientsText = document.getElementById('recipeIngredients').value.trim();
+            const directionsText = document.getElementById('recipeDirections').value.trim();
+            
+            const newRecipe = {
+                id: Date.now(),
+                title: title,
+                protein_source: document.getElementById('recipeProtein').value || null,
+                meal_type: document.getElementById('recipeMealType').value || 'entree',
+                difficulty: document.getElementById('recipeDifficulty').value || 'medium',
+                ingredients: ingredientsText ? ingredientsText.split('\n').filter(i => i.trim()) : [],
+                directions: directionsText ? directionsText.split('\n').filter(d => d.trim()) : [],
+                rating: parseFloat(document.getElementById('recipeRating').value) || null,
+                protein: parseFloat(document.getElementById('recipeProteinGrams').value) || null,
+                num_ingredients: ingredientsText ? ingredientsText.split('\n').filter(i => i.trim()).length : 0,
+                num_steps: directionsText ? directionsText.split('\n').filter(d => d.trim()).length : 0,
+                is_family_recipe: false,
+                photo: currentPhotoData || null,
+                date: new Date().toISOString()
+            };
+            
+            // Add to recipes array
+            recipes.push(newRecipe);
+            
+            // Save to localStorage as backup
+            try {
+                localStorage.setItem('curated_recipes_backup', JSON.stringify(recipes));
+            } catch (e) {
+                console.warn('Could not save to localStorage:', e);
+            }
+            
+            // Update display
+            document.getElementById('totalCount').textContent = recipes.length;
+            renderRecipes();
+            
+            // Close modal and show success
+            closeAddRecipeModal();
+            showToast('Recipe added! Don\'t forget to export to save permanently.');
+            
+            // Show download prompt
+            setTimeout(() => {
+                if (confirm('Recipe added! Would you like to download the updated curated_recipes.json file now?')) {
+                    downloadAllRecipes();
+                }
+            }, 500);
+        }
+        
+        function downloadAllRecipes() {
+            const blob = new Blob([JSON.stringify(recipes, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'curated_recipes.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Downloaded curated_recipes.json!');
+        }
+        
         // Event listeners
         document.getElementById('search').addEventListener('input', renderRecipes);
         document.getElementById('filterProtein').addEventListener('change', renderRecipes);
@@ -841,6 +1119,10 @@
         // Close modal on outside click
         document.getElementById('exportModal').addEventListener('click', (e) => {
             if (e.target.id === 'exportModal') closeModal();
+        });
+        
+        document.getElementById('addRecipeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'addRecipeModal') closeAddRecipeModal();
         });
         
         // Load recipes on page load
