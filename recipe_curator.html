@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Recipe Curator</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
@@ -32,6 +32,14 @@
             color: var(--text);
             min-height: 100vh;
             line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+        }
+        
+        html {
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
         
         header {
@@ -184,12 +192,42 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
+            -webkit-overflow-scrolling: touch;
         }
         
         .recipe-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.25rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        @media (max-width: 768px) {
+            .recipe-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            main {
+                padding: 1rem;
+                padding-bottom: 120px;
+            }
+            
+            header {
+                padding: 1rem;
+            }
+            
+            .quick-actions {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .quick-actions .btn {
+                font-size: 0.85rem;
+                padding: 0.6rem 1rem;
+            }
         }
         
         .recipe-card {
@@ -476,6 +514,11 @@
             justify-content: center;
             gap: 1rem;
             z-index: 50;
+            pointer-events: none;
+        }
+        
+        .quick-actions .btn {
+            pointer-events: auto;
         }
         
         .quick-actions .btn {
