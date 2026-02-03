@@ -2730,6 +2730,7 @@
       renderWeek();
       document.getElementById('accept-btn').disabled = false;
     }
+    window.generateWeek = generateWeek;
 
     function renderWeek() {
       const html = `
@@ -2973,6 +2974,7 @@
       updateGroceryCount();
       showToast('✅', `Week accepted! Added ${addedCount} meals to shortlist.`);
     }
+    window.acceptWeek = acceptWeek;
 
     function swapMeal(type, index) {
       let pool, current;
@@ -2999,6 +3001,7 @@
         showToast('❌', 'No more alternatives available');
       }
     }
+    window.swapMeal = swapMeal;
 
     // FAVORITES FUNCTIONS (Long-term saved recipes)
     
@@ -3024,6 +3027,7 @@
       renderFavorites();
       showToast('❤️', 'Added to favorites!');
     }
+    window.addToFavorites = addToFavorites;
 
     function addFavoriteToShortlist(index) {
       const meal = favorites[index];
@@ -3044,6 +3048,7 @@
       renderWeek();
       showToast('📋', 'Added to this week\'s shortlist!');
     }
+    window.addFavoriteToShortlist = addFavoriteToShortlist;
 
     function removeFromFavorites(index) {
       const meal = favorites[index];
@@ -3072,6 +3077,7 @@
         showToast('🗑️', 'Favorites cleared');
       }
     }
+    window.clearFavorites = clearFavorites;
 
     function saveFavorites() {
       localStorage.setItem('mealFavorites', JSON.stringify(favorites));
@@ -3086,6 +3092,7 @@
       section.style.display = 'block';
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    window.toggleFavorites = toggleFavorites;
 
     function renderFavorites() {
       const grid = document.getElementById('favorites-grid');
@@ -3126,12 +3133,14 @@
       section.style.display = 'block';
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    window.togglePantry = togglePantry;
     
     function handlePantryKeypress(event) {
       if (event.key === 'Enter') {
         addPantryItem();
       }
     }
+    window.handlePantryKeypress = handlePantryKeypress;
     
     function addPantryItem() {
       const input = document.getElementById('pantry-input');
@@ -3157,6 +3166,7 @@
       
       showToast('🥫', `Added "${item}" to pantry`);
     }
+    window.addPantryItem = addPantryItem;
     
     function addPantryItemDirect(item) {
       if (pantry.includes(item.toLowerCase())) {
@@ -3176,6 +3186,7 @@
       
       showToast('🥫', `Added "${item}" to pantry`);
     }
+    window.addPantryItemDirect = addPantryItemDirect;
     
     function removePantryItem(index) {
       const removed = pantry.splice(index, 1)[0];
@@ -3190,6 +3201,7 @@
       
       showToast('🗑️', `Removed "${removed}" from pantry`);
     }
+    window.removePantryItem = removePantryItem;
     
     function clearPantry() {
       if (confirm('Clear all pantry items?')) {
@@ -3205,6 +3217,7 @@
         showToast('🗑️', 'Pantry cleared');
       }
     }
+    window.clearPantry = clearPantry;
     
     function savePantry() {
       localStorage.setItem('myPantry', JSON.stringify(pantry));
@@ -3283,6 +3296,7 @@
       generateGroceryList();
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    window.toggleGroceryList = toggleGroceryList;
     
     function generateGroceryList() {
       const container = document.getElementById('grocery-categories');
@@ -3423,6 +3437,7 @@
       generateGroceryList();
       showToast('🔄', 'All items unchecked');
     }
+    window.clearGroceryChecks = clearGroceryChecks;
     
     function updateGroceryStats(total, checked, meals) {
       document.getElementById('grocery-total').textContent = total;
@@ -3451,6 +3466,7 @@
       generateGroceryList();
       showToast('🔄', 'Grocery list regenerated');
     }
+    window.regenerateGroceryList = regenerateGroceryList;
     
     function copyGroceryList() {
       if (shortlist.length === 0) {
@@ -3496,6 +3512,7 @@
         showToast('❌', 'Failed to copy');
       });
     }
+    window.copyGroceryList = copyGroceryList;
 
     // SEARCH FUNCTIONS
     
@@ -3689,6 +3706,7 @@
       section.style.display = 'block';
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    window.toggleHistory = toggleHistory;
     
     function renderHistory() {
       const container = document.getElementById('history-weeks');
@@ -3849,6 +3867,7 @@
         }
       );
     }
+    window.removeWeekFromHistory = removeWeekFromHistory;
   </script>
 </body>
 </html>
