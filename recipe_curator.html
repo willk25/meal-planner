@@ -1396,6 +1396,7 @@ header {
             showToast('Signed out');
         }
 
+        // Make functions globally accessible
         function showAuthModal() {
             try {
                 const modal = document.getElementById('authModal');
@@ -1411,6 +1412,7 @@ header {
                 showToast('Error opening sign-in form');
             }
         }
+        window.showAuthModal = showAuthModal;
 
         function closeAuthModal() {
             document.getElementById('authModal').classList.remove('active');
@@ -2005,6 +2007,7 @@ header {
                 showToast('Error opening recipe form');
             }
         }
+        window.showAddRecipeModal = showAddRecipeModal;
         
         function closeAddRecipeModal() {
             document.getElementById('addRecipeModal').classList.remove('active');
@@ -2392,28 +2395,43 @@ header {
             if (sortByEl) {
                 sortByEl.addEventListener('change', renderRecipes);
             }
+            
+            // Close modal on outside click
+            const exportModal = document.getElementById('exportModal');
+            if (exportModal) {
+                exportModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'exportModal') closeModal();
+                });
+            }
+            
+            const addRecipeModal = document.getElementById('addRecipeModal');
+            if (addRecipeModal) {
+                addRecipeModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'addRecipeModal') closeAddRecipeModal();
+                });
+            }
+            
+            const importRecipeModal = document.getElementById('importRecipeModal');
+            if (importRecipeModal) {
+                importRecipeModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'importRecipeModal') closeImportRecipeModal();
+                });
+            }
+
+            const authModal = document.getElementById('authModal');
+            if (authModal) {
+                authModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'authModal') closeAuthModal();
+                });
+            }
+
+            const tagsModal = document.getElementById('tagsModal');
+            if (tagsModal) {
+                tagsModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'tagsModal') closeTagsModal();
+                });
+            }
         }
-        
-        // Close modal on outside click
-        document.getElementById('exportModal').addEventListener('click', (e) => {
-            if (e.target.id === 'exportModal') closeModal();
-        });
-        
-        document.getElementById('addRecipeModal').addEventListener('click', (e) => {
-            if (e.target.id === 'addRecipeModal') closeAddRecipeModal();
-        });
-        
-        document.getElementById('importRecipeModal').addEventListener('click', (e) => {
-            if (e.target.id === 'importRecipeModal') closeImportRecipeModal();
-        });
-
-        document.getElementById('authModal').addEventListener('click', (e) => {
-            if (e.target.id === 'authModal') closeAuthModal();
-        });
-
-        document.getElementById('tagsModal').addEventListener('click', (e) => {
-            if (e.target.id === 'tagsModal') closeTagsModal();
-        });
         
         // Import recipe functionality
         function showImportRecipeModal() {
@@ -2431,6 +2449,7 @@ header {
                 showToast('Error opening import form');
             }
         }
+        window.showImportRecipeModal = showImportRecipeModal;
         
         function closeImportRecipeModal() {
             document.getElementById('importRecipeModal').classList.remove('active');
@@ -2762,6 +2781,25 @@ header {
             
             showToast('Recipe extracted! Please review and fill in any missing details.');
         }
+        
+        // Make all button functions globally accessible
+        window.selectAll = selectAll;
+        window.clearSelection = clearSelection;
+        window.showExport = showExport;
+        window.toggleSelect = toggleSelect;
+        window.toggleExpand = toggleExpand;
+        window.signOut = signOut;
+        window.closeAuthModal = closeAuthModal;
+        window.switchAuthTab = switchAuthTab;
+        window.closeImportRecipeModal = closeImportRecipeModal;
+        window.switchImportTab = switchImportTab;
+        window.closeAddRecipeModal = closeAddRecipeModal;
+        window.closeTagsModal = closeTagsModal;
+        window.openEditTags = openEditTags;
+        window.saveTags = saveTags;
+        window.closeModal = closeModal;
+        window.copyExport = copyExport;
+        window.downloadExport = downloadExport;
         
         // Load recipes on page load
         if (document.readyState === 'loading') {
