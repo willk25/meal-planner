@@ -1424,22 +1424,22 @@
       </div>
 
       <div class="main-actions">
-      <button class="btn btn-primary" onclick="generateWeek()">
+      <button class="btn btn-primary" id="generate-week-btn">
         🎲 Generate New Week
       </button>
-      <button class="btn btn-success" onclick="acceptWeek()" id="accept-btn" disabled>
+      <button class="btn btn-success" id="accept-btn" disabled>
         ✅ Accept This Week → Shortlist
       </button>
-      <button class="btn btn-secondary" onclick="togglePantry()">
+      <button class="btn btn-secondary" id="toggle-pantry-btn">
         🥫 My Pantry (<span id="pantry-count">0</span>)
       </button>
-      <button class="btn btn-secondary" onclick="toggleGroceryList()">
+      <button class="btn btn-secondary" id="toggle-grocery-btn">
         🛒 Grocery List (<span id="grocery-count">0</span>)
       </button>
-      <button class="btn btn-secondary" onclick="toggleFavorites()">
+      <button class="btn btn-secondary" id="toggle-favorites-btn">
         ❤️ My Favorites (<span id="favorites-count">0</span>)
       </button>
-      <button class="btn btn-secondary" onclick="toggleHistory()">
+      <button class="btn btn-secondary" id="toggle-history-btn">
         📜 History (<span id="history-count">0</span>)
       </button>
     </div>
@@ -1448,13 +1448,13 @@
     <div class="pantry-section" id="pantry-section">
       <div class="pantry-header">
         <h2>🥫 My Pantry</h2>
-        <button class="btn btn-small btn-secondary" onclick="clearPantry()">Clear All</button>
+        <button class="btn btn-small btn-secondary" id="clear-pantry-btn">Clear All</button>
       </div>
       <p class="pantry-desc">Add ingredients you have on hand. Meals will show how many ingredients you already have!</p>
       
       <div class="pantry-input-area">
-        <input type="text" class="pantry-input" id="pantry-input" placeholder="Type an ingredient (e.g., chicken, olive oil, garlic)..." onkeypress="handlePantryKeypress(event)">
-        <button class="btn btn-small btn-primary" onclick="addPantryItem()">Add</button>
+        <input type="text" class="pantry-input" id="pantry-input" placeholder="Type an ingredient (e.g., chicken, olive oil, garlic)...">
+        <button class="btn btn-small btn-primary" id="add-pantry-btn">Add</button>
       </div>
       
       <div class="pantry-tags" id="pantry-tags">
@@ -1523,7 +1523,7 @@
       <div class="favorites-header">
         <h2>❤️ My Favorites</h2>
         <p class="favorites-desc">Your saved recipes to pull from when nothing generated looks good</p>
-        <button class="btn btn-small btn-secondary" onclick="clearFavorites()">Clear All</button>
+        <button class="btn btn-small btn-secondary" id="clear-favorites-btn">Clear All</button>
       </div>
       <div class="favorites-grid" id="favorites-grid">
         <div class="favorites-empty">No favorites yet. Click ❤️ on meals you love!</div>
@@ -1535,7 +1535,7 @@
       <div class="history-header">
         <h2>📜 Meal History</h2>
         <p class="favorites-desc">Past weeks' meals - add any to your favorites!</p>
-        <button class="btn btn-small btn-secondary" onclick="clearHistory()">Clear History</button>
+        <button class="btn btn-small btn-secondary" id="clear-history-btn">Clear History</button>
       </div>
       <div class="history-weeks" id="history-weeks">
         <div class="history-empty">No history yet. When you clear your shortlist or start a new week, meals will be saved here.</div>
@@ -1547,8 +1547,8 @@
       <div class="grocery-header">
         <h2>🛒 Grocery List</h2>
         <div style="display: flex; gap: 0.5rem;">
-          <button class="btn btn-small btn-primary" onclick="copyGroceryList()">📋 Copy List</button>
-          <button class="btn btn-small btn-secondary" onclick="clearGroceryChecks()">Uncheck All</button>
+          <button class="btn btn-small btn-primary" id="copy-grocery-btn">📋 Copy List</button>
+          <button class="btn btn-small btn-secondary" id="clear-grocery-checks-btn">Uncheck All</button>
         </div>
       </div>
       <p class="grocery-desc">Missing ingredients from your shortlisted meals (based on what's in your pantry)</p>
@@ -1573,7 +1573,7 @@
       </div>
       
       <div class="grocery-actions">
-        <button class="btn btn-small btn-secondary" onclick="regenerateGroceryList()">🔄 Regenerate List</button>
+        <button class="btn btn-small btn-secondary" id="regenerate-grocery-btn">🔄 Regenerate List</button>
       </div>
     </div>
     </div>
@@ -2567,6 +2567,49 @@
       renderHistory();
       renderPantry();
       generateGroceryList();
+      
+      // Attach event listeners to buttons
+      const generateWeekBtn = document.getElementById('generate-week-btn');
+      if (generateWeekBtn) generateWeekBtn.addEventListener('click', generateWeek);
+      
+      const acceptBtn = document.getElementById('accept-btn');
+      if (acceptBtn) acceptBtn.addEventListener('click', acceptWeek);
+      
+      const togglePantryBtn = document.getElementById('toggle-pantry-btn');
+      if (togglePantryBtn) togglePantryBtn.addEventListener('click', togglePantry);
+      
+      const toggleGroceryBtn = document.getElementById('toggle-grocery-btn');
+      if (toggleGroceryBtn) toggleGroceryBtn.addEventListener('click', toggleGroceryList);
+      
+      const toggleFavoritesBtn = document.getElementById('toggle-favorites-btn');
+      if (toggleFavoritesBtn) toggleFavoritesBtn.addEventListener('click', toggleFavorites);
+      
+      const toggleHistoryBtn = document.getElementById('toggle-history-btn');
+      if (toggleHistoryBtn) toggleHistoryBtn.addEventListener('click', toggleHistory);
+      
+      const clearPantryBtn = document.getElementById('clear-pantry-btn');
+      if (clearPantryBtn) clearPantryBtn.addEventListener('click', clearPantry);
+      
+      const addPantryBtn = document.getElementById('add-pantry-btn');
+      if (addPantryBtn) addPantryBtn.addEventListener('click', addPantryItem);
+      
+      const pantryInput = document.getElementById('pantry-input');
+      if (pantryInput) pantryInput.addEventListener('keypress', handlePantryKeypress);
+      
+      const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
+      if (clearFavoritesBtn) clearFavoritesBtn.addEventListener('click', clearFavorites);
+      
+      const clearHistoryBtn = document.getElementById('clear-history-btn');
+      if (clearHistoryBtn) clearHistoryBtn.addEventListener('click', clearHistory);
+      
+      const copyGroceryBtn = document.getElementById('copy-grocery-btn');
+      if (copyGroceryBtn) copyGroceryBtn.addEventListener('click', copyGroceryList);
+      
+      const clearGroceryChecksBtn = document.getElementById('clear-grocery-checks-btn');
+      if (clearGroceryChecksBtn) clearGroceryChecksBtn.addEventListener('click', clearGroceryChecks);
+      
+      const regenerateGroceryBtn = document.getElementById('regenerate-grocery-btn');
+      if (regenerateGroceryBtn) regenerateGroceryBtn.addEventListener('click', regenerateGroceryList);
     });
 
     async function loadRecipes() {
