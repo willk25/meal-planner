@@ -1284,28 +1284,50 @@ header {
     <div class="toast" id="toast">Copied to clipboard!</div>
     
     <script>
-        // Make functions globally accessible immediately (before they're defined)
-        // This ensures onclick handlers can find them
-        window.showAuthModal = function() { console.error('showAuthModal not yet defined'); };
-        window.showAddRecipeModal = function() { console.error('showAddRecipeModal not yet defined'); };
-        window.showImportRecipeModal = function() { console.error('showImportRecipeModal not yet defined'); };
-        window.selectAll = function() { console.error('selectAll not yet defined'); };
-        window.clearSelection = function() { console.error('clearSelection not yet defined'); };
-        window.showExport = function() { console.error('showExport not yet defined'); };
-        window.toggleSelect = function() { console.error('toggleSelect not yet defined'); };
-        window.toggleExpand = function() { console.error('toggleExpand not yet defined'); };
-        window.signOut = function() { console.error('signOut not yet defined'); };
-        window.closeAuthModal = function() { console.error('closeAuthModal not yet defined'); };
-        window.switchAuthTab = function() { console.error('switchAuthTab not yet defined'); };
-        window.closeImportRecipeModal = function() { console.error('closeImportRecipeModal not yet defined'); };
-        window.switchImportTab = function() { console.error('switchImportTab not yet defined'); };
-        window.closeAddRecipeModal = function() { console.error('closeAddRecipeModal not yet defined'); };
-        window.closeTagsModal = function() { console.error('closeTagsModal not yet defined'); };
-        window.openEditTags = function() { console.error('openEditTags not yet defined'); };
-        window.saveTags = function() { console.error('saveTags not yet defined'); };
-        window.closeModal = function() { console.error('closeModal not yet defined'); };
-        window.copyExport = function() { console.error('copyExport not yet defined'); };
-        window.downloadExport = function() { console.error('downloadExport not yet defined'); };
+        // Make functions globally accessible immediately using var (not hoisted like function declarations)
+        // This ensures onclick handlers can find them before the real functions are defined
+        var showAuthModal = function() { console.error('showAuthModal not yet defined'); };
+        var showAddRecipeModal = function() { console.error('showAddRecipeModal not yet defined'); };
+        var showImportRecipeModal = function() { console.error('showImportRecipeModal not yet defined'); };
+        var selectAll = function() { console.error('selectAll not yet defined'); };
+        var clearSelection = function() { console.error('clearSelection not yet defined'); };
+        var showExport = function() { console.error('showExport not yet defined'); };
+        var toggleSelect = function() { console.error('toggleSelect not yet defined'); };
+        var toggleExpand = function() { console.error('toggleExpand not yet defined'); };
+        var signOut = function() { console.error('signOut not yet defined'); };
+        var closeAuthModal = function() { console.error('closeAuthModal not yet defined'); };
+        var switchAuthTab = function() { console.error('switchAuthTab not yet defined'); };
+        var closeImportRecipeModal = function() { console.error('closeImportRecipeModal not yet defined'); };
+        var switchImportTab = function() { console.error('switchImportTab not yet defined'); };
+        var closeAddRecipeModal = function() { console.error('closeAddRecipeModal not yet defined'); };
+        var closeTagsModal = function() { console.error('closeTagsModal not yet defined'); };
+        var openEditTags = function() { console.error('openEditTags not yet defined'); };
+        var saveTags = function() { console.error('saveTags not yet defined'); };
+        var closeModal = function() { console.error('closeModal not yet defined'); };
+        var copyExport = function() { console.error('copyExport not yet defined'); };
+        var downloadExport = function() { console.error('downloadExport not yet defined'); };
+        
+        // Also assign to window for explicit access
+        window.showAuthModal = showAuthModal;
+        window.showAddRecipeModal = showAddRecipeModal;
+        window.showImportRecipeModal = showImportRecipeModal;
+        window.selectAll = selectAll;
+        window.clearSelection = clearSelection;
+        window.showExport = showExport;
+        window.toggleSelect = toggleSelect;
+        window.toggleExpand = toggleExpand;
+        window.signOut = signOut;
+        window.closeAuthModal = closeAuthModal;
+        window.switchAuthTab = switchAuthTab;
+        window.closeImportRecipeModal = closeImportRecipeModal;
+        window.switchImportTab = switchImportTab;
+        window.closeAddRecipeModal = closeAddRecipeModal;
+        window.closeTagsModal = closeTagsModal;
+        window.openEditTags = openEditTags;
+        window.saveTags = saveTags;
+        window.closeModal = closeModal;
+        window.copyExport = copyExport;
+        window.downloadExport = downloadExport;
         
         // Supabase Configuration
         // TODO: Replace these with your Supabase project credentials
@@ -1419,8 +1441,8 @@ header {
             showToast('Signed out');
         }
 
-        // Make functions globally accessible
-        function showAuthModal() {
+        // Replace placeholder with real implementation
+        showAuthModal = function() {
             try {
                 const modal = document.getElementById('authModal');
                 if (!modal) {
@@ -1434,7 +1456,7 @@ header {
                 console.error('Error opening auth modal:', error);
                 showToast('Error opening sign-in form');
             }
-        }
+        };
         window.showAuthModal = showAuthModal;
 
         function closeAuthModal() {
@@ -2008,7 +2030,8 @@ header {
         let currentPhotoData = [];
         let cameraStream = null;
         
-        function showAddRecipeModal() {
+        // Replace placeholder with real implementation
+        showAddRecipeModal = function() {
             try {
                 const modal = document.getElementById('addRecipeModal');
                 if (!modal) {
@@ -2029,7 +2052,7 @@ header {
                 console.error('Error opening add recipe modal:', error);
                 showToast('Error opening recipe form');
             }
-        }
+        };
         window.showAddRecipeModal = showAddRecipeModal;
         
         function closeAddRecipeModal() {
@@ -2456,8 +2479,8 @@ header {
             }
         }
         
-        // Import recipe functionality
-        function showImportRecipeModal() {
+        // Import recipe functionality - Replace placeholder with real implementation
+        showImportRecipeModal = function() {
             try {
                 const modal = document.getElementById('importRecipeModal');
                 if (!modal) {
@@ -2471,7 +2494,7 @@ header {
                 console.error('Error opening import recipe modal:', error);
                 showToast('Error opening import form');
             }
-        }
+        };
         window.showImportRecipeModal = showImportRecipeModal;
         
         function closeImportRecipeModal() {
