@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS recipes (
   photos JSONB,
   estimated_price NUMERIC(6,2),
   source TEXT,
+  source_url TEXT,
+  tags JSONB DEFAULT '[]'::jsonb,
   date TIMESTAMPTZ DEFAULT NOW(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

@@ -1397,8 +1397,19 @@ header {
         }
 
         function showAuthModal() {
-            document.getElementById('authModal').classList.add('active');
-            switchAuthTab('magic');
+            try {
+                const modal = document.getElementById('authModal');
+                if (!modal) {
+                    console.error('authModal element not found');
+                    showToast('Error: Could not open sign-in form');
+                    return;
+                }
+                modal.classList.add('active');
+                switchAuthTab('magic');
+            } catch (error) {
+                console.error('Error opening auth modal:', error);
+                showToast('Error opening sign-in form');
+            }
         }
 
         function closeAuthModal() {
@@ -1406,16 +1417,33 @@ header {
         }
 
         function switchAuthTab(tab) {
-            document.getElementById('authTabMagic').classList.toggle('active', tab === 'magic');
-            document.getElementById('authTabPassword').classList.toggle('active', tab === 'password');
-            document.getElementById('authMagicTab').style.display = tab === 'magic' ? 'block' : 'none';
-            document.getElementById('authPasswordTab').style.display = tab === 'password' ? 'block' : 'none';
+            try {
+                const magicTab = document.getElementById('authTabMagic');
+                const passwordTab = document.getElementById('authTabPassword');
+                const magicContent = document.getElementById('authMagicTab');
+                const passwordContent = document.getElementById('authPasswordTab');
+                
+                if (magicTab) magicTab.classList.toggle('active', tab === 'magic');
+                if (passwordTab) passwordTab.classList.toggle('active', tab === 'password');
+                if (magicContent) magicContent.style.display = tab === 'magic' ? 'block' : 'none';
+                if (passwordContent) passwordContent.style.display = tab === 'password' ? 'block' : 'none';
+            } catch (error) {
+                console.error('Error switching auth tab:', error);
+            }
         }
 
         async function sendMagicLink(event) {
             event.preventDefault();
+            if (!supabase) {
+                showToast('Supabase not configured. Please configure your Supabase credentials.');
+                return;
+            }
+            
             const email = document.getElementById('magicEmail').value.trim();
-            if (!email) return;
+            if (!email) {
+                showToast('Please enter your email address');
+                return;
+            }
 
             try {
                 const { error } = await supabase.auth.signInWithOtp({
@@ -1423,11 +1451,11 @@ header {
                     options: { emailRedirectTo: window.location.origin + window.location.pathname }
                 });
                 if (error) throw error;
-                showToast('Magic link sent. Check your email.');
+                showToast('Magic link sent! Check your email and click the link to sign in.');
                 closeAuthModal();
             } catch (err) {
-                console.error(err);
-                showToast(err.message || 'Could not send magic link');
+                console.error('Magic link error:', err);
+                showToast(err.message || 'Could not send magic link. Please try again.');
             }
         }
 
@@ -1601,6 +1629,7 @@ header {
         
         // Load recipes from Supabase (with fallback to JSON file)
         async function loadRecipes() {
+            // Try loading from Supabase first if user is signed in
             if (supabase && currentUser) {
                 try {
                     const { data, error } = await supabase
@@ -1644,14 +1673,32 @@ header {
                         renderRecipes();
                         console.log(`✅ Loaded ${recipes.length} recipes from Supabase`);
                         return;
+                    } else {
+                        // User signed in but no recipes in Supabase - try localStorage backup
+                        try {
+                            const backupKey = `curated_recipes_backup_${currentUser.id}`;
+                            const backup = localStorage.getItem(backupKey);
+                            if (backup) {
+                                recipes = JSON.parse(backup);
+                                recipes.forEach((r, i) => {
+                                    if (!r.id) r.id = Date.now() + i;
+                                });
+                                document.getElementById('totalCount').textContent = recipes.length;
+                                renderRecipes();
+                                console.log(`✅ Loaded ${recipes.length} recipes from localStorage backup`);
+                                return;
+                            }
+                        } catch (e) {
+                            console.warn('Could not load from localStorage backup:', e);
+                        }
                     }
                 } catch (error) {
                     console.error('Error loading from Supabase:', error);
-                    showToast('Could not load from cloud. Falling back to local file...');
+                    // Fall through to JSON file fallback
                 }
             }
 
-            // Fallback to JSON file
+            // Fallback to JSON file (for anonymous users or if Supabase fails)
             try {
                 const response = await fetch('curated_recipes.json');
                 recipes = await response.json();
@@ -1714,8 +1761,10 @@ header {
         }
         
         function getFilteredRecipes() {
-            const search = document.getElementById('search').value.toLowerCase();
-            const tagSearch = document.getElementById('filterTag').value.toLowerCase().trim();
+            const searchEl = document.getElementById('search');
+            const filterTagEl = document.getElementById('filterTag');
+            const search = searchEl ? searchEl.value.toLowerCase() : '';
+            const tagSearch = filterTagEl ? filterTagEl.value.toLowerCase().trim() : '';
             const protein = document.getElementById('filterProtein').value;
             const meal = document.getElementById('filterMeal').value;
             const difficulty = document.getElementById('filterDifficulty').value;
@@ -1935,12 +1984,26 @@ header {
         let cameraStream = null;
         
         function showAddRecipeModal() {
-            document.getElementById('addRecipeModal').classList.add('active');
-            document.getElementById('addRecipeForm').reset();
-            document.getElementById('recipeTags').value = '';
-            document.getElementById('recipeSourceUrl').value = '';
-            currentImportSourceUrl = null;
-            clearPhoto();
+            try {
+                const modal = document.getElementById('addRecipeModal');
+                if (!modal) {
+                    console.error('addRecipeModal element not found');
+                    showToast('Error: Could not open recipe form');
+                    return;
+                }
+                modal.classList.add('active');
+                const form = document.getElementById('addRecipeForm');
+                if (form) form.reset();
+                const tagsInput = document.getElementById('recipeTags');
+                if (tagsInput) tagsInput.value = '';
+                const sourceUrlInput = document.getElementById('recipeSourceUrl');
+                if (sourceUrlInput) sourceUrlInput.value = '';
+                currentImportSourceUrl = null;
+                clearPhoto();
+            } catch (error) {
+                console.error('Error opening add recipe modal:', error);
+                showToast('Error opening recipe form');
+            }
         }
         
         function closeAddRecipeModal() {
@@ -2290,14 +2353,46 @@ header {
             showToast('Downloaded curated_recipes.json!');
         }
         
-        // Event listeners
-        document.getElementById('search').addEventListener('input', renderRecipes);
-        document.getElementById('filterProtein').addEventListener('change', renderRecipes);
-        document.getElementById('filterTag').addEventListener('input', renderRecipes);
-        document.getElementById('filterMeal').addEventListener('change', renderRecipes);
-        document.getElementById('filterDifficulty').addEventListener('change', renderRecipes);
-        document.getElementById('filterFamily').addEventListener('change', renderRecipes);
-        document.getElementById('sortBy').addEventListener('change', renderRecipes);
+        // Event listeners - wait for DOM to be ready
+        function setupEventListeners() {
+            const searchEl = document.getElementById('search');
+            const filterTagEl = document.getElementById('filterTag');
+            const filterProteinEl = document.getElementById('filterProtein');
+            const filterMealEl = document.getElementById('filterMeal');
+            const filterDifficultyEl = document.getElementById('filterDifficulty');
+            const filterFamilyEl = document.getElementById('filterFamily');
+            const sortByEl = document.getElementById('sortBy');
+            
+            if (searchEl) {
+                searchEl.addEventListener('input', renderRecipes);
+            } else {
+                console.error('Search element not found');
+            }
+            
+            if (filterTagEl) {
+                filterTagEl.addEventListener('input', renderRecipes);
+            }
+            
+            if (filterProteinEl) {
+                filterProteinEl.addEventListener('change', renderRecipes);
+            }
+            
+            if (filterMealEl) {
+                filterMealEl.addEventListener('change', renderRecipes);
+            }
+            
+            if (filterDifficultyEl) {
+                filterDifficultyEl.addEventListener('change', renderRecipes);
+            }
+            
+            if (filterFamilyEl) {
+                filterFamilyEl.addEventListener('change', renderRecipes);
+            }
+            
+            if (sortByEl) {
+                sortByEl.addEventListener('change', renderRecipes);
+            }
+        }
         
         // Close modal on outside click
         document.getElementById('exportModal').addEventListener('click', (e) => {
@@ -2322,8 +2417,19 @@ header {
         
         // Import recipe functionality
         function showImportRecipeModal() {
-            document.getElementById('importRecipeModal').classList.add('active');
-            switchImportTab('text');
+            try {
+                const modal = document.getElementById('importRecipeModal');
+                if (!modal) {
+                    console.error('importRecipeModal element not found');
+                    showToast('Error: Could not open import form');
+                    return;
+                }
+                modal.classList.add('active');
+                switchImportTab('text');
+            } catch (error) {
+                console.error('Error opening import recipe modal:', error);
+                showToast('Error opening import form');
+            }
         }
         
         function closeImportRecipeModal() {
@@ -2658,8 +2764,17 @@ header {
         }
         
         // Load recipes on page load
-        initializeAuth();
-        loadRecipes();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setupEventListeners();
+                initializeAuth();
+                loadRecipes();
+            });
+        } else {
+            setupEventListeners();
+            initializeAuth();
+            loadRecipes();
+        }
     </script>
 </body>
 </html>
