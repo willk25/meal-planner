@@ -1391,14 +1391,14 @@
       <div class="auth-section">
         <div id="userInfo" class="user-info" style="display: none;">
           <span id="userEmail"></span>
-          <button class="btn btn-small btn-secondary" onclick="signOut()">Sign out</button>
+          <button class="btn btn-small btn-secondary" id="sign-out-btn">Sign out</button>
         </div>
-        <button id="signInBtn" class="btn btn-small btn-primary" onclick="showAuthModal()">Sign in</button>
+        <button id="signInBtn" class="btn btn-small btn-primary">Sign in</button>
       </div>
 
       <div class="tabs-container">
-        <button class="tab-btn active" onclick="switchTab('planner')" id="tab-planner">Meal Planner</button>
-        <button class="tab-btn" onclick="switchTab('add-recipe')" id="tab-add-recipe">Recipe Add</button>
+        <button class="tab-btn active" id="tab-planner">Meal Planner</button>
+        <button class="tab-btn" id="tab-add-recipe">Recipe Add</button>
       </div>
     </header>
 
@@ -1732,12 +1732,12 @@
   </div>
 
   <!-- Auth Modal -->
-  <div class="modal" id="authModal" style="display: none;" onclick="if(event.target.id === 'authModal') closeAuthModal();">
+  <div class="modal" id="authModal" style="display: none;">
     <div onclick="event.stopPropagation();" style="background: var(--bg-card); border-radius: 12px; padding: 2rem; max-width: 520px; width: 90%; max-height: 80vh; overflow-y: auto;">
       <h2 style="color: var(--accent-gold); margin-bottom: 1.5rem;">Account</h2>
       <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle);">
-        <button type="button" class="tab-btn" onclick="switchAuthTab('magic')" id="authTabMagic" style="border-bottom: 3px solid transparent;">Magic Link</button>
-        <button type="button" class="tab-btn" onclick="switchAuthTab('password')" id="authTabPassword" style="border-bottom: 3px solid transparent;">Email + Password</button>
+        <button type="button" class="tab-btn" id="authTabMagic" style="border-bottom: 3px solid transparent;">Magic Link</button>
+        <button type="button" class="tab-btn" id="authTabPassword" style="border-bottom: 3px solid transparent;">Email + Password</button>
       </div>
 
       <div id="authMagicTab">
@@ -1750,7 +1750,7 @@
             <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">We will send a sign-in link to your email.</p>
           </div>
           <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-            <button type="button" class="btn btn-secondary" onclick="closeAuthModal()">Cancel</button>
+            <button type="button" class="btn btn-secondary" id="close-auth-modal-btn-1">Cancel</button>
             <button type="submit" class="btn btn-primary">Send Magic Link</button>
           </div>
         </form>
@@ -1771,9 +1771,9 @@
                    placeholder="••••••••">
           </div>
           <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1.5rem;">
-            <button type="button" class="btn btn-secondary" onclick="closeAuthModal()">Cancel</button>
+            <button type="button" class="btn btn-secondary" id="close-auth-modal-btn-2">Cancel</button>
             <button type="submit" class="btn btn-primary">Sign In</button>
-            <button type="button" class="btn btn-secondary" onclick="createAccount()">Create Account</button>
+            <button type="button" class="btn btn-secondary" id="create-account-btn">Create Account</button>
           </div>
         </form>
       </div>
@@ -2610,6 +2610,80 @@
       
       const regenerateGroceryBtn = document.getElementById('regenerate-grocery-btn');
       if (regenerateGroceryBtn) regenerateGroceryBtn.addEventListener('click', regenerateGroceryList);
+      
+      // Tab buttons
+      const tabPlanner = document.getElementById('tab-planner');
+      if (tabPlanner) tabPlanner.addEventListener('click', () => switchTab('planner'));
+      
+      const tabAddRecipe = document.getElementById('tab-add-recipe');
+      if (tabAddRecipe) tabAddRecipe.addEventListener('click', () => switchTab('add-recipe'));
+      
+      // Auth buttons
+      const signInBtn = document.getElementById('signInBtn');
+      if (signInBtn) signInBtn.addEventListener('click', showAuthModal);
+      
+      const signOutBtn = document.getElementById('sign-out-btn');
+      if (signOutBtn) signOutBtn.addEventListener('click', signOut);
+      
+      const authTabMagic = document.getElementById('authTabMagic');
+      if (authTabMagic) authTabMagic.addEventListener('click', () => switchAuthTab('magic'));
+      
+      const authTabPassword = document.getElementById('authTabPassword');
+      if (authTabPassword) authTabPassword.addEventListener('click', () => switchAuthTab('password'));
+      
+      const closeAuthModalBtn1 = document.getElementById('close-auth-modal-btn-1');
+      if (closeAuthModalBtn1) closeAuthModalBtn1.addEventListener('click', closeAuthModal);
+      
+      const closeAuthModalBtn2 = document.getElementById('close-auth-modal-btn-2');
+      if (closeAuthModalBtn2) closeAuthModalBtn2.addEventListener('click', closeAuthModal);
+      
+      const createAccountBtn = document.getElementById('create-account-btn');
+      if (createAccountBtn) createAccountBtn.addEventListener('click', createAccount);
+      
+      // Auth modal backdrop click
+      const authModal = document.getElementById('authModal');
+      if (authModal) {
+        authModal.addEventListener('click', (e) => {
+          if (e.target.id === 'authModal') closeAuthModal();
+        });
+      }
+      
+      // Recipe Add tab buttons
+      const recipePhotoBtn = document.querySelector('button[onclick*="recipePhoto"]');
+      if (recipePhotoBtn) {
+        recipePhotoBtn.removeAttribute('onclick');
+        recipePhotoBtn.addEventListener('click', () => document.getElementById('recipePhoto').click());
+      }
+      
+      const capturePhotoBtn = document.querySelector('button[onclick="capturePhoto()"]');
+      if (capturePhotoBtn) {
+        capturePhotoBtn.removeAttribute('onclick');
+        capturePhotoBtn.addEventListener('click', capturePhoto);
+      }
+      
+      const extractTextBtn = document.getElementById('ocrButton');
+      if (extractTextBtn) {
+        extractTextBtn.removeAttribute('onclick');
+        extractTextBtn.addEventListener('click', extractTextFromPhotos);
+      }
+      
+      const clearPhotoBtn = document.querySelector('button[onclick="clearPhoto()"]');
+      if (clearPhotoBtn) {
+        clearPhotoBtn.removeAttribute('onclick');
+        clearPhotoBtn.addEventListener('click', clearPhoto);
+      }
+      
+      const captureFromCameraBtn = document.querySelector('button[onclick="captureFromCamera()"]');
+      if (captureFromCameraBtn) {
+        captureFromCameraBtn.removeAttribute('onclick');
+        captureFromCameraBtn.addEventListener('click', captureFromCamera);
+      }
+      
+      const urlImportBtn = document.getElementById('urlImportBtn');
+      if (urlImportBtn) {
+        urlImportBtn.removeAttribute('onclick');
+        urlImportBtn.addEventListener('click', importFromUrl);
+      }
     });
 
     async function loadRecipes() {
