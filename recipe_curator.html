@@ -1284,6 +1284,29 @@ header {
     <div class="toast" id="toast">Copied to clipboard!</div>
     
     <script>
+        // Make functions globally accessible immediately (before they're defined)
+        // This ensures onclick handlers can find them
+        window.showAuthModal = function() { console.error('showAuthModal not yet defined'); };
+        window.showAddRecipeModal = function() { console.error('showAddRecipeModal not yet defined'); };
+        window.showImportRecipeModal = function() { console.error('showImportRecipeModal not yet defined'); };
+        window.selectAll = function() { console.error('selectAll not yet defined'); };
+        window.clearSelection = function() { console.error('clearSelection not yet defined'); };
+        window.showExport = function() { console.error('showExport not yet defined'); };
+        window.toggleSelect = function() { console.error('toggleSelect not yet defined'); };
+        window.toggleExpand = function() { console.error('toggleExpand not yet defined'); };
+        window.signOut = function() { console.error('signOut not yet defined'); };
+        window.closeAuthModal = function() { console.error('closeAuthModal not yet defined'); };
+        window.switchAuthTab = function() { console.error('switchAuthTab not yet defined'); };
+        window.closeImportRecipeModal = function() { console.error('closeImportRecipeModal not yet defined'); };
+        window.switchImportTab = function() { console.error('switchImportTab not yet defined'); };
+        window.closeAddRecipeModal = function() { console.error('closeAddRecipeModal not yet defined'); };
+        window.closeTagsModal = function() { console.error('closeTagsModal not yet defined'); };
+        window.openEditTags = function() { console.error('openEditTags not yet defined'); };
+        window.saveTags = function() { console.error('saveTags not yet defined'); };
+        window.closeModal = function() { console.error('closeModal not yet defined'); };
+        window.copyExport = function() { console.error('copyExport not yet defined'); };
+        window.downloadExport = function() { console.error('downloadExport not yet defined'); };
+        
         // Supabase Configuration
         // TODO: Replace these with your Supabase project credentials
         // Get them from: Supabase Dashboard → Settings → API
@@ -2782,7 +2805,10 @@ header {
             showToast('Recipe extracted! Please review and fill in any missing details.');
         }
         
-        // Make all button functions globally accessible
+        // Override placeholder functions with real implementations
+        window.showAuthModal = showAuthModal;
+        window.showAddRecipeModal = showAddRecipeModal;
+        window.showImportRecipeModal = showImportRecipeModal;
         window.selectAll = selectAll;
         window.clearSelection = clearSelection;
         window.showExport = showExport;
