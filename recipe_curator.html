@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Recipe Curator</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap');
         
         * {
             box-sizing: border-box;
@@ -15,35 +16,35 @@
         }
         
         :root {
-            --bg-dark: #1a1a1a;
-            --bg-card: #242424;
-            --bg-hover: #2d2d2d;
-            --accent: #e07b39;
-            --accent-light: #f4a261;
-            --text: #f5f5f5;
-            --text-muted: #a0a0a0;
-            --border: #333;
-            --success: #4ade80;
-            --family: #a78bfa;
+            --bg: #f6f7f2;
+            --bg-soft: #eef1ea;
+            --bg-card: #ffffff;
+            --bg-hover: #f0f3ef;
+            --accent: #1f6f5c;
+            --accent-light: #4fb286;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --success: #16a34a;
+            --family: #f59e0b;
+            --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
         }
-        
-        body {
-            font-family: 'Source Sans 3', sans-serif;
-            background: var(--bg-dark);
+body {
+            font-family: 'Instrument Sans', sans-serif;
+            background: radial-gradient(circle at top, #ffffff 0%, var(--bg) 45%, #eef1ea 100%);
             color: var(--text);
             min-height: 100vh;
-            line-height: 1.5;
+            line-height: 1.55;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             touch-action: pan-y;
         }
-        
-        html {
+html {
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            background: var(--bg);
         }
-        
-        header {
+header {
             background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
             border-bottom: 1px solid var(--border);
             padding: 2rem;
@@ -582,53 +583,353 @@
         #ocrProgress {
             animation: fadeIn 0.3s;
         }
+
+        .topbar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 2.5rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .account {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-email {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: minmax(260px, 1.5fr) minmax(200px, 1fr) repeat(4, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            align-items: center;
+        }
+
+        .search-box input,
+        .tag-filter input,
+        .text-input,
+        select {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            box-sizing: border-box;
+        }
+
+        .search-box::after {
+            content: "";
+            width: 7px;
+            height: 2px;
+            background: var(--text-muted);
+            position: absolute;
+            left: 1.55rem;
+            top: 56%;
+            transform: rotate(45deg);
+            border-radius: 999px;
+        }
+
+        .search-box input {
+            padding-left: 2.2rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, background 0.2s, color 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-soft);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .recipe-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            cursor: pointer;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        .recipe-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .recipe-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .tag {
+            padding: 0.2rem 0.55rem;
+            background: var(--bg-soft);
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            text-transform: none;
+        }
+
+        .tag.user-tag {
+            background: rgba(79, 178, 134, 0.15);
+            color: #1f6f5c;
+        }
+
+        .tag.family {
+            background: rgba(245, 158, 11, 0.2);
+            color: #b45309;
+        }
+
+        .stats {
+            margin-top: 1.25rem;
+        }
+
+        .stat-value {
+            color: var(--accent);
+        }
+
+        .recipe-details h4 {
+            color: var(--accent);
+        }
+
+        .recipe-details li::before,
+        .recipe-details ol li::before {
+            color: var(--accent);
+        }
+
+        .quick-actions {
+            background: linear-gradient(180deg, transparent 0%, rgba(246, 247, 242, 0.9) 30%, rgba(246, 247, 242, 0.98) 100%);
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .field-hint {
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .mini-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .mini-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1100px) {
+            .controls {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem 1rem;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>🍽️ Recipe Curator</h1>
-        <p class="subtitle">Browse, select, and export your favorite recipes</p>
-        
+        <div class="topbar">
+            <div class="brand">
+                <h1>Recipe Curator</h1>
+                <p class="subtitle">Organize, tag, and share your recipes</p>
+            </div>
+            <div class="account">
+                <div id="userMenu" class="user-menu" style="display: none;">
+                    <span id="userEmail" class="user-email"></span>
+                    <button class="btn btn-outline" onclick="signOut()">Sign out</button>
+                </div>
+                <button class="btn btn-primary" id="authBtn" onclick="showAuthModal()">Sign in</button>
+            </div>
+        </div>
+        <div id="supabaseStatus" style="display: none; margin-top: 0.75rem; padding: 0.5rem 1rem; background: var(--bg-card); border-radius: 8px; font-size: 0.85rem; color: var(--text-muted);">
+            <span id="supabaseStatusText"></span>
+        </div>
+
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="search" placeholder="Search recipes...">
+                <input type="text" id="search" placeholder="Search recipes, ingredients, tags...">
             </div>
-            
+
+            <div class="tag-filter">
+                <input type="text" id="filterTag" placeholder="Filter by tag">
+            </div>
+
             <select id="filterProtein">
                 <option value="">All Proteins</option>
-                <option value="chicken">🐔 Chicken</option>
-                <option value="beef">🥩 Beef</option>
-                <option value="pork">🐷 Pork</option>
-                <option value="seafood">🐟 Seafood</option>
-                <option value="turkey">🦃 Turkey</option>
-                <option value="lamb">🐑 Lamb</option>
-                <option value="eggs">🥚 Eggs</option>
-                <option value="other">🥗 Other/Veggie</option>
+                <option value="chicken">Chicken</option>
+                <option value="beef">Beef</option>
+                <option value="pork">Pork</option>
+                <option value="seafood">Seafood</option>
+                <option value="turkey">Turkey</option>
+                <option value="lamb">Lamb</option>
+                <option value="eggs">Eggs</option>
+                <option value="other">Other/Veggie</option>
             </select>
-            
+
             <select id="filterMeal">
                 <option value="">All Meal Types</option>
-                <option value="breakfast">🌅 Breakfast</option>
-                <option value="entree">🍽️ Entree</option>
-                <option value="soup">🥣 Soup</option>
-                <option value="salad">🥗 Salad</option>
-                <option value="appetizer">🍤 Appetizer</option>
-                <option value="dessert">🍰 Dessert</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="entree">Entree</option>
+                <option value="soup">Soup</option>
+                <option value="salad">Salad</option>
+                <option value="appetizer">Appetizer</option>
+                <option value="dessert">Dessert</option>
             </select>
-            
+
             <select id="filterDifficulty">
                 <option value="">All Difficulties</option>
-                <option value="easy">⚡ Easy</option>
-                <option value="medium">⏱️ Medium</option>
-                <option value="involved">👨‍🍳 Involved</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="involved">Involved</option>
             </select>
-            
+
             <select id="filterFamily">
                 <option value="">All Recipes</option>
-                <option value="family">🏠 Family Only</option>
-                <option value="curated">📚 Curated Only</option>
+                <option value="family">Family Only</option>
+                <option value="curated">Curated Only</option>
             </select>
-            
+
             <select id="sortBy">
                 <option value="title">Sort: A-Z</option>
                 <option value="rating">Sort: Rating</option>
@@ -636,7 +937,7 @@
                 <option value="ingredients">Sort: Simplest First</option>
             </select>
         </div>
-        
+
         <div class="stats">
             <div class="stat">
                 <span class="stat-value" id="totalCount">0</span>
@@ -650,10 +951,10 @@
                 <span class="stat-value" id="selectedCount">0</span>
                 <span class="stat-label">selected</span>
             </div>
-            
+
             <div class="action-buttons">
-                <button class="btn btn-primary" onclick="showImportRecipeModal()" style="background: #60a5fa;">📥 Import Recipe</button>
-                <button class="btn btn-primary" onclick="showAddRecipeModal()" style="background: var(--accent-light);">📸 Add Recipe from Photo</button>
+                <button class="btn btn-primary" onclick="showImportRecipeModal()">Import Recipe</button>
+                <button class="btn btn-secondary" onclick="showAddRecipeModal()">Add Recipe from Photo</button>
                 <button class="btn btn-outline" onclick="selectAll()">Select All Visible</button>
                 <button class="btn btn-outline" onclick="clearSelection()">Clear Selection</button>
                 <button class="btn btn-primary" onclick="showExport()">Export Selected</button>
@@ -668,14 +969,14 @@
     </main>
     
     <div class="quick-actions">
-        <button class="btn btn-primary" onclick="showImportRecipeModal()" style="background: #60a5fa;">
-            📥 Import Recipe
+        <button class="btn btn-primary" onclick="showImportRecipeModal()">
+            Import Recipe
         </button>
-        <button class="btn btn-primary" onclick="showAddRecipeModal()" style="background: var(--accent-light);">
-            📸 Add Recipe from Photo
+        <button class="btn btn-secondary" onclick="showAddRecipeModal()">
+            Add Recipe from Photo
         </button>
         <button class="btn btn-success" onclick="showExport()">
-            📥 Export <span id="exportCount">0</span> Selected Recipes
+            Export <span id="exportCount">0</span> Selected Recipes
         </button>
     </div>
     
@@ -696,7 +997,7 @@
     
     <div class="modal" id="importRecipeModal">
         <div class="modal-content" style="max-width: 800px;">
-            <h2>📥 Import Recipe</h2>
+            <h2>Import Recipe</h2>
             <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
                 <button type="button" class="import-tab-btn active" onclick="switchImportTab('text')" id="importTabText">
                     📋 Paste Recipe Text
@@ -738,8 +1039,11 @@
                                style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 1rem;"
                                placeholder="https://www.allrecipes.com/recipe/...">
                         <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
-                            Paste a URL from a recipe website. The recipe will be automatically extracted.
+                            We fetch the cleaned version via cooked.wiki to strip the story and keep the recipe.
                         </p>
+                        <div class="mini-link" style="margin-top: 0.25rem;">
+                            <a id="cookedLink" href="#" target="_blank" rel="noopener">Open cleaned page</a>
+                        </div>
                     </div>
                     <div id="urlLoading" style="display: none; text-align: center; padding: 2rem; color: var(--text-muted);">
                         <p>⏳ Extracting recipe from URL...</p>
@@ -759,7 +1063,7 @@
     
     <div class="modal" id="addRecipeModal">
         <div class="modal-content" style="max-width: 700px;">
-            <h2>📸 Add Recipe from Photo</h2>
+            <h2>Add Recipe from Photo</h2>
             <form id="addRecipeForm" onsubmit="saveRecipeFromPhoto(event)">
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
@@ -846,6 +1150,19 @@
                     </div>
                 </div>
                 
+                <div class="form-row">
+                    <div>
+                        <label class="field-label">Tags</label>
+                        <input type="text" id="recipeTags" placeholder="family, NYT, weeknight" class="text-input">
+                        <p class="field-hint">Use commas or #tags. Tags are searchable.</p>
+                    </div>
+                    <div>
+                        <label class="field-label">Source URL (optional)</label>
+                        <input type="url" id="recipeSourceUrl" placeholder="https://..." class="text-input">
+                    </div>
+                </div>
+                </div>
+                
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--text); font-weight: 500;">
                         Ingredients (one per line)
@@ -899,14 +1216,442 @@
         </div>
     </div>
     
+
+    <div class="modal" id="authModal">
+        <div class="modal-content" style="max-width: 520px;">
+            <h2>Account</h2>
+            <div class="auth-tabs">
+                <button type="button" class="import-tab-btn active" onclick="switchAuthTab('magic')" id="authTabMagic">Magic Link</button>
+                <button type="button" class="import-tab-btn" onclick="switchAuthTab('password')" id="authTabPassword">Email + Password</button>
+            </div>
+
+            <div id="authMagicTab" class="import-tab-content">
+                <form onsubmit="sendMagicLink(event)">
+                    <div style="margin-bottom: 1rem;">
+                        <label class="field-label">Email</label>
+                        <input type="email" id="magicEmail" required class="text-input" placeholder="you@example.com">
+                        <p class="field-hint">We will send a sign-in link to your email.</p>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn btn-outline" onclick="closeAuthModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Send Magic Link</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="authPasswordTab" class="import-tab-content" style="display: none;">
+                <form onsubmit="signInWithPassword(event)">
+                    <div style="margin-bottom: 1rem;">
+                        <label class="field-label">Email</label>
+                        <input type="email" id="passwordEmail" required class="text-input" placeholder="you@example.com">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label class="field-label">Password</label>
+                        <input type="password" id="passwordValue" required class="text-input" placeholder="••••••••">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label class="field-label">Username (optional)</label>
+                        <input type="text" id="displayName" class="text-input" placeholder="chef-will">
+                    </div>
+                    <label class="remember-row">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <span>Stay signed in for months</span>
+                    </label>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn btn-outline" onclick="closeAuthModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                        <button type="button" class="btn btn-secondary" onclick="createAccount()">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="tagsModal">
+        <div class="modal-content" style="max-width: 520px;">
+            <h2>Edit Tags</h2>
+            <div style="margin-bottom: 1rem;">
+                <label class="field-label">Tags</label>
+                <input type="text" id="editTagsInput" class="text-input" placeholder="family, NYT, weeknight">
+                <p class="field-hint">Comma separated or #tags.</p>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-outline" onclick="closeTagsModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveTags()">Save Tags</button>
+            </div>
+        </div>
+    </div>
     <div class="toast" id="toast">Copied to clipboard!</div>
     
     <script>
+        // Supabase Configuration
+        // TODO: Replace these with your Supabase project credentials
+        // Get them from: Supabase Dashboard → Settings → API
+        const SUPABASE_URL = 'https://dtavyealoifnyqkanovx.supabase.co'; // e.g., 'https://xxxxx.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0YXZ5ZWFsb2lmbnlxa2Fub3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwODgyMDIsImV4cCI6MjA4NTY2NDIwMn0._jLnINmj8expMf90KKH0FTwBPba3P4RSrnJeo_KO9IQ'; // Your anon/public key
+        
+        // Initialize Supabase client (only if credentials are provided)
+        let supabase = null;
+        if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storage: window.localStorage } });
+            console.log('✅ Supabase connected');
+            updateSupabaseStatus(true);
+        } else {
+            console.warn('⚠️ Supabase not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY to enable cloud storage.');
+            updateSupabaseStatus(false);
+        }
+        
+        let currentUser = null;
+        let rememberUser = true;
+        let currentImportSourceUrl = null;
+        let currentImportSourceName = null;
+        let editingTagsRecipeId = null;
+
+        function getSavedAuth() {
+            try {
+                const raw = localStorage.getItem('rc_saved_auth');
+                if (!raw) return null;
+                const data = JSON.parse(raw);
+                if (!data?.email || !data?.password || !data?.expiresAt) return null;
+                if (Date.now() > data.expiresAt) {
+                    localStorage.removeItem('rc_saved_auth');
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveAuthForRememberMe(email, password) {
+            try {
+                const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 120; // ~120 days
+                localStorage.setItem('rc_saved_auth', JSON.stringify({ email, password, expiresAt }));
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        function clearSavedAuth() {
+            try {
+                localStorage.removeItem('rc_saved_auth');
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        async function initializeAuth() {
+            if (!supabase) return;
+            const { data } = await supabase.auth.getSession();
+            currentUser = data.session?.user || null;
+            updateAuthUI();
+
+            if (!currentUser) {
+                const saved = getSavedAuth();
+                if (saved) {
+                    try {
+                        const { error } = await supabase.auth.signInWithPassword({
+                            email: saved.email,
+                            password: saved.password
+                        });
+                        if (error) throw error;
+                    } catch (err) {
+                        console.warn('Auto sign-in failed:', err?.message || err);
+                        clearSavedAuth();
+                    }
+                }
+            }
+
+            supabase.auth.onAuthStateChange((_event, session) => {
+                currentUser = session?.user || null;
+                updateAuthUI();
+                loadRecipes();
+            });
+        }
+
+        
+        function updateAuthUI() {
+            const authBtn = document.getElementById('authBtn');
+            const userMenu = document.getElementById('userMenu');
+            const userEmail = document.getElementById('userEmail');
+
+            if (currentUser) {
+                if (authBtn) authBtn.style.display = 'none';
+                if (userMenu) userMenu.style.display = 'flex';
+                if (userEmail) userEmail.textContent = currentUser.email || 'Signed in';
+            } else {
+                if (authBtn) authBtn.style.display = 'inline-flex';
+                if (userMenu) userMenu.style.display = 'none';
+                if (userEmail) userEmail.textContent = '';
+            }
+            if (typeof updateSupabaseStatus === 'function') {
+                updateSupabaseStatus(!!supabase);
+            }
+        }
+
+        async function signOut() {
+            if (!supabase) return;
+            await supabase.auth.signOut();
+            clearSavedAuth();
+            showToast('Signed out');
+        }
+
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+            switchAuthTab('magic');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function switchAuthTab(tab) {
+            document.getElementById('authTabMagic').classList.toggle('active', tab === 'magic');
+            document.getElementById('authTabPassword').classList.toggle('active', tab === 'password');
+            document.getElementById('authMagicTab').style.display = tab === 'magic' ? 'block' : 'none';
+            document.getElementById('authPasswordTab').style.display = tab === 'password' ? 'block' : 'none';
+        }
+
+        async function sendMagicLink(event) {
+            event.preventDefault();
+            const email = document.getElementById('magicEmail').value.trim();
+            if (!email) return;
+
+            try {
+                const { error } = await supabase.auth.signInWithOtp({
+                    email,
+                    options: { emailRedirectTo: window.location.origin + window.location.pathname }
+                });
+                if (error) throw error;
+                showToast('Magic link sent. Check your email.');
+                closeAuthModal();
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Could not send magic link');
+            }
+        }
+
+        async function signInWithPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('passwordEmail').value.trim();
+            const password = document.getElementById('passwordValue').value;
+            rememberUser = document.getElementById('rememberMe').checked;
+
+            try {
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                if (rememberUser) {
+                    saveAuthForRememberMe(email, password);
+                } else {
+                    clearSavedAuth();
+                }
+                showToast('Signed in');
+                closeAuthModal();
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Could not sign in');
+            }
+        }
+
+        async function createAccount() {
+            const email = document.getElementById('passwordEmail').value.trim();
+            const password = document.getElementById('passwordValue').value;
+            const username = document.getElementById('displayName').value.trim();
+            rememberUser = document.getElementById('rememberMe').checked;
+
+            try {
+                const { data, error } = await supabase.auth.signUp({ email, password });
+                if (error) throw error;
+
+                if (username && data.user) {
+                    await saveUserProfile(data.user.id, username);
+                }
+
+                if (rememberUser) {
+                    saveAuthForRememberMe(email, password);
+                } else {
+                    clearSavedAuth();
+                }
+                showToast('Account created! You are signed in.');
+                closeAuthModal();
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Could not create account');
+            }
+        }
+
+        async function saveUserProfile(userId, username) {
+            if (!supabase || !userId || !username) return;
+            try {
+                await supabase
+                    .from('profiles')
+                    .upsert({ id: userId, username, updated_at: new Date().toISOString() });
+            } catch (err) {
+                console.warn('Profile save skipped:', err?.message || err);
+            }
+        }
+
+        function parseTags(input) {
+            if (!input) return [];
+            return Array.from(new Set(
+                input
+                    .split(/[\n,]+/)
+                    .map(tag => tag.replace(/^#/, '').trim())
+                    .filter(Boolean)
+            ));
+        }
+
+        function tagsToString(tags) {
+            return (tags || []).join(', ');
+        }
+
+        function openEditTags(event, id) {
+            event.stopPropagation();
+            editingTagsRecipeId = id;
+            const recipe = recipes.find(r => r.id === id);
+            document.getElementById('editTagsInput').value = tagsToString(recipe?.tags || []);
+            document.getElementById('tagsModal').classList.add('active');
+        }
+
+        function closeTagsModal() {
+            document.getElementById('tagsModal').classList.remove('active');
+            editingTagsRecipeId = null;
+        }
+
+        async function saveTags() {
+            if (!editingTagsRecipeId) return;
+            const tags = parseTags(document.getElementById('editTagsInput').value);
+            const recipe = recipes.find(r => r.id === editingTagsRecipeId);
+            if (!recipe) return;
+
+            recipe.tags = tags;
+            renderRecipes();
+            closeTagsModal();
+
+            if (supabase && currentUser) {
+                try {
+                    await supabase.from('recipes').update({ tags }).eq('id', recipe.id);
+                    showToast('Tags updated');
+                } catch (err) {
+                    console.error(err);
+                    showToast('Could not update tags in cloud');
+                }
+            }
+        }
+
+// Update Supabase status indicator
+        function updateSupabaseStatus(connected) {
+            const statusDiv = document.getElementById('supabaseStatus');
+            const statusText = document.getElementById('supabaseStatusText');
+            if (statusDiv && statusText) {
+                if (connected) {
+                    statusDiv.style.display = 'block';
+                    statusDiv.style.border = '1px solid var(--success)';
+                    statusText.innerHTML = currentUser ? '☁️ Cloud storage enabled • signed in' : '☁️ Cloud storage enabled • sign in to sync';
+                } else {
+                    statusDiv.style.display = 'block';
+                    statusDiv.style.border = '1px solid var(--text-muted)';
+                    statusText.innerHTML = '💾 Local storage only - <a href="SUPABASE_SETUP.md" target="_blank" style="color: var(--accent); text-decoration: underline;">Configure Supabase</a> for cloud sync';
+                }
+            }
+        }
+        
+        // Helper function to save a recipe to Supabase
+        async function saveRecipeToSupabase(recipe) {
+            if (!supabase || !currentUser) return null;
+
+            try {
+                const supabaseRecipe = {
+                    user_id: currentUser.id,
+                    title: recipe.title,
+                    protein_source: recipe.protein_source,
+                    meal_type: recipe.meal_type,
+                    difficulty: recipe.difficulty,
+                    ingredients: recipe.ingredients || [],
+                    directions: recipe.directions || [],
+                    rating: recipe.rating,
+                    protein: recipe.protein,
+                    num_ingredients: recipe.num_ingredients || 0,
+                    num_steps: recipe.num_steps || 0,
+                    is_family_recipe: recipe.is_family_recipe || false,
+                    photo: recipe.photo,
+                    photos: recipe.photos || null,
+                    tags: recipe.tags || [],
+                    source_url: recipe.source_url || null,
+                    date: recipe.date || new Date().toISOString()
+                };
+
+                const { data, error } = await supabase
+                    .from('recipes')
+                    .insert([supabaseRecipe])
+                    .select()
+                    .single();
+
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error saving to Supabase:', error);
+                throw error;
+            }
+        }
+        
+        
         let recipes = [];
         let selectedIds = new Set();
         
-        // Load recipes from the JSON file
+        // Load recipes from Supabase (with fallback to JSON file)
         async function loadRecipes() {
+            if (supabase && currentUser) {
+                try {
+                    const { data, error } = await supabase
+                        .from('recipes')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('created_at', { ascending: false });
+
+                    if (error) throw error;
+
+                    if (data && data.length > 0) {
+                        recipes = data.map(r => ({
+                            id: r.id,
+                            title: r.title,
+                            protein_source: r.protein_source,
+                            meal_type: r.meal_type,
+                            difficulty: r.difficulty,
+                            ingredients: r.ingredients || [],
+                            directions: r.directions || [],
+                            rating: r.rating ? parseFloat(r.rating) : null,
+                            protein: r.protein ? parseFloat(r.protein) : null,
+                            num_ingredients: r.num_ingredients || 0,
+                            num_steps: r.num_steps || 0,
+                            is_family_recipe: r.is_family_recipe || false,
+                            photo: r.photo,
+                            photos: r.photos || null,
+                            estimated_price: r.estimated_price ? parseFloat(r.estimated_price) : null,
+                            source: r.source,
+                            source_url: r.source_url,
+                            tags: r.tags || [],
+                            date: r.date || r.created_at
+                        }));
+
+                        try {
+                            localStorage.setItem(`curated_recipes_backup_${currentUser.id}`, JSON.stringify(recipes));
+                        } catch (e) {
+                            console.warn('Could not save to localStorage:', e);
+                        }
+
+                        document.getElementById('totalCount').textContent = recipes.length;
+                        renderRecipes();
+                        console.log(`✅ Loaded ${recipes.length} recipes from Supabase`);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error loading from Supabase:', error);
+                    showToast('Could not load from cloud. Falling back to local file...');
+                }
+            }
+
+            // Fallback to JSON file
             try {
                 const response = await fetch('curated_recipes.json');
                 recipes = await response.json();
@@ -916,10 +1661,48 @@
                     if (!r.id) r.id = i;
                 });
                 
+                // Also check localStorage for any unsaved recipes
+                try {
+                    const backupKey = currentUser ? `curated_recipes_backup_${currentUser.id}` : 'curated_recipes_backup';
+                    const backup = localStorage.getItem(backupKey);
+                    if (backup) {
+                        const localRecipes = JSON.parse(backup);
+                        const seenIds = new Set(recipes.map(r => r.id));
+                        localRecipes.forEach(localRecipe => {
+                            if (!seenIds.has(localRecipe.id)) {
+                                recipes.push(localRecipe);
+                                seenIds.add(localRecipe.id);
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Could not load from localStorage:', e);
+                }
+                
                 document.getElementById('totalCount').textContent = recipes.length;
                 renderRecipes();
+                console.log(`✅ Loaded ${recipes.length} recipes from JSON file`);
             } catch (error) {
                 console.error('Error loading recipes:', error);
+                
+                // Last resort: try localStorage
+                try {
+                    const backupKey = currentUser ? `curated_recipes_backup_${currentUser.id}` : 'curated_recipes_backup';
+                    const backup = localStorage.getItem(backupKey);
+                    if (backup) {
+                        recipes = JSON.parse(backup);
+                        recipes.forEach((r, i) => {
+                            if (!r.id) r.id = Date.now() + i;
+                        });
+                        document.getElementById('totalCount').textContent = recipes.length;
+                        renderRecipes();
+                        showToast('Loaded recipes from local storage');
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('Could not load from localStorage fallback:', e);
+                }
+                
                 document.getElementById('recipeGrid').innerHTML = `
                     <div class="no-results">
                         <h3>Could not load recipes</h3>
@@ -932,45 +1715,32 @@
         
         function getFilteredRecipes() {
             const search = document.getElementById('search').value.toLowerCase();
+            const tagSearch = document.getElementById('filterTag').value.toLowerCase().trim();
             const protein = document.getElementById('filterProtein').value;
             const meal = document.getElementById('filterMeal').value;
             const difficulty = document.getElementById('filterDifficulty').value;
             const family = document.getElementById('filterFamily').value;
             const sortBy = document.getElementById('sortBy').value;
-            
+
             let filtered = recipes.filter(r => {
-                // Search
-                if (search && !r.title?.toLowerCase().includes(search)) {
-                    return false;
-                }
-                
-                // Protein filter
-                if (protein && r.protein_source !== protein) {
-                    return false;
-                }
-                
-                // Meal type filter
-                if (meal && r.meal_type !== meal) {
-                    return false;
-                }
-                
-                // Difficulty filter
-                if (difficulty && r.difficulty !== difficulty) {
-                    return false;
-                }
-                
-                // Family filter
-                if (family === 'family' && !r.is_family_recipe) {
-                    return false;
-                }
-                if (family === 'curated' && r.is_family_recipe) {
-                    return false;
-                }
-                
+                const tagList = (r.tags || []).map(t => t.toLowerCase());
+                const searchable = [
+                    r.title || '',
+                    (r.ingredients || []).join(' '),
+                    (r.directions || []).join(' '),
+                    tagList.join(' ')
+                ].join(' ').toLowerCase();
+
+                if (search && !searchable.includes(search)) return false;
+                if (tagSearch && !tagList.some(t => t.includes(tagSearch))) return false;
+                if (protein && r.protein_source !== protein) return false;
+                if (meal && r.meal_type !== meal) return false;
+                if (difficulty && r.difficulty !== difficulty) return false;
+                if (family === 'family' && !r.is_family_recipe) return false;
+                if (family === 'curated' && r.is_family_recipe) return false;
                 return true;
             });
-            
-            // Sort
+
             filtered.sort((a, b) => {
                 switch (sortBy) {
                     case 'rating':
@@ -983,7 +1753,7 @@
                         return (a.title || '').localeCompare(b.title || '');
                 }
             });
-            
+
             return filtered;
         }
         
@@ -1037,6 +1807,7 @@
                             ${recipe.meal_type ? `<span class="tag meal">${recipe.meal_type}</span>` : ''}
                             ${recipe.difficulty ? `<span class="tag difficulty">${recipe.difficulty}</span>` : ''}
                             ${isFamily ? '<span class="tag family">Family</span>' : ''}
+                            ${(recipe.tags && recipe.tags.length) ? recipe.tags.slice(0, 4).map(t => `<span class="tag user-tag">#${escapeHtml(t)}</span>`).join('') : ''}
                         </div>
                         
                         <div class="recipe-stats">
@@ -1066,7 +1837,11 @@
                                         ${recipe.directions.length > 5 ? `<li><em>...and ${recipe.directions.length - 5} more steps</em></li>` : ''}
                                     </ol>
                                 ` : ''}
-                                ${recipe.source ? `<p style="margin-top: 0.75rem; color: var(--text-muted); font-size: 0.85rem;">Source: ${escapeHtml(recipe.source)}</p>` : ''}
+                                ${recipe.source ? `<p style=\"margin-top: 0.75rem; color: var(--text-muted); font-size: 0.85rem;\">Source: ${escapeHtml(recipe.source)}</p>` : ''}
+                                ${recipe.source_url ? `<p style=\"margin-top: 0.35rem; color: var(--text-muted); font-size: 0.85rem;\">${escapeHtml(recipe.source_url)}</p>` : ''}
+                                <div style=\"margin-top: 0.75rem;\">
+                                    <button class=\"btn btn-outline btn-small\" onclick=\"openEditTags(event, ${recipe.id})\">Edit Tags</button>
+                                </div>
                             </div>
                         ` : ''}
                     </div>
@@ -1162,6 +1937,9 @@
         function showAddRecipeModal() {
             document.getElementById('addRecipeModal').classList.add('active');
             document.getElementById('addRecipeForm').reset();
+            document.getElementById('recipeTags').value = '';
+            document.getElementById('recipeSourceUrl').value = '';
+            currentImportSourceUrl = null;
             clearPhoto();
         }
         
@@ -1415,7 +2193,7 @@
             document.getElementById('cameraControls').style.display = 'none';
         }
         
-        function saveRecipeFromPhoto(event) {
+        async function saveRecipeFromPhoto(event) {
             event.preventDefault();
             
             const title = document.getElementById('recipeTitle').value.trim();
@@ -1427,48 +2205,78 @@
             const ingredientsText = document.getElementById('recipeIngredients').value.trim();
             const directionsText = document.getElementById('recipeDirections').value.trim();
             
+            const tags = parseTags(document.getElementById('recipeTags').value);
+            const sourceUrlInput = document.getElementById('recipeSourceUrl').value.trim();
+            const sourceUrl = sourceUrlInput || currentImportSourceUrl || null;
+            const sourceName = sourceUrl ? new URL(sourceUrl).hostname.replace(/^www\./, '') : null;
+
             const newRecipe = {
                 id: Date.now(),
                 title: title,
                 protein_source: document.getElementById('recipeProtein').value || null,
                 meal_type: document.getElementById('recipeMealType').value || 'entree',
                 difficulty: document.getElementById('recipeDifficulty').value || 'medium',
-                ingredients: ingredientsText ? ingredientsText.split('\n').filter(i => i.trim()) : [],
-                directions: directionsText ? directionsText.split('\n').filter(d => d.trim()) : [],
+                ingredients: ingredientsText ? ingredientsText.split('
+').filter(i => i.trim()) : [],
+                directions: directionsText ? directionsText.split('
+').filter(d => d.trim()) : [],
                 rating: parseFloat(document.getElementById('recipeRating').value) || null,
                 protein: parseFloat(document.getElementById('recipeProteinGrams').value) || null,
-                num_ingredients: ingredientsText ? ingredientsText.split('\n').filter(i => i.trim()).length : 0,
-                num_steps: directionsText ? directionsText.split('\n').filter(d => d.trim()).length : 0,
+                num_ingredients: ingredientsText ? ingredientsText.split('
+').filter(i => i.trim()).length : 0,
+                num_steps: directionsText ? directionsText.split('
+').filter(d => d.trim()).length : 0,
                 is_family_recipe: false,
                 photo: currentPhotoData.length > 0 ? currentPhotoData[0].data : null,
                 photos: currentPhotoData.length > 1 ? currentPhotoData.map(p => p.data) : null,
+                tags: tags,
+                source: sourceName,
+                source_url: sourceUrl,
                 date: new Date().toISOString()
             };
             
-            // Add to recipes array
+            // Add to recipes array immediately (optimistic update)
             recipes.push(newRecipe);
             
             // Save to localStorage as backup
             try {
-                localStorage.setItem('curated_recipes_backup', JSON.stringify(recipes));
+                const backupKey = currentUser ? `curated_recipes_backup_${currentUser.id}` : 'curated_recipes_backup';
+                localStorage.setItem(backupKey, JSON.stringify(recipes));
             } catch (e) {
                 console.warn('Could not save to localStorage:', e);
+            }
+            
+            // Save to Supabase if configured
+            if (supabase && currentUser) {
+                try {
+                    const data = await saveRecipeToSupabase(newRecipe);
+                    
+                    // Update local ID with Supabase ID
+                    if (data && data.id) {
+                        const index = recipes.findIndex(r => r.id === newRecipe.id);
+                        if (index !== -1) {
+                            recipes[index].id = data.id;
+                        }
+                    }
+                    
+                    console.log('✅ Recipe saved to Supabase');
+                    showToast('Recipe saved to cloud! ✨');
+                } catch (error) {
+                    console.error('Error saving to Supabase:', error);
+                    showToast('Saved locally, but cloud save failed. Check console.');
+                }
+            } else if (supabase && !currentUser) {
+                showToast('Saved locally. Sign in to sync to the cloud.');
+            } else {
+                showToast('Recipe saved locally. Configure Supabase for cloud storage.');
             }
             
             // Update display
             document.getElementById('totalCount').textContent = recipes.length;
             renderRecipes();
             
-            // Close modal and show success
+            // Close modal
             closeAddRecipeModal();
-            showToast('Recipe added! Don\'t forget to export to save permanently.');
-            
-            // Show download prompt
-            setTimeout(() => {
-                if (confirm('Recipe added! Would you like to download the updated curated_recipes.json file now?')) {
-                    downloadAllRecipes();
-                }
-            }, 500);
         }
         
         function downloadAllRecipes() {
@@ -1485,6 +2293,7 @@
         // Event listeners
         document.getElementById('search').addEventListener('input', renderRecipes);
         document.getElementById('filterProtein').addEventListener('change', renderRecipes);
+        document.getElementById('filterTag').addEventListener('input', renderRecipes);
         document.getElementById('filterMeal').addEventListener('change', renderRecipes);
         document.getElementById('filterDifficulty').addEventListener('change', renderRecipes);
         document.getElementById('filterFamily').addEventListener('change', renderRecipes);
@@ -1501,6 +2310,14 @@
         
         document.getElementById('importRecipeModal').addEventListener('click', (e) => {
             if (e.target.id === 'importRecipeModal') closeImportRecipeModal();
+        });
+
+        document.getElementById('authModal').addEventListener('click', (e) => {
+            if (e.target.id === 'authModal') closeAuthModal();
+        });
+
+        document.getElementById('tagsModal').addEventListener('click', (e) => {
+            if (e.target.id === 'tagsModal') closeTagsModal();
         });
         
         // Import recipe functionality
@@ -1520,6 +2337,7 @@
             importBtn.textContent = 'Extract & Import Recipe';
             importBtn.setAttribute('data-recipe-extracted', 'false');
             window.extractedRecipeData = null;
+            window.extractedRecipeMeta = null;
         }
         
         function switchImportTab(tab) {
@@ -1631,6 +2449,9 @@
             }
             
             const url = document.getElementById('recipeUrl').value.trim();
+            const cookedUrl = buildCookedUrl(url);
+            const cookedLink = document.getElementById('cookedLink');
+            if (cookedLink) cookedLink.href = cookedUrl;
             if (!url) {
                 showToast('Please enter a recipe URL');
                 return;
@@ -1656,7 +2477,7 @@
             try {
                 // Use a CORS proxy to fetch the recipe page
                 // Note: In production, you'd want to use your own backend or a recipe extraction API
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(cookedUrl)}`;
                 const response = await fetch(proxyUrl);
                 const data = await response.json();
                 
@@ -1719,6 +2540,7 @@
                 
                 // Store recipe data for import
                 window.extractedRecipeData = recipeData;
+                window.extractedRecipeMeta = { sourceUrl: url, cleanedUrl: cookedUrl };
                 importBtn.disabled = false;
                 importBtn.textContent = 'Import Recipe';
                 importBtn.setAttribute('data-recipe-extracted', 'true');
@@ -1733,6 +2555,12 @@
             }
         }
         
+        function buildCookedUrl(url) {
+            if (!url) return '';
+            if (url.includes('cooked.wiki/')) return url;
+            return `https://cooked.wiki/${url.replace(/^https?:\/\//, '')}`;
+        }
+
         function extractRecipeFromHTML(doc, url) {
             // Fallback extraction from common HTML patterns
             const recipe = {
@@ -1807,6 +2635,10 @@
             
             // Populate the add recipe form
             document.getElementById('recipeTitle').value = recipeData.name || '';
+            if (window.extractedRecipeMeta?.sourceUrl) {
+                currentImportSourceUrl = window.extractedRecipeMeta.sourceUrl;
+                document.getElementById('recipeSourceUrl').value = window.extractedRecipeMeta.sourceUrl;
+            }
             document.getElementById('recipeIngredients').value = ingredients.join('\n');
             document.getElementById('recipeDirections').value = directions.join('\n');
             
@@ -1826,6 +2658,7 @@
         }
         
         // Load recipes on page load
+        initializeAuth();
         loadRecipes();
     </script>
 </body>

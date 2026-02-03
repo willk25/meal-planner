@@ -275,6 +275,9 @@ launchctl load ~/Library/LaunchAgents/com.recipebot.plist
 | `full_format_recipes.json` | 20k recipes with full data (original) |
 | `service_account.json` | Google API credentials |
 | `.env` | Your configuration |
+| `recipe_curator.html` | Web interface for browsing and adding recipes |
+| `SUPABASE_SETUP.md` | Guide for setting up Supabase cloud storage |
+| `supabase-schema.sql` | Database schema for recipes table |
 
 ---
 
