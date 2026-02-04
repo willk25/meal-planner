@@ -36,6 +36,9 @@ CREATE TABLE IF NOT EXISTS public.recipes (
 ALTER TABLE public.recipes
   ADD COLUMN IF NOT EXISTS source_url TEXT;
 
+ALTER TABLE public.recipes
+  ADD COLUMN IF NOT EXISTS is_baseline BOOLEAN DEFAULT FALSE;
+
 -- Handle tags column carefully - check if it exists and what type it is
 DO $$
 BEGIN
@@ -79,6 +82,7 @@ CREATE INDEX IF NOT EXISTS idx_recipes_user_id ON public.recipes(user_id);
 CREATE INDEX IF NOT EXISTS idx_recipes_title ON public.recipes(title);
 CREATE INDEX IF NOT EXISTS idx_recipes_protein_source ON public.recipes(protein_source);
 CREATE INDEX IF NOT EXISTS idx_recipes_meal_type ON public.recipes(meal_type);
+CREATE INDEX IF NOT EXISTS idx_recipes_is_baseline ON public.recipes(is_baseline);
 
 -- ============================================================================
 -- 4) Enable Row Level Security
@@ -107,32 +111,44 @@ DROP POLICY IF EXISTS "Users can read own recipes" ON public.recipes;
 DROP POLICY IF EXISTS "Users can insert own recipes" ON public.recipes;
 DROP POLICY IF EXISTS "Users can update own recipes" ON public.recipes;
 DROP POLICY IF EXISTS "Users can delete own recipes" ON public.recipes;
+DROP POLICY IF EXISTS "Anyone can read baseline recipes" ON public.recipes;
+DROP POLICY IF EXISTS "Users can read own user recipes" ON public.recipes;
+DROP POLICY IF EXISTS "Users can insert own user recipes" ON public.recipes;
+DROP POLICY IF EXISTS "Users can update own user recipes" ON public.recipes;
+DROP POLICY IF EXISTS "Users can delete own user recipes" ON public.recipes;
 DROP POLICY IF EXISTS "Users can read own profile" ON public.profiles;
 DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
 DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
 
 -- ============================================================================
--- 7) Create recipes policies (user-scoped)
+-- 7) Create recipes policies (baseline + user-scoped)
 -- ============================================================================
-CREATE POLICY "Users can read own recipes"
+-- Baseline recipes: Readable by everyone, not editable by users
+CREATE POLICY "Anyone can read baseline recipes"
   ON public.recipes
   FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (is_baseline = true);
 
-CREATE POLICY "Users can insert own recipes"
+-- User recipes: Readable/writable by owner only
+CREATE POLICY "Users can read own user recipes"
+  ON public.recipes
+  FOR SELECT
+  USING (is_baseline = false AND auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own user recipes"
   ON public.recipes
   FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (is_baseline = false AND auth.uid() = user_id);
 
-CREATE POLICY "Users can update own recipes"
+CREATE POLICY "Users can update own user recipes"
   ON public.recipes
   FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (is_baseline = false AND auth.uid() = user_id);
 
-CREATE POLICY "Users can delete own recipes"
+CREATE POLICY "Users can delete own user recipes"
   ON public.recipes
   FOR DELETE
-  USING (auth.uid() = user_id);
+  USING (is_baseline = false AND auth.uid() = user_id);
 
 -- ============================================================================
 -- 8) Create profiles policies

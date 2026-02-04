@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weekly Meal Planner</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --bg-dark: #1a1a2e;
@@ -1325,6 +1326,9 @@
       </div>
 
       <div class="main-actions">
+      <button class="btn btn-primary" id="toggle-add-recipe-btn" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); font-weight: 600; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+        ➕ Add Recipe
+      </button>
       <button class="btn btn-primary" id="generate-week-btn">
         🎲 Generate New Week
       </button>
@@ -1343,6 +1347,127 @@
       <button class="btn btn-secondary" id="toggle-history-btn">
         📜 History (<span id="history-count">0</span>)
       </button>
+    </div>
+
+    <!-- ADD RECIPE SECTION -->
+    <div class="add-recipe-section" id="add-recipe-section" style="display: none;">
+      <div class="add-recipe-header">
+        <h2>➕ Add New Recipe</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Add your own recipes to the meal planner</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        <!-- URL Import Section -->
+        <div style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-subtle);">
+          <h3 style="margin-bottom: 1rem; color: var(--accent-coral);">🔗 Import from URL</h3>
+          <input type="url" id="recipeUrl" placeholder="https://www.allrecipes.com/recipe/..." 
+                 style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.75rem;">
+          <button type="button" class="btn btn-primary" id="urlImportBtn" style="width: 100%;">
+            Extract Recipe
+          </button>
+          <div id="urlLoading" style="display: none; text-align: center; padding: 1rem; color: var(--text-secondary); margin-top: 0.75rem;">
+            <p>⏳ Extracting recipe from URL...</p>
+          </div>
+          <div id="urlPreview" style="display: none; margin-top: 0.75rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <h4 style="color: var(--accent-coral); margin-bottom: 0.5rem;" id="urlPreviewTitle"></h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;" id="urlPreviewInfo"></p>
+          </div>
+        </div>
+
+        <!-- Manual Form Section -->
+        <div style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-subtle);">
+          <h3 style="margin-bottom: 1rem; color: var(--accent-teal);">✍️ Manual Entry</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Fill out the form below to add a recipe manually</p>
+        </div>
+      </div>
+
+      <!-- Recipe Form -->
+      <form id="addRecipeForm" style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-subtle);">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Recipe Title *</label>
+          <input type="text" id="recipeTitle" required
+                 style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary); font-size: 1rem;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Protein Source</label>
+            <select id="recipeProtein" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+              <option value="">Select...</option>
+              <option value="chicken">Chicken</option>
+              <option value="beef">Beef</option>
+              <option value="pork">Pork</option>
+              <option value="seafood">Seafood</option>
+              <option value="turkey">Turkey</option>
+              <option value="lamb">Lamb</option>
+              <option value="eggs">Eggs</option>
+              <option value="other">Other/Veggie</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Meal Type</label>
+            <select id="recipeMealType" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+              <option value="entree">Entree</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="soup">Soup</option>
+              <option value="salad">Salad</option>
+              <option value="appetizer">Appetizer</option>
+              <option value="dessert">Dessert</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Difficulty</label>
+            <select id="recipeDifficulty" style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="involved">Involved</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Rating (0-5)</label>
+            <input type="number" id="recipeRating" min="0" max="5" step="0.1"
+                   style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+          </div>
+          <div>
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Protein (g)</label>
+            <input type="number" id="recipeProteinGrams" min="0"
+                   style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Ingredients (one per line) *</label>
+          <textarea id="recipeIngredients" rows="8" required
+                    style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; font-family: inherit; resize: vertical;"
+                    placeholder="1 cup flour&#10;2 eggs&#10;1 tsp salt"></textarea>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Directions (one per line) *</label>
+          <textarea id="recipeDirections" rows="8" required
+                    style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary); font-size: 0.9rem; font-family: inherit; resize: vertical;"
+                    placeholder="Mix ingredients together&#10;Cook for 30 minutes"></textarea>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Tags (optional, comma separated)</label>
+          <input type="text" id="recipeTags" placeholder="family, weeknight, NYT"
+                 style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Source URL (optional)</label>
+          <input type="url" id="recipeSourceUrl" placeholder="https://..."
+                 style="width: 100%; padding: 0.75rem; background: var(--bg-dark); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary);">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+          💾 Save Recipe
+        </button>
+      </form>
     </div>
 
     <!-- PANTRY: What ingredients you have on hand -->
@@ -1498,6 +1623,52 @@
   </div>
 
   <script>
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://dtavyealoifnyqkanovx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0YXZ5ZWFsb2lmbnlxa2Fub3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwODgyMDIsImV4cCI6MjA4NTY2NDIwMn0._jLnINmj8expMf90KKH0FTwBPba3P4RSrnJeo_KO9IQ';
+    
+    // Initialize Supabase client
+    let supabase = null;
+    let currentUser = null;
+    
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          storage: window.localStorage
+        }
+      });
+      console.log('✅ Supabase connected');
+    }
+    
+    // Initialize anonymous authentication
+    async function initializeAuth() {
+      if (!supabase) {
+        console.warn('⚠️ Supabase not configured');
+        return;
+      }
+      
+      try {
+        // Check if we already have a session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session && session.user) {
+          currentUser = session.user;
+          console.log('✅ Using existing anonymous session');
+        } else {
+          // Sign in anonymously
+          const { data, error } = await supabase.auth.signInAnonymously();
+          if (error) throw error;
+          currentUser = data.user;
+          console.log('✅ Signed in anonymously:', currentUser.id);
+        }
+      } catch (error) {
+        console.error('❌ Error initializing auth:', error);
+      }
+    }
+    
     let allRecipes = [];
     let entrees = [];
     let appetizers = [];
@@ -1519,10 +1690,9 @@
     // GROCERY LIST: Items checked off
     let groceryChecked = JSON.parse(localStorage.getItem('groceryChecked') || '[]');
 
-    // Simple meal planner - just loads from curated_recipes.json
-
     // Load recipes on page load
     document.addEventListener('DOMContentLoaded', async () => {
+      await initializeAuth();
       await loadRecipes();
       updateFavoritesCount();
       updateHistoryCount();
@@ -1576,64 +1746,180 @@
       
       const regenerateGroceryBtn = document.getElementById('regenerate-grocery-btn');
       if (regenerateGroceryBtn) regenerateGroceryBtn.addEventListener('click', regenerateGroceryList);
+      
+      // Recipe addition buttons
+      const toggleAddRecipeBtn = document.getElementById('toggle-add-recipe-btn');
+      if (toggleAddRecipeBtn) toggleAddRecipeBtn.addEventListener('click', toggleAddRecipe);
+      
+      const urlImportBtn = document.getElementById('urlImportBtn');
+      if (urlImportBtn) urlImportBtn.addEventListener('click', importFromUrl);
+      
+      const addRecipeForm = document.getElementById('addRecipeForm');
+      if (addRecipeForm) addRecipeForm.addEventListener('submit', saveRecipe);
     });
 
     async function loadRecipes() {
-      try {
-        const response = await fetch('curated_recipes.json');
-        allRecipes = await response.json();
-        
-        // Categorize recipes
-        entrees = allRecipes.filter(r => 
-          r.meal_type === 'entree' || 
-          r.protein_source && !['dessert', 'appetizer', 'breakfast'].includes(r.meal_type)
-        );
-        
+      let baselineRecipes = [];
+      let userRecipes = [];
+      
+      // Try loading from Supabase first
+      if (supabase) {
+        try {
+          // Load baseline recipes (public/shared)
+          const { data: baselineData, error: baselineError } = await supabase
+            .from('recipes')
+            .select('*')
+            .eq('is_baseline', true)
+            .order('created_at', { ascending: false });
+          
+          if (baselineError) throw baselineError;
+          if (baselineData) {
+            baselineRecipes = baselineData.map(r => ({
+              id: r.id,
+              title: r.title,
+              protein_source: r.protein_source,
+              meal_type: r.meal_type,
+              difficulty: r.difficulty,
+              ingredients: r.ingredients || [],
+              directions: r.directions || [],
+              rating: r.rating ? parseFloat(r.rating) : null,
+              protein: r.protein ? parseFloat(r.protein) : null,
+              num_ingredients: r.num_ingredients || 0,
+              num_steps: r.num_steps || 0,
+              is_family_recipe: r.is_family_recipe || false,
+              photo: r.photo,
+              photos: r.photos || null,
+              estimated_price: r.estimated_price ? parseFloat(r.estimated_price) : null,
+              source: r.source,
+              source_url: r.source_url,
+              tags: r.tags || [],
+              date: r.date || r.created_at,
+              is_baseline: true
+            }));
+            console.log(`✅ Loaded ${baselineRecipes.length} baseline recipes from Supabase`);
+          }
+          
+          // Load user recipes (if authenticated)
+          if (currentUser) {
+            const { data: userData, error: userError } = await supabase
+              .from('recipes')
+              .select('*')
+              .eq('user_id', currentUser.id)
+              .eq('is_baseline', false)
+              .order('created_at', { ascending: false });
+            
+            if (userError) throw userError;
+            if (userData) {
+              userRecipes = userData.map(r => ({
+                id: r.id,
+                title: r.title,
+                protein_source: r.protein_source,
+                meal_type: r.meal_type,
+                difficulty: r.difficulty,
+                ingredients: r.ingredients || [],
+                directions: r.directions || [],
+                rating: r.rating ? parseFloat(r.rating) : null,
+                protein: r.protein ? parseFloat(r.protein) : null,
+                num_ingredients: r.num_ingredients || 0,
+                num_steps: r.num_steps || 0,
+                is_family_recipe: r.is_family_recipe || false,
+                photo: r.photo,
+                photos: r.photos || null,
+                estimated_price: r.estimated_price ? parseFloat(r.estimated_price) : null,
+                source: r.source,
+                source_url: r.source_url,
+                tags: r.tags || [],
+                date: r.date || r.created_at,
+                is_baseline: false
+              }));
+              console.log(`✅ Loaded ${userRecipes.length} user recipes from Supabase`);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading from Supabase:', error);
+        }
+      }
+      
+      // Fallback to JSON if no baseline recipes from Supabase
+      if (baselineRecipes.length === 0) {
+        try {
+          const response = await fetch('curated_recipes.json');
+          const jsonRecipes = await response.json();
+          baselineRecipes = jsonRecipes.map(r => ({ ...r, is_baseline: true }));
+          console.log(`📦 Loaded ${baselineRecipes.length} baseline recipes from JSON (fallback)`);
+        } catch (error) {
+          console.error('Failed to load JSON fallback:', error);
+        }
+      }
+      
+      // Merge baseline and user recipes
+      const recipeMap = new Map();
+      
+      // Add baseline recipes first
+      baselineRecipes.forEach(r => {
+        recipeMap.set(r.id, r);
+      });
+      
+      // Add/override with user recipes (user recipes take precedence if same ID)
+      userRecipes.forEach(r => {
+        recipeMap.set(r.id, r);
+      });
+      
+      allRecipes = Array.from(recipeMap.values());
+      
+      // Categorize recipes
+      entrees = allRecipes.filter(r => 
+        r.meal_type === 'entree' || 
+        r.protein_source && !['dessert', 'appetizer', 'breakfast'].includes(r.meal_type)
+      );
+      
+      appetizers = allRecipes.filter(r => 
+        r.meal_type === 'appetizer' || 
+        (r.categories && r.categories.some(c => 
+          c.toLowerCase().includes('appetizer') || 
+          c.toLowerCase().includes('starter') ||
+          c.toLowerCase().includes('side')
+        ))
+      );
+      
+      // For desserts, check categories and family recipes marked as dessert
+      desserts = allRecipes.filter(r => 
+        r.meal_type === 'dessert' ||
+        (r.categories && r.categories.some(c => 
+          c.toLowerCase().includes('dessert') || 
+          c.toLowerCase().includes('cake') ||
+          c.toLowerCase().includes('cookie') ||
+          c.toLowerCase().includes('pie') ||
+          c.toLowerCase().includes('sweet')
+        )) ||
+        (r.category && r.category.toLowerCase().includes('dessert'))
+      );
+
+      // If we don't have enough appetizers/desserts, be more lenient
+      if (appetizers.length < 10) {
         appetizers = allRecipes.filter(r => 
           r.meal_type === 'appetizer' || 
-          (r.categories && r.categories.some(c => 
-            c.toLowerCase().includes('appetizer') || 
-            c.toLowerCase().includes('starter') ||
-            c.toLowerCase().includes('side')
-          ))
+          r.meal_type === 'salad' ||
+          (r.num_ingredients && r.num_ingredients <= 6)
         );
-        
-        // For desserts, check categories and family recipes marked as dessert
-        desserts = allRecipes.filter(r => 
-          r.meal_type === 'dessert' ||
-          (r.categories && r.categories.some(c => 
-            c.toLowerCase().includes('dessert') || 
-            c.toLowerCase().includes('cake') ||
-            c.toLowerCase().includes('cookie') ||
-            c.toLowerCase().includes('pie') ||
-            c.toLowerCase().includes('sweet')
-          )) ||
-          (r.category && r.category.toLowerCase().includes('dessert'))
-        );
+      }
 
-        // If we don't have enough appetizers/desserts, be more lenient
-        if (appetizers.length < 10) {
-          appetizers = allRecipes.filter(r => 
-            r.meal_type === 'appetizer' || 
-            r.meal_type === 'salad' ||
-            (r.num_ingredients && r.num_ingredients <= 6)
-          );
-        }
-
-        // Update stats
-        document.getElementById('total-recipes').textContent = allRecipes.length;
-        document.getElementById('entree-count').textContent = entrees.length;
-        document.getElementById('appetizer-count').textContent = appetizers.length;
-        document.getElementById('dessert-count').textContent = desserts.length;
-        
-        console.log(`Loaded: ${entrees.length} entrees, ${appetizers.length} appetizers, ${desserts.length} desserts`);
-      } catch (error) {
-        console.error('Failed to load recipes:', error);
+      // Update stats
+      const baselineCount = baselineRecipes.length;
+      const userCount = userRecipes.length;
+      document.getElementById('total-recipes').textContent = allRecipes.length;
+      document.getElementById('entree-count').textContent = entrees.length;
+      document.getElementById('appetizer-count').textContent = appetizers.length;
+      document.getElementById('dessert-count').textContent = desserts.length;
+      
+      console.log(`Loaded: ${entrees.length} entrees, ${appetizers.length} appetizers, ${desserts.length} desserts (${baselineCount} baseline + ${userCount} user recipes)`);
+      
+      if (allRecipes.length === 0) {
         document.getElementById('week-plan').innerHTML = `
           <div class="empty-state">
             <div class="icon">❌</div>
-            <h3>Failed to Load Recipes</h3>
-            <p>Make sure curated_recipes.json is available</p>
+            <h3>No Recipes Available</h3>
+            <p>Add recipes using the "Add Recipe" button above</p>
           </div>
         `;
       }
@@ -1643,6 +1929,263 @@
       const shuffled = [...array].sort(() => Math.random() - 0.5);
       return shuffled.slice(0, count);
     }
+
+    // Toggle Add Recipe section
+    function toggleAddRecipe() {
+      const section = document.getElementById('add-recipe-section');
+      section.style.display = section.style.display === 'none' ? 'block' : 'none';
+      if (section.style.display === 'block') {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    window.toggleAddRecipe = toggleAddRecipe;
+
+    // Save recipe to Supabase
+    async function saveRecipe(event) {
+      event.preventDefault();
+      
+      if (!supabase || !currentUser) {
+        showToast('❌', 'Please wait for authentication to complete');
+        return;
+      }
+
+      const title = document.getElementById('recipeTitle').value.trim();
+      if (!title) {
+        showToast('❌', 'Please enter a recipe title');
+        return;
+      }
+
+      const ingredientsText = document.getElementById('recipeIngredients').value.trim();
+      const directionsText = document.getElementById('recipeDirections').value.trim();
+      const tagsText = document.getElementById('recipeTags').value.trim();
+      const tags = tagsText ? tagsText.split(',').map(t => t.trim()).filter(t => t) : [];
+
+      const newRecipe = {
+        user_id: currentUser.id,
+        title: title,
+        protein_source: document.getElementById('recipeProtein').value || null,
+        meal_type: document.getElementById('recipeMealType').value || 'entree',
+        difficulty: document.getElementById('recipeDifficulty').value || 'medium',
+        ingredients: ingredientsText ? ingredientsText.split('\n').filter(i => i.trim()) : [],
+        directions: directionsText ? directionsText.split('\n').filter(d => d.trim()) : [],
+        rating: parseFloat(document.getElementById('recipeRating').value) || null,
+        protein: parseFloat(document.getElementById('recipeProteinGrams').value) || null,
+        num_ingredients: ingredientsText ? ingredientsText.split('\n').filter(i => i.trim()).length : 0,
+        num_steps: directionsText ? directionsText.split('\n').filter(d => d.trim()).length : 0,
+        is_family_recipe: false,
+        is_baseline: false,
+        tags: tags,
+        source_url: document.getElementById('recipeSourceUrl').value.trim() || null,
+        date: new Date().toISOString()
+      };
+
+      try {
+        const { data, error } = await supabase
+          .from('recipes')
+          .insert([newRecipe])
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        showToast('✅', 'Recipe saved! It will appear in your meal planner.');
+        
+        // Reset form
+        document.getElementById('addRecipeForm').reset();
+        document.getElementById('urlPreview').style.display = 'none';
+        document.getElementById('recipeUrl').value = '';
+
+        // Reload recipes to include the new one
+        await loadRecipes();
+        
+        // Hide add recipe section
+        document.getElementById('add-recipe-section').style.display = 'none';
+
+      } catch (error) {
+        console.error('Error saving recipe:', error);
+        showToast('❌', `Error saving recipe: ${error.message}`);
+      }
+    }
+    window.saveRecipe = saveRecipe;
+
+    // Build cooked.wiki URL
+    function buildCookedUrl(url) {
+      if (!url) return '';
+      if (url.includes('cooked.wiki/')) return url;
+      return `https://cooked.wiki/${url.replace(/^https?:\/\//, '')}`;
+    }
+
+    // Extract recipe from HTML (fallback)
+    function extractRecipeFromHTML(doc, url) {
+      const recipe = {
+        name: '',
+        recipeIngredient: [],
+        recipeInstructions: []
+      };
+
+      recipe.name = doc.querySelector('h1')?.textContent?.trim() || 
+                   doc.querySelector('[class*="recipe-title"]')?.textContent?.trim() ||
+                   doc.querySelector('[class*="recipe-name"]')?.textContent?.trim() ||
+                   '';
+
+      const ingredientSelectors = [
+        '[class*="ingredient"]',
+        '[class*="recipe-ingredient"]',
+        '[itemprop="recipeIngredient"]',
+        'ul.ingredients li',
+        'ol.ingredients li'
+      ];
+
+      for (const selector of ingredientSelectors) {
+        const elements = doc.querySelectorAll(selector);
+        if (elements.length > 0) {
+          recipe.recipeIngredient = Array.from(elements)
+            .map(el => el.textContent.trim())
+            .filter(text => text && text.length > 2);
+          if (recipe.recipeIngredient.length > 0) break;
+        }
+      }
+
+      const instructionSelectors = [
+        '[class*="instruction"]',
+        '[class*="recipe-step"]',
+        '[class*="direction"]',
+        '[itemprop="recipeInstructions"]',
+        'ol.instructions li',
+        'ol.directions li'
+      ];
+
+      for (const selector of instructionSelectors) {
+        const elements = doc.querySelectorAll(selector);
+        if (elements.length > 0) {
+          recipe.recipeInstructions = Array.from(elements)
+            .map(el => el.textContent.trim())
+            .filter(text => text && text.length > 2);
+          if (recipe.recipeInstructions.length > 0) break;
+        }
+      }
+
+      return recipe.name ? recipe : null;
+    }
+
+    // Import recipe from URL
+    async function importFromUrl() {
+      if (!supabase) {
+        showToast('❌', 'Supabase not configured');
+        return;
+      }
+
+      const url = document.getElementById('recipeUrl').value.trim();
+      const cookedUrl = buildCookedUrl(url);
+      if (!url) {
+        showToast('❌', 'Please enter a recipe URL');
+        return;
+      }
+
+      try {
+        new URL(url);
+      } catch (e) {
+        showToast('❌', 'Please enter a valid URL');
+        return;
+      }
+
+      const loadingDiv = document.getElementById('urlLoading');
+      const previewDiv = document.getElementById('urlPreview');
+      const importBtn = document.getElementById('urlImportBtn');
+
+      loadingDiv.style.display = 'block';
+      previewDiv.style.display = 'none';
+      importBtn.disabled = true;
+      importBtn.textContent = 'Extracting...';
+
+      try {
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(cookedUrl)}`;
+        const response = await fetch(proxyUrl);
+        const data = await response.json();
+
+        if (!data.contents) {
+          throw new Error('Could not fetch recipe page');
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.contents, 'text/html');
+
+        let recipeData = null;
+        const jsonLdScripts = doc.querySelectorAll('script[type="application/ld+json"]');
+
+        for (const script of jsonLdScripts) {
+          try {
+            const json = JSON.parse(script.textContent);
+            if (json['@type'] === 'Recipe' || (Array.isArray(json['@type']) && json['@type'].includes('Recipe'))) {
+              recipeData = json;
+              break;
+            }
+            if (json['@graph']) {
+              const recipe = json['@graph'].find(item => 
+                item['@type'] === 'Recipe' || 
+                (Array.isArray(item['@type']) && item['@type'].includes('Recipe'))
+              );
+              if (recipe) {
+                recipeData = recipe;
+                break;
+              }
+            }
+          } catch (e) {
+            // Skip invalid JSON
+          }
+        }
+
+        if (!recipeData) {
+          recipeData = extractRecipeFromHTML(doc, url);
+        }
+
+        if (!recipeData || !recipeData.name) {
+          throw new Error('Could not extract recipe data from this URL');
+        }
+
+        document.getElementById('urlPreviewTitle').textContent = recipeData.name;
+        const info = [];
+        if (recipeData.recipeIngredient && recipeData.recipeIngredient.length) {
+          info.push(`${recipeData.recipeIngredient.length} ingredients`);
+        }
+        if (recipeData.recipeInstructions && recipeData.recipeInstructions.length) {
+          info.push(`${recipeData.recipeInstructions.length} steps`);
+        }
+        document.getElementById('urlPreviewInfo').textContent = info.join(' • ') || 'Recipe found';
+
+        previewDiv.style.display = 'block';
+        window.extractedRecipeData = recipeData;
+        document.getElementById('recipeSourceUrl').value = url;
+
+        const ingredients = Array.isArray(recipeData.recipeIngredient) ? recipeData.recipeIngredient : [];
+        let directions = [];
+        if (Array.isArray(recipeData.recipeInstructions)) {
+          directions = recipeData.recipeInstructions.map(inst => {
+            if (typeof inst === 'string') return inst;
+            if (inst.text) return inst.text;
+            if (inst['@type'] === 'HowToStep' && inst.text) return inst.text;
+            return String(inst);
+          }).filter(d => d);
+        }
+
+        document.getElementById('recipeTitle').value = recipeData.name || '';
+        document.getElementById('recipeIngredients').value = ingredients.join('\n');
+        document.getElementById('recipeDirections').value = directions.join('\n');
+
+        importBtn.disabled = false;
+        importBtn.textContent = 'Extract Recipe';
+        showToast('✅', 'Recipe extracted! Review and save.');
+
+      } catch (error) {
+        console.error('Error extracting recipe:', error);
+        showToast('❌', `Error: ${error.message}. Try pasting the recipe text instead.`);
+        importBtn.disabled = false;
+        importBtn.textContent = 'Extract Recipe';
+      } finally {
+        loadingDiv.style.display = 'none';
+      }
+    }
+    window.importFromUrl = importFromUrl;
 
     function generateWeek() {
       if (entrees.length === 0) {
