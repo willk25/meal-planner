@@ -1,6 +1,6 @@
-# 🍽️ Recipe Bot
+# 🍽️ Recipe Bot & Meal Planner
 
-A Python bot that picks random recipes from Epicurious, writes to Google Sheets & Google Docs, and emails you the options with full ingredients and directions. Runs every 2 days.
+A Python bot that picks random recipes from Epicurious, writes to Google Sheets & Google Docs, and emails you the options with full ingredients and directions. Also includes a web-based meal planner for weekly meal planning. Runs every 2 days.
 
 ## Features
 
@@ -11,6 +11,7 @@ A Python bot that picks random recipes from Epicurious, writes to Google Sheets 
 - **Google Sheets**: Updates a sheet with your recipe options
 - **Google Docs**: Creates a meal plan doc with shopping lists + directions
 - **Email**: Sends formatted email when new recipes are picked
+- **Web Meal Planner**: Interactive web app for weekly meal planning with pantry management, favorites, and grocery lists
 
 ---
 
@@ -47,6 +48,20 @@ Each recipe includes:
 | `calories` | 426 |
 | `protein_source` | "chicken" (curated only) |
 | `difficulty` | "easy" / "medium" / "involved" |
+
+---
+
+## Web Meal Planner
+
+The `meal_planner.html` web app provides an interactive interface for:
+- **Weekly Meal Planning**: Generate random meal plans with 3 entrees, 2 appetizers, and 2 desserts
+- **Pantry Management**: Track ingredients you have on hand
+- **Favorites**: Save recipes you love for easy access
+- **Grocery Lists**: Automatically generate shopping lists based on your shortlisted meals
+- **Recipe Search**: Search recipes by name, ingredient, or protein source
+- **History**: View past weekly meal plans
+
+Simply open `meal_planner.html` in your browser or deploy to Vercel for cloud hosting.
 
 ---
 
@@ -271,13 +286,16 @@ launchctl load ~/Library/LaunchAgents/com.recipebot.plist
 |------|---------|
 | `recipe_bot.py` | Main bot script |
 | `curate_recipes.py` | Script to re-curate recipes with custom filters |
+| `add_family_recipes.py` | Script to add family recipes to dataset |
+| `add_pricing.py` | Script to add pricing information to recipes |
 | `curated_recipes.json` | 2,567 high-protein, simple, well-rated recipes |
+| `family_recipes.json` | Additional family recipe collection |
 | `full_format_recipes.json` | 20k recipes with full data (original) |
+| `meal_planner.html` | Web interface for weekly meal planning |
+| `index.html` | Landing page for the meal planner |
 | `service_account.json` | Google API credentials |
 | `.env` | Your configuration |
-| `recipe_curator.html` | Web interface for browsing and adding recipes |
-| `SUPABASE_SETUP.md` | Guide for setting up Supabase cloud storage |
-| `supabase-schema.sql` | Database schema for recipes table |
+| `vercel.json` | Deployment configuration for Vercel |
 
 ---
 
