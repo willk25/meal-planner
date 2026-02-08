@@ -236,6 +236,13 @@ def add_recipe_to_db(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     Uses the local db_layer.py in the api/ directory.
     """
     try:
+        import sys
+        from pathlib import Path
+        # Ensure api directory is in path
+        api_dir = Path(__file__).parent
+        if str(api_dir) not in sys.path:
+            sys.path.insert(0, str(api_dir))
+        
         from db_layer import add_recipe as db_add_recipe
         return db_add_recipe(recipe)
     except ImportError as e:

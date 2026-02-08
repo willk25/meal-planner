@@ -1919,8 +1919,37 @@
 
     async function loadRecipes() {
       try {
-        const response = await fetch('curated_recipes.json');
-        allRecipes = await response.json();
+        // Try API endpoint first, fallback to JSON file for local development
+        let response;
+        try {
+          response = await fetch('/api/load-recipes');
+          if (!response.ok) {
+            throw new Error(`API returned ${response.status}: ${response.statusText}`);
+          }
+          allRecipes = await response.json();
+          
+          // Check if we got a valid array
+          if (!Array.isArray(allRecipes)) {
+            console.error('API returned non-array:', allRecipes);
+            throw new Error('API returned invalid data format');
+          }
+          
+          console.log(`Loaded ${allRecipes.length} recipes from API`);
+          
+          // If API returned empty array, try JSON fallback
+          if (allRecipes.length === 0) {
+            console.warn('API returned empty array, trying local JSON file...');
+            throw new Error('API returned empty array');
+          }
+        } catch (apiError) {
+          console.warn('API endpoint failed, trying local JSON file:', apiError);
+          response = await fetch('curated_recipes.json');
+          if (!response.ok) {
+            throw new Error(`Failed to load recipes: ${response.status}`);
+          }
+          allRecipes = await response.json();
+          console.log(`Loaded ${allRecipes.length} recipes from JSON file`);
+        }
       
       // Categorize recipes
       entrees = allRecipes.filter(r => 

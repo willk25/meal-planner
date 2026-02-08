@@ -40,6 +40,53 @@ elif USE_SUPABASE:
     USE_SUPABASE = False
 
 
+def load_recipes() -> List[Dict[str, Any]]:
+    """
+    Load all recipes from Supabase.
+    Returns empty list if no recipes found or Supabase not configured.
+    
+    Note: This is the Vercel API version - it only supports Supabase.
+    For local development with JSON fallback, use the root db_layer.py
+    """
+    # Debug logging
+    print(f"DEBUG load_recipes: USE_SUPABASE={USE_SUPABASE}, SUPABASE_AVAILABLE={SUPABASE_AVAILABLE}")
+    print(f"DEBUG load_recipes: supabase_client={supabase_client is not None}")
+    print(f"DEBUG load_recipes: SUPABASE_URL set={bool(SUPABASE_URL)}, SUPABASE_KEY set={bool(SUPABASE_KEY)}")
+    
+    if not USE_SUPABASE:
+        print("⚠️  Warning: USE_SUPABASE is False - check environment variables")
+        return []
+    
+    if not supabase_client:
+        print("⚠️  Warning: Supabase client not initialized")
+        print(f"   SUPABASE_AVAILABLE={SUPABASE_AVAILABLE}, USE_SUPABASE={USE_SUPABASE}")
+        print(f"   SUPABASE_URL={'set' if SUPABASE_URL else 'NOT SET'}")
+        print(f"   SUPABASE_KEY={'set' if SUPABASE_KEY else 'NOT SET'}")
+        return []
+    
+    try:
+        print("DEBUG: Querying Supabase for recipes...")
+        response = supabase_client.table('recipes').select('*').execute()
+        print(f"DEBUG: Supabase response received, data length: {len(response.data) if response.data else 0}")
+        
+        if response.data:
+            # Convert Supabase records to recipe format (remove id, created_at, updated_at)
+            recipes = []
+            for record in response.data:
+                recipe = {k: v for k, v in record.items() 
+                         if k not in ['id', 'created_at', 'updated_at']}
+                recipes.append(recipe)
+            print(f"DEBUG: Returning {len(recipes)} recipes")
+            return recipes
+        print("DEBUG: No recipes found in Supabase")
+        return []
+    except Exception as e:
+        import traceback
+        print(f"⚠️  Warning: Supabase load failed: {e}")
+        print(f"Traceback: {traceback.format_exc()}")
+        return []
+
+
 def add_recipe(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     """
     Add a single recipe to Supabase.
@@ -54,10 +101,19 @@ def add_recipe(recipe: Dict[str, Any]) -> Tuple[bool, str]:
         if existing.data:
             return (False, f"Duplicate recipe found: '{recipe['title']}' already exists")
         
+        # Filter out unwanted fields - only keep fields that exist in database schema
+        allowed_fields = {
+            'title', 'ingredients', 'directions', 'protein_source', 'meal_type',
+            'difficulty', 'rating', 'protein', 'desc', 'categories', 'date',
+            'estimated_price', 'num_ingredients', 'num_steps'
+        }
+        filtered_recipe = {k: v for k, v in recipe.items() 
+                          if k in allowed_fields}
+        
         # Insert new recipe
-        response = supabase_client.table('recipes').insert(recipe).execute()
+        response = supabase_client.table('recipes').insert(filtered_recipe).execute()
         if response.data:
-            return (True, f"✅ Successfully added recipe: '{recipe['title']}'")
+            return (True, f"✅ Successfully added recipe: '{filtered_recipe['title']}'")
         return (False, "Failed to add recipe to Supabase")
     except Exception as e:
         return (False, f"Error adding recipe: {str(e)}")

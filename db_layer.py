@@ -92,10 +92,51 @@ def save_recipes(recipes: List[Dict[str, Any]]) -> bool:
             
             # Insert all recipes in chunks (Supabase has limits)
             if recipes:
-                chunk_size = 100
-                for i in range(0, len(recipes), chunk_size):
-                    chunk = recipes[i:i + chunk_size]
-                    supabase_client.table('recipes').insert(chunk).execute()
+                # Filter out unwanted fields before inserting
+                # Only keep fields that exist in the database schema
+                allowed_fields = {
+                    'title', 'ingredients', 'directions', 'protein_source', 'meal_type',
+                    'difficulty', 'rating', 'protein', 'desc', 'categories', 'date',
+                    'estimated_price', 'num_ingredients', 'num_steps'
+                }
+                filtered_recipes = []
+                for recipe in recipes:
+                    # Only include fields that are in the database schema
+                    filtered_recipe = {k: v for k, v in recipe.items() 
+                                     if k in allowed_fields}
+                    filtered_recipes.append(filtered_recipe)
+                
+                chunk_size = 50  # Smaller chunks to avoid SSL/timeout issues
+                total_chunks = (len(filtered_recipes) + chunk_size - 1) // chunk_size
+                
+                import time
+                for i in range(0, len(filtered_recipes), chunk_size):
+                    chunk = filtered_recipes[i:i + chunk_size]
+                    chunk_num = (i // chunk_size) + 1
+                    
+                    # Retry logic for SSL/connection errors
+                    max_retries = 3
+                    retry_delay = 2  # seconds
+                    
+                    for attempt in range(max_retries):
+                        try:
+                            print(f"   Uploading chunk {chunk_num}/{total_chunks} ({len(chunk)} recipes)...", end='', flush=True)
+                            supabase_client.table('recipes').insert(chunk).execute()
+                            print(" ✓")
+                            
+                            # Small delay between chunks to avoid overwhelming the connection
+                            if i + chunk_size < len(filtered_recipes):
+                                time.sleep(0.5)
+                            break
+                        except Exception as e:
+                            if attempt < max_retries - 1:
+                                print(f" ✗ (retrying in {retry_delay}s...)")
+                                time.sleep(retry_delay)
+                                retry_delay *= 2  # Exponential backoff
+                            else:
+                                # Last attempt failed, re-raise the exception
+                                print(f" ✗")
+                                raise
             
             return True
         except Exception as e:
