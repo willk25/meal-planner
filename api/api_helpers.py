@@ -9,6 +9,12 @@ import re
 from datetime import datetime
 from typing import Dict, Any, List, Tuple
 
+# Dummy import to ensure Vercel bundles db_layer.py (wrapped to not crash if it fails)
+try:
+    import db_layer  # noqa: F401
+except ImportError:
+    pass  # Will use importlib.util at runtime instead
+
 # Protein source detection (minimal version)
 PROTEIN_SOURCES = {
     "chicken": ["chicken", "poultry"],

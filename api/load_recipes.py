@@ -15,6 +15,12 @@ api_dir = Path(__file__).parent
 if str(api_dir) not in sys.path:
     sys.path.insert(0, str(api_dir))
 
+# Dummy import to ensure Vercel bundles db_layer.py (wrapped to not crash if it fails)
+try:
+    import db_layer  # noqa: F401
+except ImportError:
+    pass  # Will use importlib.util at runtime instead
+
 
 class handler(BaseHTTPRequestHandler):
     """Vercel serverless function handler."""
