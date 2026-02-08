@@ -7,6 +7,7 @@ Uses recipe-scrapers library (keep existing logic unchanged).
 
 import json
 import sys
+from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 
 # Add parent directory to path to import upload_recipe
@@ -21,128 +22,108 @@ except ImportError:
     scrape_me = None
 
 
-def handler(event):
+class handler(BaseHTTPRequestHandler):
     """Vercel serverless function handler."""
-    # Get HTTP method
-    method = event.get('httpMethod', 'GET')
     
-    # Handle CORS preflight
-    if method == 'OPTIONS':
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
-            },
-            'body': ''
-        }
+    def do_OPTIONS(self):
+        """Handle CORS preflight."""
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.end_headers()
     
-    # Only allow POST
-    if method != 'POST':
-        return {
-            'statusCode': 405,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            'body': json.dumps({
-                'success': False,
-                'message': 'Method not allowed. Use POST.'
-            })
-        }
-    
-    try:
-        # Parse request body
-        request_body = event.get('body', '{}')
-        if isinstance(request_body, str):
-            body = json.loads(request_body)
-        else:
-            body = request_body
-        url = body.get('url', '').strip()
-        
-        if not url:
-            return {
-                'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                'body': json.dumps({
+    def do_POST(self):
+        """Handle POST request to extract recipe from URL."""
+        try:
+            # Read request body
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length).decode('utf-8')
+            
+            # Parse JSON body
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'message': 'Invalid JSON in request body.'
+                }).encode('utf-8'))
+                return
+            
+            url = data.get('url', '').strip()
+            
+            if not url:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({
                     'success': False,
                     'message': 'URL is required.'
-                })
-            }
-        
-        # Check if recipe-scrapers is available
-        if scrape_me is None:
-            return {
-                'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                'body': json.dumps({
+                }).encode('utf-8'))
+                return
+            
+            # Check if recipe-scrapers is available
+            if scrape_me is None:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({
                     'success': False,
                     'message': 'Recipe scrapers library not available.'
-                })
+                }).encode('utf-8'))
+                return
+            
+            # Extract recipe from URL (keep existing logic unchanged)
+            scraper = scrape_me(url)
+            
+            # Build recipe dictionary from scraped data
+            recipe = {
+                'title': scraper.title() if scraper.title() else '',
+                'ingredients': scraper.ingredients() if scraper.ingredients() else [],
+                'directions': scraper.instructions_list() if scraper.instructions_list() else [],
             }
-        
-        # Extract recipe from URL (keep existing logic unchanged)
-        scraper = scrape_me(url)
-        
-        # Build recipe dictionary from scraped data
-        recipe = {
-            'title': scraper.title() if scraper.title() else '',
-            'ingredients': scraper.ingredients() if scraper.ingredients() else [],
-            'directions': scraper.instructions_list() if scraper.instructions_list() else [],
-        }
-        
-        # Add optional fields if available
-        if scraper.total_time():
-            recipe['total_time'] = scraper.total_time()
-        if scraper.yields():
-            recipe['yields'] = scraper.yields()
-        if scraper.image():
-            recipe['image'] = scraper.image()
-        
-        # Enrich recipe with auto-detected metadata
-        recipe = enrich_recipe(recipe)
-        
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            'body': json.dumps({
+            
+            # Add optional fields if available
+            if scraper.total_time():
+                recipe['total_time'] = scraper.total_time()
+            if scraper.yields():
+                recipe['yields'] = scraper.yields()
+            if scraper.image():
+                recipe['image'] = scraper.image()
+            
+            # Enrich recipe with auto-detected metadata
+            recipe = enrich_recipe(recipe)
+            
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({
                 'success': True,
                 'recipe': recipe
-            })
-        }
-        
-    except Exception as e:
-        error_message = str(e)
-        # Provide more helpful error messages
-        if 'certificate' in error_message.lower() or 'ssl' in error_message.lower():
-            error_message = 'Failed to extract recipe: SSL certificate error. Make sure the URL is a valid recipe page.'
-        elif 'not found' in error_message.lower() or '404' in error_message:
-            error_message = 'Failed to extract recipe: URL not found or recipe page not accessible.'
-        else:
-            error_message = f'Failed to extract recipe: {error_message}'
-        
-        return {
-            'statusCode': 400,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            'body': json.dumps({
+            }).encode('utf-8'))
+            
+        except Exception as e:
+            error_message = str(e)
+            # Provide more helpful error messages
+            if 'certificate' in error_message.lower() or 'ssl' in error_message.lower():
+                error_message = 'Failed to extract recipe: SSL certificate error. Make sure the URL is a valid recipe page.'
+            elif 'not found' in error_message.lower() or '404' in error_message:
+                error_message = 'Failed to extract recipe: URL not found or recipe page not accessible.'
+            else:
+                error_message = f'Failed to extract recipe: {error_message}'
+            
+            self.send_response(400)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({
                 'success': False,
                 'message': error_message
-            })
-        }
-
-
-# Export handler for Vercel
-__vercel_handler__ = handler
+            }).encode('utf-8'))
