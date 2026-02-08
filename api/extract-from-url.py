@@ -21,10 +21,13 @@ except ImportError:
     scrape_me = None
 
 
-def handler(request):
+def handler(event):
     """Vercel serverless function handler."""
+    # Get HTTP method
+    method = event.get('httpMethod', 'GET')
+    
     # Handle CORS preflight
-    if request.method == 'OPTIONS':
+    if method == 'OPTIONS':
         return {
             'statusCode': 200,
             'headers': {
@@ -36,7 +39,7 @@ def handler(request):
         }
     
     # Only allow POST
-    if request.method != 'POST':
+    if method != 'POST':
         return {
             'statusCode': 405,
             'headers': {
@@ -51,7 +54,11 @@ def handler(request):
     
     try:
         # Parse request body
-        body = json.loads(request.body) if isinstance(request.body, str) else request.body
+        request_body = event.get('body', '{}')
+        if isinstance(request_body, str):
+            body = json.loads(request_body)
+        else:
+            body = request_body
         url = body.get('url', '').strip()
         
         if not url:
