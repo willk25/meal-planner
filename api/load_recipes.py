@@ -6,9 +6,16 @@ GET /api/load_recipes
 
 import json
 import os
+import sys
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-# Use normal Python import - Vercel will bundle db_layer.py automatically
+# Add api directory to path for imports (same pattern as other API files)
+api_dir = Path(__file__).parent
+if str(api_dir) not in sys.path:
+    sys.path.insert(0, str(api_dir))
+
+# Import db_layer - now that api_dir is in sys.path
 from db_layer import load_recipes
 
 # #region agent log
