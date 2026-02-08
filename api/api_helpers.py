@@ -233,10 +233,29 @@ def validate_recipe(recipe: Dict[str, Any]) -> Tuple[bool, List[str]]:
 def add_recipe_to_db(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     """
     Add a recipe to the database using db_layer.
-    Uses normal Python import - Vercel will bundle db_layer.py automatically.
+    Uses importlib to load db_layer directly from file path (reliable in Vercel).
     """
     try:
-        from db_layer import add_recipe as db_add_recipe
+        import importlib.util
+        import sys
+        from pathlib import Path
+        
+        # Get the api directory (where this file and db_layer.py are located)
+        api_dir = Path(__file__).parent
+        
+        # Load db_layer using importlib (more reliable in Vercel)
+        db_layer_path = api_dir / 'db_layer.py'
+        if not db_layer_path.exists():
+            return (False, f"Database layer not found at {db_layer_path}")
+        
+        spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
+        if spec is None or spec.loader is None:
+            return (False, f"Failed to create spec for db_layer at {db_layer_path}")
+        
+        db_layer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(db_layer)
+        db_add_recipe = db_layer.add_recipe
+        
         return db_add_recipe(recipe)
     except ImportError as e:
         return (False, f"Database layer not available: {str(e)}")

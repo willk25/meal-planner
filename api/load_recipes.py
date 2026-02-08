@@ -30,10 +30,21 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle GET request to load recipes."""
         try:
-            # Import inside handler to catch import errors gracefully
+            # Import db_layer using importlib (more reliable in Vercel)
             try:
-                from db_layer import load_recipes
-            except ImportError as import_err:
+                import importlib.util
+                db_layer_path = api_dir / 'db_layer.py'
+                if not db_layer_path.exists():
+                    raise ImportError(f"db_layer.py not found at {db_layer_path}")
+                
+                spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
+                if spec is None or spec.loader is None:
+                    raise ImportError(f"Failed to create spec for db_layer at {db_layer_path}")
+                
+                db_layer = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(db_layer)
+                load_recipes = db_layer.load_recipes
+            except Exception as import_err:
                 import traceback
                 error_trace = traceback.format_exc()
                 print(f"ERROR: Failed to import db_layer: {error_trace}")
