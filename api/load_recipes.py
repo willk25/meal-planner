@@ -15,9 +15,6 @@ api_dir = Path(__file__).parent
 if str(api_dir) not in sys.path:
     sys.path.insert(0, str(api_dir))
 
-# Import db_layer - now that api_dir is in sys.path
-from db_layer import load_recipes
-
 
 class handler(BaseHTTPRequestHandler):
     """Vercel serverless function handler."""
@@ -33,6 +30,24 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle GET request to load recipes."""
         try:
+            # Import inside handler to catch import errors gracefully
+            try:
+                from db_layer import load_recipes
+            except ImportError as import_err:
+                import traceback
+                error_trace = traceback.format_exc()
+                print(f"ERROR: Failed to import db_layer: {error_trace}")
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'message': f'Import error: {str(import_err)}',
+                    'recipes': []
+                }).encode('utf-8'))
+                return
+            
             # Load recipes from database
             recipes = load_recipes()
             
