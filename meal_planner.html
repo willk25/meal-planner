@@ -2820,6 +2820,149 @@
       );
     }
     window.removeWeekFromHistory = removeWeekFromHistory;
+
+    // ============================================================================
+    // MULTI-USER AUTHENTICATION (COMMENTED OUT - Enable when ready)
+    // ============================================================================
+    /*
+    // Authentication state
+    let currentUser = null;
+    let authToken = null;
+
+    // Initialize auth on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      await checkAuthStatus();
+    });
+
+    async function checkAuthStatus() {
+      try {
+        const response = await fetch('http://localhost:5001/api/auth/me', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const user = await response.json();
+          currentUser = user;
+          updateAuthUI();
+        }
+      } catch (error) {
+        console.log('Not authenticated');
+        updateAuthUI();
+      }
+    }
+
+    function updateAuthUI() {
+      const authBtn = document.getElementById('auth-tab-btn');
+      const signoutBtn = document.getElementById('signout-btn');
+      
+      if (currentUser) {
+        if (authBtn) authBtn.style.display = 'block';
+        if (signoutBtn) signoutBtn.style.display = 'block';
+        if (authBtn) authBtn.textContent = `👤 ${currentUser.email || 'Account'}`;
+      } else {
+        if (authBtn) authBtn.style.display = 'none';
+        if (signoutBtn) signoutBtn.style.display = 'none';
+      }
+    }
+
+    async function signUp(email, password, fullName) {
+      try {
+        const response = await fetch('http://localhost:5001/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, full_name: fullName }),
+          credentials: 'include'
+        });
+        const result = await response.json();
+        if (result.success) {
+          currentUser = result.user;
+          updateAuthUI();
+          showToast('✅', 'Account created successfully!');
+          if (typeof switchTab === 'function') switchTab('planner');
+        } else {
+          showToast('❌', result.message || 'Failed to create account');
+        }
+      } catch (error) {
+        showToast('❌', 'Error: ' + error.message);
+      }
+    }
+
+    async function signIn(email, password) {
+      try {
+        const response = await fetch('http://localhost:5001/api/auth/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+          credentials: 'include'
+        });
+        const result = await response.json();
+        if (result.success) {
+          currentUser = result.user;
+          updateAuthUI();
+          showToast('✅', 'Signed in successfully!');
+          if (typeof switchTab === 'function') switchTab('planner');
+          // Reload recipes for current user
+          if (typeof loadRecipes === 'function') {
+            loadRecipes();
+          }
+        } else {
+          showToast('❌', result.message || 'Invalid credentials');
+        }
+      } catch (error) {
+        showToast('❌', 'Error: ' + error.message);
+      }
+    }
+
+    async function signOut() {
+      try {
+        await fetch('http://localhost:5001/api/auth/signout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        currentUser = null;
+        authToken = null;
+        updateAuthUI();
+        showToast('👋', 'Signed out successfully');
+        // Reload recipes (will show empty or all recipes depending on config)
+        if (typeof loadRecipes === 'function') {
+          loadRecipes();
+        }
+      } catch (error) {
+        showToast('❌', 'Error signing out: ' + error.message);
+      }
+    }
+    window.signOut = signOut;
+
+    // Add authentication tab to navigation (uncomment when ready):
+    // In the tab-navigation div, add:
+    // <button class="tab-btn-nav" onclick="switchTab('auth')" id="auth-tab-btn" style="display: none;">👤 Account</button>
+    // <button class="tab-btn-nav" onclick="signOut()" id="signout-btn" style="display: none;">Sign Out</button>
+    //
+    // Add authentication tab content (uncomment when ready):
+    // <div id="auth-tab" class="tab-content">
+    //   <div class="recipe-adder-container">
+    //     <header>
+    //       <h1>👤 Account</h1>
+    //       <p class="subtitle">Sign in or create an account</p>
+    //     </header>
+    //     <div class="recipe-adder-form">
+    //       <div id="auth-message" class="message"></div>
+    //       <div id="signin-section">
+    //         <h3>Sign In</h3>
+    //         <input type="email" id="signin-email" placeholder="Email">
+    //         <input type="password" id="signin-password" placeholder="Password">
+    //         <button class="btn btn-primary" onclick="signIn(document.getElementById('signin-email').value, document.getElementById('signin-password').value)">Sign In</button>
+    //       </div>
+    //       <div id="signup-section">
+    //         <h3>Create Account</h3>
+    //         <input type="text" id="signup-name" placeholder="Full Name">
+    //         <input type="email" id="signup-email" placeholder="Email">
+    //         <input type="password" id="signup-password" placeholder="Password">
+    //         <button class="btn btn-primary" onclick="signUp(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-name').value)">Sign Up</button>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+    */
   </script>
 </body>
 </html>

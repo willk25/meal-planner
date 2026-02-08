@@ -254,16 +254,38 @@ def enrich_recipe(recipe: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def load_existing_recipes() -> List[Dict[str, Any]]:
-    """Load existing recipes from curated_recipes.json."""
-    if not CURATED_RECIPES_JSON.exists():
-        return []
+    """Load existing recipes from database or JSON file."""
+    # MULTI-USER: When enabling user authentication, uncomment this section:
+    # try:
+    #     from db_layer import get_current_user_id, load_user_recipes
+    #     user_id = get_current_user_id()
+    #     if user_id:
+    #         # User is authenticated, load only their recipes
+    #         return load_user_recipes(user_id)
+    #     else:
+    #         # No user authenticated - either return empty or all recipes
+    #         # Option 1: Return empty (require login to see recipes)
+    #         # return []
+    #         # Option 2: Return all recipes (allow anonymous viewing)
+    #         from db_layer import load_recipes
+    #         return load_recipes()
+    # except ImportError:
+    #     pass
     
     try:
-        with open(CURATED_RECIPES_JSON, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except (json.JSONDecodeError, IOError) as e:
-        print(f"⚠️  Warning: Could not load existing recipes: {e}")
-        return []
+        from db_layer import load_recipes
+        return load_recipes()
+    except ImportError:
+        # Fallback to direct JSON if db_layer not available
+        if not CURATED_RECIPES_JSON.exists():
+            return []
+        
+        try:
+            with open(CURATED_RECIPES_JSON, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"⚠️  Warning: Could not load existing recipes: {e}")
+            return []
 
 
 def check_duplicate(recipe: Dict[str, Any], existing_recipes: List[Dict[str, Any]]) -> bool:
@@ -293,26 +315,31 @@ def create_backup() -> Path:
 
 
 def save_recipes(recipes: List[Dict[str, Any]]) -> bool:
-    """Save recipes to curated_recipes.json."""
+    """Save recipes to database or JSON file."""
     try:
-        # Create backup
-        backup_path = create_backup()
-        if backup_path:
-            print(f"📦 Backup created: {backup_path.name}")
-        
-        # Write recipes
-        with open(CURATED_RECIPES_JSON, 'w', encoding='utf-8') as f:
-            json.dump(recipes, f, indent=2, ensure_ascii=False)
-        
-        return True
-    except Exception as e:
-        print(f"❌ Error saving recipes: {e}")
-        return False
+        from db_layer import save_recipes as db_save_recipes
+        return db_save_recipes(recipes)
+    except ImportError:
+        # Fallback to direct JSON if db_layer not available
+        try:
+            # Create backup
+            backup_path = create_backup()
+            if backup_path:
+                print(f"📦 Backup created: {backup_path.name}")
+            
+            # Write recipes
+            with open(CURATED_RECIPES_JSON, 'w', encoding='utf-8') as f:
+                json.dump(recipes, f, indent=2, ensure_ascii=False)
+            
+            return True
+        except Exception as e:
+            print(f"❌ Error saving recipes: {e}")
+            return False
 
 
 def add_recipe(recipe: Dict[str, Any], skip_duplicate_check: bool = False) -> Tuple[bool, str]:
     """
-    Add a recipe to curated_recipes.json.
+    Add a recipe to database or JSON file.
     
     Args:
         recipe: Recipe dictionary
@@ -329,21 +356,58 @@ def add_recipe(recipe: Dict[str, Any], skip_duplicate_check: bool = False) -> Tu
     # Enrich with auto-detected metadata
     recipe = enrich_recipe(recipe)
     
-    # Load existing recipes
-    existing_recipes = load_existing_recipes()
+    # MULTI-USER: When enabling user authentication, uncomment this section:
+    # from db_layer import get_current_user_id, add_user_recipe
+    # user_id = get_current_user_id()
+    # if user_id:
+    #     # User is authenticated, use user-specific function
+    #     if skip_duplicate_check:
+    #         # For skip_duplicate_check with users, we need special handling
+    #         existing_recipes = load_existing_recipes()
+    #         recipe['user_id'] = user_id
+    #         existing_recipes.append(recipe)
+    #         if save_recipes(existing_recipes):
+    #             return (True, f"✅ Successfully added recipe: '{recipe['title']}'")
+    #         else:
+    #             return (False, "Failed to save recipes")
+    #     else:
+    #         return add_user_recipe(recipe, user_id)
+    # else:
+    #     # No user authenticated - either allow anonymous or require login
+    #     # Option 1: Allow anonymous (current behavior)
+    #     # Option 2: Require login (uncomment next line)
+    #     # return (False, "Please sign in to add recipes")
     
-    # Check for duplicates
-    if not skip_duplicate_check and check_duplicate(recipe, existing_recipes):
-        return (False, f"Duplicate recipe found: '{recipe['title']}' already exists")
-    
-    # Add to list
-    existing_recipes.append(recipe)
-    
-    # Save
-    if save_recipes(existing_recipes):
-        return (True, f"✅ Successfully added recipe: '{recipe['title']}'")
-    else:
-        return (False, "Failed to save recipes")
+    # Try using db_layer first (supports Supabase)
+    try:
+        from db_layer import add_recipe as db_add_recipe
+        if skip_duplicate_check:
+            # For skip_duplicate_check, we need to use the old method
+            # because db_layer.add_recipe doesn't support this flag
+            existing_recipes = load_existing_recipes()
+            existing_recipes.append(recipe)
+            if save_recipes(existing_recipes):
+                return (True, f"✅ Successfully added recipe: '{recipe['title']}'")
+            else:
+                return (False, "Failed to save recipes")
+        else:
+            return db_add_recipe(recipe)
+    except ImportError:
+        # Fallback to direct JSON if db_layer not available
+        existing_recipes = load_existing_recipes()
+        
+        # Check for duplicates
+        if not skip_duplicate_check and check_duplicate(recipe, existing_recipes):
+            return (False, f"Duplicate recipe found: '{recipe['title']}' already exists")
+        
+        # Add to list
+        existing_recipes.append(recipe)
+        
+        # Save
+        if save_recipes(existing_recipes):
+            return (True, f"✅ Successfully added recipe: '{recipe['title']}'")
+        else:
+            return (False, "Failed to save recipes")
 
 
 def preview_recipe(recipe: Dict[str, Any]) -> None:
