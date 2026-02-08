@@ -142,3 +142,7 @@ def handler(event):
                 'message': error_message
             })
         }
+
+
+# Export handler for Vercel
+__vercel_handler__ = handler

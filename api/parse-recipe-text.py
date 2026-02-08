@@ -110,3 +110,7 @@ def handler(event):
                 'message': f'Failed to parse recipe: {str(e)}'
             })
         }
+
+
+# Export handler for Vercel
+__vercel_handler__ = handler

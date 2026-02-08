@@ -166,3 +166,7 @@ def handler(event):
                 'message': f'Error: {str(e)}'
             })
         }
+
+
+# Export handler for Vercel
+__vercel_handler__ = handler

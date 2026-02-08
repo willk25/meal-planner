@@ -5,7 +5,7 @@
   "trailingSlash": false,
   "functions": {
     "api/**/*.py": {
-      "runtime": "python3.9"
+      "runtime": "@vercel/python"
     }
   },
   "rewrites": [
