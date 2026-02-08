@@ -1919,36 +1919,39 @@
 
     async function loadRecipes() {
       try {
-        // Try API endpoint first, fallback to JSON file for local development
-        let response;
-        try {
-          response = await fetch('/api/load_recipes');
-          if (!response.ok) {
-            throw new Error(`API returned ${response.status}: ${response.statusText}`);
+        // Load from Supabase via API endpoint
+        const response = await fetch('/api/load_recipes');
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          let errorMessage = `API returned ${response.status}: ${response.statusText}`;
+          try {
+            const errorJson = JSON.parse(errorText);
+            if (errorJson.message) {
+              errorMessage = errorJson.message;
+            }
+          } catch (e) {
+            // Not JSON, use the text as-is
+            if (errorText) {
+              errorMessage = errorText.substring(0, 200);
+            }
           }
-          allRecipes = await response.json();
-          
-          // Check if we got a valid array
-          if (!Array.isArray(allRecipes)) {
-            console.error('API returned non-array:', allRecipes);
-            throw new Error('API returned invalid data format');
-          }
-          
-          console.log(`Loaded ${allRecipes.length} recipes from API`);
-          
-          // If API returned empty array, try JSON fallback
-          if (allRecipes.length === 0) {
-            console.warn('API returned empty array, trying local JSON file...');
-            throw new Error('API returned empty array');
-          }
-        } catch (apiError) {
-          console.warn('API endpoint failed, trying local JSON file:', apiError);
-          response = await fetch('curated_recipes.json');
-          if (!response.ok) {
-            throw new Error(`Failed to load recipes: ${response.status}`);
-          }
-          allRecipes = await response.json();
-          console.log(`Loaded ${allRecipes.length} recipes from JSON file`);
+          throw new Error(errorMessage);
+        }
+        
+        allRecipes = await response.json();
+        
+        // Check if we got a valid array
+        if (!Array.isArray(allRecipes)) {
+          console.error('API returned non-array:', allRecipes);
+          throw new Error('API returned invalid data format. Expected an array of recipes.');
+        }
+        
+        console.log(`Loaded ${allRecipes.length} recipes from Supabase`);
+        
+        // If API returned empty array, show helpful message
+        if (allRecipes.length === 0) {
+          throw new Error('No recipes found in Supabase. Make sure recipes have been uploaded to your database.');
         }
       
       // Categorize recipes
@@ -1997,11 +2000,19 @@
         console.log(`Loaded: ${entrees.length} entrees, ${appetizers.length} appetizers, ${desserts.length} desserts`);
       } catch (error) {
         console.error('Failed to load recipes:', error);
+        const errorMessage = error.message || 'Unknown error occurred';
         document.getElementById('week-plan').innerHTML = `
           <div class="empty-state">
             <div class="icon">❌</div>
-            <h3>Failed to Load Recipes</h3>
-            <p>Make sure curated_recipes.json is available</p>
+            <h3>Failed to Load Recipes from Supabase</h3>
+            <p style="color: #ff6b6b; margin: 10px 0;">${errorMessage}</p>
+            <p style="font-size: 0.9em; color: #888; margin-top: 20px;">
+              <strong>Troubleshooting:</strong><br>
+              • Check Vercel function logs for detailed error messages<br>
+              • Verify environment variables are set (USE_SUPABASE, SUPABASE_URL, SUPABASE_KEY)<br>
+              • Make sure recipes have been uploaded to your Supabase database<br>
+              • Check that the /api/load_recipes endpoint is working
+            </p>
           </div>
         `;
       }
