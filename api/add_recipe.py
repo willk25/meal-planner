@@ -5,14 +5,16 @@ POST /api/add_recipe
 """
 
 import json
+import sys
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-# Use normal Python imports - Vercel will bundle these automatically
-from api_helpers import validate_recipe, enrich_recipe, add_recipe_to_db
+# Add api directory to path for imports
+api_dir = Path(__file__).parent
+if str(api_dir) not in sys.path:
+    sys.path.insert(0, str(api_dir))
 
-# #region agent log
-print(f"DEBUG [add_recipe]: Module loaded - imports successful")
-# #endregion
+from api_helpers import validate_recipe, enrich_recipe, add_recipe_to_db
 
 
 class handler(BaseHTTPRequestHandler):
@@ -29,10 +31,6 @@ class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         """Handle POST request to add recipe."""
         try:
-            # #region agent log
-            print(f"DEBUG [add_recipe]: do_POST called")
-            # #endregion
-            
             # Read request body
             content_length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(content_length).decode('utf-8')
@@ -79,16 +77,8 @@ class handler(BaseHTTPRequestHandler):
             # Enrich with auto-detected metadata
             recipe_data = enrich_recipe(recipe_data)
             
-            # #region agent log
-            print(f"DEBUG [add_recipe]: Calling add_recipe_to_db")
-            # #endregion
-            
             # Add recipe to database
             success, message = add_recipe_to_db(recipe_data)
-            
-            # #region agent log
-            print(f"DEBUG [add_recipe]: add_recipe_to_db returned - success={success}, message={message}")
-            # #endregion
             
             if success:
                 self.send_response(200)
@@ -106,10 +96,7 @@ class handler(BaseHTTPRequestHandler):
         except Exception as e:
             import traceback
             error_trace = traceback.format_exc()
-            # #region agent log
-            print(f"DEBUG [add_recipe]: Exception in do_POST - {str(e)}")
-            print(f"DEBUG [add_recipe]: Traceback - {error_trace}")
-            # #endregion
+            print(f"ERROR in add_recipe: {error_trace}")
             self.send_response(500)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')

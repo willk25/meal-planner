@@ -236,21 +236,9 @@ def add_recipe_to_db(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     Uses normal Python import - Vercel will bundle db_layer.py automatically.
     """
     try:
-        # Use normal Python import - Vercel will bundle db_layer.py automatically
         from db_layer import add_recipe as db_add_recipe
-        
-        # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: db_layer.add_recipe imported successfully")
-        # #endregion
-        
         return db_add_recipe(recipe)
     except ImportError as e:
-        # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: ImportError - {str(e)}")
-        # #endregion
         return (False, f"Database layer not available: {str(e)}")
     except Exception as e:
-        # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: Exception - {str(e)}")
-        # #endregion
         return (False, f"Error adding recipe: {str(e)}")
