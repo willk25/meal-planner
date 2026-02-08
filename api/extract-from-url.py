@@ -7,19 +7,22 @@ Uses recipe-scrapers library (keep existing logic unchanged).
 
 import json
 import sys
-from http.server import BaseHTTPRequestHandler
 from pathlib import Path
+from http.server import BaseHTTPRequestHandler
 
-# Add parent directory to path to import upload_recipe
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add api directory to path for imports
+api_dir = Path(__file__).parent
+if str(api_dir) not in sys.path:
+    sys.path.insert(0, str(api_dir))
 
-from upload_recipe import enrich_recipe
+from api_helpers import enrich_recipe
 
-# Import recipe-scrapers (keep existing logic unchanged)
+# Use lightweight scraper instead of recipe-scrapers
 try:
-    from recipe_scrapers import scrape_me
+    from recipe_scraper import scrape_recipe
+    SCRAPING_AVAILABLE = True
 except ImportError:
-    scrape_me = None
+    SCRAPING_AVAILABLE = False
 
 
 class handler(BaseHTTPRequestHandler):
@@ -67,35 +70,20 @@ class handler(BaseHTTPRequestHandler):
                 }).encode('utf-8'))
                 return
             
-            # Check if recipe-scrapers is available
-            if scrape_me is None:
+            # Check if scraping is available
+            if not SCRAPING_AVAILABLE:
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(json.dumps({
                     'success': False,
-                    'message': 'Recipe scrapers library not available.'
+                    'message': 'Recipe scraping library not available.'
                 }).encode('utf-8'))
                 return
             
-            # Extract recipe from URL (keep existing logic unchanged)
-            scraper = scrape_me(url)
-            
-            # Build recipe dictionary from scraped data
-            recipe = {
-                'title': scraper.title() if scraper.title() else '',
-                'ingredients': scraper.ingredients() if scraper.ingredients() else [],
-                'directions': scraper.instructions_list() if scraper.instructions_list() else [],
-            }
-            
-            # Add optional fields if available
-            if scraper.total_time():
-                recipe['total_time'] = scraper.total_time()
-            if scraper.yields():
-                recipe['yields'] = scraper.yields()
-            if scraper.image():
-                recipe['image'] = scraper.image()
+            # Extract recipe from URL using lightweight scraper
+            recipe = scrape_recipe(url)
             
             # Enrich recipe with auto-detected metadata
             recipe = enrich_recipe(recipe)

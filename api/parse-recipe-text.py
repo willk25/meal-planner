@@ -2,18 +2,20 @@
 """
 Vercel serverless function to parse text recipe.
 POST /api/parse-recipe-text
-Uses parse_text_recipe() from upload_recipe.py (keep existing logic unchanged).
+Uses parse_text_recipe() from api_helpers (keep existing logic unchanged).
 """
 
 import json
 import sys
-from http.server import BaseHTTPRequestHandler
 from pathlib import Path
+from http.server import BaseHTTPRequestHandler
 
-# Add parent directory to path to import upload_recipe
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add api directory to path for imports
+api_dir = Path(__file__).parent
+if str(api_dir) not in sys.path:
+    sys.path.insert(0, str(api_dir))
 
-from upload_recipe import parse_text_recipe, enrich_recipe
+from api_helpers import parse_text_recipe, enrich_recipe
 
 
 class handler(BaseHTTPRequestHandler):

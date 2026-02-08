@@ -1,0 +1,35 @@
+# Exclude large data files
+full_format_recipes.json
+curated_recipes*.json
+family_recipes.json
+*.pdf
+
+# Exclude Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Exclude backup files
+*_backup_*.json
+
+# Exclude development files
+service_account.json
+*.md
+!README.md
+
+# Exclude other large files
+Recipes consolidated.pdf
+
+# Exclude root requirements.txt (use api/requirements.txt instead)
+requirements.txt
+!api/requirements.txt
+
+# Exclude root Python files that aren't needed for API
+add_*.py
+curate_*.py
+recipe_bot.py
+auth_service.py
+db_layer.py
+upload_recipe.py

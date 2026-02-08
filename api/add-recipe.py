@@ -6,13 +6,15 @@ POST /api/add-recipe
 
 import json
 import sys
-from http.server import BaseHTTPRequestHandler
 from pathlib import Path
+from http.server import BaseHTTPRequestHandler
 
-# Add parent directory to path to import upload_recipe
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add api directory to path for imports
+api_dir = Path(__file__).parent
+if str(api_dir) not in sys.path:
+    sys.path.insert(0, str(api_dir))
 
-from upload_recipe import add_recipe
+from api_helpers import validate_recipe, enrich_recipe, add_recipe_to_db
 
 
 class handler(BaseHTTPRequestHandler):
@@ -59,8 +61,24 @@ class handler(BaseHTTPRequestHandler):
                 }).encode('utf-8'))
                 return
             
-            # Add recipe using existing function (saves to Supabase via db_layer)
-            success, message = add_recipe(recipe_data)
+            # Validate recipe
+            is_valid, errors = validate_recipe(recipe_data)
+            if not is_valid:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'message': f"Validation failed: {', '.join(errors)}"
+                }).encode('utf-8'))
+                return
+            
+            # Enrich with auto-detected metadata
+            recipe_data = enrich_recipe(recipe_data)
+            
+            # Add recipe to database
+            success, message = add_recipe_to_db(recipe_data)
             
             if success:
                 self.send_response(200)
