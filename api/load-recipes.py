@@ -14,13 +14,30 @@ from http.server import BaseHTTPRequestHandler
 import importlib.util
 api_dir = Path(__file__).parent.absolute()
 db_layer_path = api_dir / 'db_layer.py'
+
+# #region agent log
+print(f"DEBUG [load-recipes]: Checking db_layer path - api_dir={api_dir}, db_layer_path={db_layer_path}, exists={db_layer_path.exists()}, __file__={__file__}")
+# #endregion
+
 if not db_layer_path.exists():
+    # #region agent log
+    api_dir_contents = list(api_dir.iterdir()) if api_dir.exists() else "api_dir does not exist"
+    print(f"DEBUG [load-recipes]: db_layer.py NOT FOUND - path={db_layer_path}, api_dir_contents={api_dir_contents}")
+    # #endregion
     raise ImportError(f"Could not find db_layer.py at {db_layer_path}")
+
+# #region agent log
+print(f"DEBUG [load-recipes]: db_layer.py FOUND, loading module - path={db_layer_path}")
+# #endregion
 
 spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
 db_layer = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(db_layer)
 load_recipes = db_layer.load_recipes
+
+# #region agent log
+print(f"DEBUG [load-recipes]: db_layer module loaded successfully - has_load_recipes={hasattr(db_layer,'load_recipes')}")
+# #endregion
 
 
 class handler(BaseHTTPRequestHandler):
