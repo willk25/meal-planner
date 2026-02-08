@@ -233,44 +233,14 @@ def validate_recipe(recipe: Dict[str, Any]) -> Tuple[bool, List[str]]:
 def add_recipe_to_db(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     """
     Add a recipe to the database using db_layer.
-    Uses the local db_layer.py in the api/ directory.
+    Uses normal Python import - Vercel will bundle db_layer.py automatically.
     """
     try:
-        import importlib.util
-        from pathlib import Path
-        
-        # Get the api directory
-        api_dir = Path(__file__).parent.absolute()
+        # Use normal Python import - Vercel will bundle db_layer.py automatically
+        from db_layer import add_recipe as db_add_recipe
         
         # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: Checking db_layer path - api_dir={api_dir}, __file__={__file__}")
-        # #endregion
-        
-        # Import db_layer directly from file (most reliable for Vercel)
-        db_layer_path = api_dir / 'db_layer.py'
-        
-        # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: Checking if db_layer.py exists - path={db_layer_path}, exists={db_layer_path.exists()}")
-        # #endregion
-        
-        if not db_layer_path.exists():
-            # #region agent log
-            api_dir_contents = list(api_dir.iterdir()) if api_dir.exists() else "api_dir does not exist"
-            print(f"DEBUG [add_recipe_to_db]: db_layer.py NOT FOUND - path={db_layer_path}, api_dir_contents={api_dir_contents}")
-            # #endregion
-            raise ImportError(f"Could not find db_layer.py at {db_layer_path}")
-        
-        # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: db_layer.py FOUND, loading module - path={db_layer_path}")
-        # #endregion
-        
-        spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
-        db_layer = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(db_layer)
-        db_add_recipe = db_layer.add_recipe
-        
-        # #region agent log
-        print(f"DEBUG [add_recipe_to_db]: db_layer module loaded, calling add_recipe - has_add_recipe={hasattr(db_layer,'add_recipe')}")
+        print(f"DEBUG [add_recipe_to_db]: db_layer.add_recipe imported successfully")
         # #endregion
         
         return db_add_recipe(recipe)

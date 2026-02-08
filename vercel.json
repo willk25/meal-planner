@@ -38,7 +38,7 @@
   ],
   "functions": {
     "api/**": {
-      "excludeFiles": "{full_format_recipes.json,curated_recipes*.json,family_recipes.json,*.pdf,__pycache__,**/__pycache__/**,.git/**,*.pyc,*.pyo,*.pyd,.Python,*.md,service_account.json,add_*.py,curate_*.py,recipe_bot.py,auth_service.py,upload_recipe.py}"
+      "excludeFiles": "{full_format_recipes.json,curated_recipes*.json,family_recipes.json,*.pdf,__pycache__,**/__pycache__/**,.git/**,*.pyc,*.pyo,*.pyd,.Python,*.md,service_account.json,curate_*.py,recipe_bot.py,auth_service.py,upload_recipe.py}"
     }
   }
 }

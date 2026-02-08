@@ -1922,7 +1922,7 @@
         // Try API endpoint first, fallback to JSON file for local development
         let response;
         try {
-          response = await fetch('/api/load-recipes');
+          response = await fetch('/api/load_recipes');
           if (!response.ok) {
             throw new Error(`API returned ${response.status}: ${response.statusText}`);
           }
@@ -3294,7 +3294,7 @@
       submitBtn.textContent = 'Adding...';
       
       try {
-        const response = await fetch('/api/add-recipe', {
+        const response = await fetch('/api/add_recipe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(recipe)
