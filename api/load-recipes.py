@@ -6,15 +6,37 @@ GET /api/load-recipes
 
 import json
 import sys
+import os
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-# Add api directory to path for imports
-api_dir = Path(__file__).parent
+# Add api directory to path for imports (Vercel-specific path handling)
+api_dir = Path(__file__).parent.absolute()
 if str(api_dir) not in sys.path:
     sys.path.insert(0, str(api_dir))
 
-from db_layer import load_recipes
+# Also try adding parent directory in case Vercel structures it differently
+parent_dir = api_dir.parent.absolute()
+if str(parent_dir) not in sys.path:
+    sys.path.insert(0, str(parent_dir))
+
+# Try importing - handle both possible locations
+try:
+    from api.db_layer import load_recipes
+except ImportError:
+    try:
+        from db_layer import load_recipes
+    except ImportError:
+        # Last resort: import directly
+        import importlib.util
+        db_layer_path = api_dir / 'db_layer.py'
+        if db_layer_path.exists():
+            spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
+            db_layer = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(db_layer)
+            load_recipes = db_layer.load_recipes
+        else:
+            raise ImportError("Could not find db_layer.py")
 
 
 class handler(BaseHTTPRequestHandler):
