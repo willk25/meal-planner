@@ -1297,10 +1297,211 @@
       .main-actions { flex-direction: column; align-items: stretch; }
       .btn { justify-content: center; }
     }
+
+    /* Tab Navigation */
+    .tab-navigation {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border-subtle);
+      padding-bottom: 0.5rem;
+    }
+
+    .tab-btn-nav {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn-nav:hover {
+      color: var(--text-primary);
+    }
+
+    .tab-btn-nav.active {
+      color: var(--accent-teal);
+      border-bottom-color: var(--accent-teal);
+    }
+
+    .tab-content {
+      display: block;
+    }
+
+    /* Recipe Adder Styles */
+    .recipe-adder-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .recipe-adder-container header {
+      margin-bottom: 2rem;
+    }
+
+    .recipe-adder-container h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .recipe-adder-container .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Extraction Method Tabs */
+    .extraction-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.5rem;
+    }
+
+    .extraction-tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s ease;
+    }
+
+    .extraction-tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .extraction-tab-btn.active {
+      color: var(--accent-teal);
+      border-bottom-color: var(--accent-teal);
+    }
+
+    .extraction-method {
+      display: block;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent-teal);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .message {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .message.success {
+      background: rgba(78, 205, 196, 0.15);
+      color: var(--accent-teal);
+      border: 1px solid rgba(78, 205, 196, 0.3);
+    }
+
+    .message.error {
+      background: rgba(255, 107, 107, 0.15);
+      color: var(--accent-coral);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    #url-preview,
+    #text-preview {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    #url-preview h3,
+    #text-preview h3 {
+      margin-bottom: 1rem;
+      color: var(--accent-teal);
+    }
+
+    #url-preview .preview-field,
+    #text-preview .preview-field {
+      margin-bottom: 1rem;
+    }
+
+    #url-preview .preview-field label,
+    #text-preview .preview-field label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    #url-preview .preview-field .preview-value,
+    #text-preview .preview-field .preview-value {
+      color: var(--text-primary);
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+      <button class="tab-btn-nav active" onclick="switchTab('planner')">🍽️ Meal Planner</button>
+      <button class="tab-btn-nav" onclick="switchTab('adder')">➕ Add Recipe</button>
+    </div>
+
+    <!-- Meal Planner Tab -->
+    <div id="planner-tab" class="tab-content">
     <header>
       <h1>🍽️ Weekly Meal Planner</h1>
       <p class="subtitle">Generate a week of delicious, high-protein meals</p>
@@ -1477,6 +1678,144 @@
         <button class="btn btn-small btn-secondary" id="regenerate-grocery-btn">🔄 Regenerate List</button>
       </div>
       </div>
+    </div>
+    <!-- End Meal Planner Tab -->
+
+    <!-- Recipe Adder Tab -->
+    <div id="adder-tab" class="tab-content" style="display: none;">
+      <div class="recipe-adder-container">
+        <header>
+          <h1>➕ Add Recipe</h1>
+          <p class="subtitle">Add a new recipe to your collection</p>
+        </header>
+
+        <!-- Extraction Method Tabs -->
+        <div class="extraction-tabs">
+          <button class="extraction-tab-btn active" onclick="switchExtractionMethod('manual')">✍️ Manual Entry</button>
+          <button class="extraction-tab-btn" onclick="switchExtractionMethod('url')">🔗 From URL</button>
+          <button class="extraction-tab-btn" onclick="switchExtractionMethod('text')">📝 Paste Text</button>
+          <!-- Photo Upload commented out for now -->
+          <!-- <button class="extraction-tab-btn" onclick="switchExtractionMethod('photo')">📷 Photo Upload</button> -->
+        </div>
+
+        <!-- Manual Entry Form -->
+        <div id="manual-method" class="extraction-method">
+          <form id="recipe-form" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="recipe-title">Title *</label>
+              <input type="text" id="recipe-title" required placeholder="Recipe name">
+            </div>
+
+            <div class="form-group">
+              <label for="recipe-ingredients">Ingredients *</label>
+              <textarea id="recipe-ingredients" required placeholder="One ingredient per line&#10;e.g.&#10;1 cup flour&#10;2 eggs&#10;1/2 cup milk" rows="6"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="recipe-directions">Directions *</label>
+              <textarea id="recipe-directions" required placeholder="One step per line&#10;e.g.&#10;Mix ingredients together&#10;Cook for 10 minutes" rows="6"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="recipe-protein-source">Protein Source</label>
+                <select id="recipe-protein-source">
+                  <option value="">Auto-detect</option>
+                  <option value="chicken">Chicken</option>
+                  <option value="beef">Beef</option>
+                  <option value="pork">Pork</option>
+                  <option value="seafood">Seafood</option>
+                  <option value="turkey">Turkey</option>
+                  <option value="lamb">Lamb</option>
+                  <option value="eggs">Eggs</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="recipe-meal-type">Meal Type</label>
+                <select id="recipe-meal-type">
+                  <option value="">Auto-detect</option>
+                  <option value="entree">Entree</option>
+                  <option value="appetizer">Appetizer</option>
+                  <option value="dessert">Dessert</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="soup">Soup</option>
+                  <option value="salad">Salad</option>
+                  <option value="side">Side</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="recipe-rating">Rating (0-5)</label>
+                <input type="number" id="recipe-rating" min="0" max="5" step="0.1" placeholder="4.5">
+              </div>
+
+              <div class="form-group">
+                <label for="recipe-protein">Protein (g)</label>
+                <input type="number" id="recipe-protein" min="0" step="0.1" placeholder="35">
+              </div>
+
+              <div class="form-group">
+                <label for="recipe-calories">Calories</label>
+                <input type="number" id="recipe-calories" min="0" step="0.1" placeholder="426">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="recipe-desc">Description</label>
+              <textarea id="recipe-desc" placeholder="Optional recipe description" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="recipe-tags">Tags (comma-separated)</label>
+              <input type="text" id="recipe-tags" placeholder="e.g. NYT Recipe, Family Recipe, Barefoot Contessa">
+            </div>
+
+            <div id="recipe-message" class="message" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-primary" id="submit-recipe-btn">Add Recipe</button>
+          </form>
+        </div>
+
+        <!-- URL Extraction Method -->
+        <div id="url-method" class="extraction-method" style="display: none;">
+          <div class="form-group">
+            <label for="recipe-url">Recipe URL</label>
+            <input type="url" id="recipe-url" placeholder="https://www.allrecipes.com/recipe/...">
+            <button class="btn btn-primary" onclick="extractFromUrl()">Extract Recipe</button>
+          </div>
+          <div id="url-message" class="message" style="display: none;"></div>
+          <div id="url-preview" style="display: none;"></div>
+        </div>
+
+        <!-- Text Paste Method -->
+        <div id="text-method" class="extraction-method" style="display: none;">
+          <div class="form-group">
+            <label for="recipe-text">Paste Recipe Text</label>
+            <textarea id="recipe-text" placeholder="Title: Recipe Name&#10;Ingredients:&#10;- ingredient 1&#10;- ingredient 2&#10;Directions:&#10;1. Step 1&#10;2. Step 2" rows="12"></textarea>
+            <button class="btn btn-primary" onclick="parseRecipeText()">Parse Recipe</button>
+          </div>
+          <div id="text-message" class="message" style="display: none;"></div>
+          <div id="text-preview" style="display: none;"></div>
+        </div>
+
+        <!-- Photo Upload Method (Commented Out) -->
+        <!--
+        <div id="photo-method" class="extraction-method" style="display: none;">
+          <div class="form-group">
+            <label for="recipe-photo">Upload Recipe Photo</label>
+            <input type="file" id="recipe-photo" accept="image/*">
+            <button class="btn btn-primary" onclick="extractFromPhoto()">Extract Recipe</button>
+          </div>
+          <div id="photo-message" class="message" style="display: none;"></div>
+        </div>
+        -->
+      </div>
+    </div>
+    <!-- End Recipe Adder Tab -->
   </div>
 
   <div class="toast" id="toast">
@@ -2820,6 +3159,282 @@
       );
     }
     window.removeWeekFromHistory = removeWeekFromHistory;
+
+    // ============================================================================
+    // RECIPE ADDER FUNCTIONALITY
+    // ============================================================================
+
+    // Tab switching
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.getElementById('planner-tab').style.display = 'none';
+      document.getElementById('adder-tab').style.display = 'none';
+      
+      // Remove active class from all tab buttons
+      document.querySelectorAll('.tab-btn-nav').forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected tab
+      if (tabName === 'planner') {
+        document.getElementById('planner-tab').style.display = 'block';
+        document.querySelector('.tab-btn-nav[onclick*="planner"]').classList.add('active');
+      } else if (tabName === 'adder') {
+        document.getElementById('adder-tab').style.display = 'block';
+        document.querySelector('.tab-btn-nav[onclick*="adder"]').classList.add('active');
+      }
+    }
+    window.switchTab = switchTab;
+
+    // Extraction method switching
+    function switchExtractionMethod(method) {
+      // Hide all methods
+      document.getElementById('manual-method').style.display = 'none';
+      document.getElementById('url-method').style.display = 'none';
+      document.getElementById('text-method').style.display = 'none';
+      
+      // Remove active class
+      document.querySelectorAll('.extraction-tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected method
+      if (method === 'manual') {
+        document.getElementById('manual-method').style.display = 'block';
+        document.querySelector('.extraction-tab-btn[onclick*="manual"]').classList.add('active');
+      } else if (method === 'url') {
+        document.getElementById('url-method').style.display = 'block';
+        document.querySelector('.extraction-tab-btn[onclick*="url"]').classList.add('active');
+      } else if (method === 'text') {
+        document.getElementById('text-method').style.display = 'block';
+        document.querySelector('.extraction-tab-btn[onclick*="text"]').classList.add('active');
+      }
+    }
+    window.switchExtractionMethod = switchExtractionMethod;
+
+    // Form submission
+    async function handleSubmit(event) {
+      event.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-recipe-btn');
+      const messageDiv = document.getElementById('recipe-message');
+      
+      // Get form values
+      const title = document.getElementById('recipe-title').value.trim();
+      const ingredientsText = document.getElementById('recipe-ingredients').value.trim();
+      const directionsText = document.getElementById('recipe-directions').value.trim();
+      
+      if (!title || !ingredientsText || !directionsText) {
+        showMessage(messageDiv, 'Please fill in all required fields.', 'error');
+        return;
+      }
+      
+      // Parse ingredients and directions
+      const ingredients = ingredientsText.split('\n').map(i => i.trim()).filter(i => i);
+      const directions = directionsText.split('\n').map(d => d.trim()).filter(d => d);
+      
+      // Build recipe object
+      const recipe = {
+        title: title,
+        ingredients: ingredients,
+        directions: directions
+      };
+      
+      // Add optional fields
+      const proteinSource = document.getElementById('recipe-protein-source').value;
+      if (proteinSource) recipe.protein_source = proteinSource;
+      
+      const mealType = document.getElementById('recipe-meal-type').value;
+      if (mealType) recipe.meal_type = mealType;
+      
+      const rating = document.getElementById('recipe-rating').value;
+      if (rating) recipe.rating = parseFloat(rating);
+      
+      const protein = document.getElementById('recipe-protein').value;
+      if (protein) recipe.protein = parseFloat(protein);
+      
+      const calories = document.getElementById('recipe-calories').value;
+      if (calories) recipe.calories = parseFloat(calories);
+      
+      const desc = document.getElementById('recipe-desc').value.trim();
+      if (desc) recipe.desc = desc;
+      
+      const tags = document.getElementById('recipe-tags').value.trim();
+      if (tags) {
+        recipe.categories = tags.split(',').map(t => t.trim()).filter(t => t);
+      }
+      
+      // Disable submit button
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Adding...';
+      
+      try {
+        const response = await fetch('/api/add-recipe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(recipe)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          showMessage(messageDiv, result.message, 'success');
+          // Reset form
+          document.getElementById('recipe-form').reset();
+          // Reload recipes if function exists
+          if (typeof loadRecipes === 'function') {
+            await loadRecipes();
+          }
+        } else {
+          showMessage(messageDiv, result.message, 'error');
+        }
+      } catch (error) {
+        showMessage(messageDiv, `Error: ${error.message}`, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Add Recipe';
+      }
+    }
+    window.handleSubmit = handleSubmit;
+
+    // Extract from URL
+    async function extractFromUrl() {
+      const url = document.getElementById('recipe-url').value.trim();
+      const messageDiv = document.getElementById('url-message');
+      const previewDiv = document.getElementById('url-preview');
+      
+      if (!url) {
+        showMessage(messageDiv, 'Please enter a URL', 'error');
+        return;
+      }
+      
+      previewDiv.style.display = 'none';
+      showMessage(messageDiv, 'Extracting recipe...', 'success');
+      
+      try {
+        const response = await fetch('/api/extract-from-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: url })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.recipe) {
+          showMessage(messageDiv, 'Recipe extracted successfully! Review and add it below.', 'success');
+          displayPreview(previewDiv, result.recipe, 'url');
+        } else {
+          showMessage(messageDiv, result.message || 'Failed to extract recipe', 'error');
+        }
+      } catch (error) {
+        showMessage(messageDiv, `Error: ${error.message}`, 'error');
+      }
+    }
+    window.extractFromUrl = extractFromUrl;
+
+    // Parse recipe text
+    async function parseRecipeText() {
+      const text = document.getElementById('recipe-text').value.trim();
+      const messageDiv = document.getElementById('text-message');
+      const previewDiv = document.getElementById('text-preview');
+      
+      if (!text) {
+        showMessage(messageDiv, 'Please paste recipe text', 'error');
+        return;
+      }
+      
+      previewDiv.style.display = 'none';
+      showMessage(messageDiv, 'Parsing recipe...', 'success');
+      
+      try {
+        const response = await fetch('/api/parse-recipe-text', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.recipe) {
+          showMessage(messageDiv, 'Recipe parsed successfully! Review and add it below.', 'success');
+          displayPreview(previewDiv, result.recipe, 'text');
+        } else {
+          showMessage(messageDiv, result.message || 'Failed to parse recipe', 'error');
+        }
+      } catch (error) {
+        showMessage(messageDiv, `Error: ${error.message}`, 'error');
+      }
+    }
+    window.parseRecipeText = parseRecipeText;
+
+    // Store preview recipe globally
+    let previewRecipe = null;
+
+    // Display preview and populate form
+    function displayPreview(previewDiv, recipe, source) {
+      previewRecipe = recipe; // Store for later use
+      previewDiv.innerHTML = `
+        <h3>Preview Recipe</h3>
+        <div class="preview-field">
+          <label>Title</label>
+          <div class="preview-value">${recipe.title || 'N/A'}</div>
+        </div>
+        <div class="preview-field">
+          <label>Ingredients (${recipe.ingredients?.length || 0})</label>
+          <div class="preview-value">${(recipe.ingredients || []).slice(0, 3).join(', ')}${(recipe.ingredients || []).length > 3 ? '...' : ''}</div>
+        </div>
+        <div class="preview-field">
+          <label>Directions (${recipe.directions?.length || 0})</label>
+          <div class="preview-value">${(recipe.directions || []).slice(0, 2).join(' | ')}${(recipe.directions || []).length > 2 ? '...' : ''}</div>
+        </div>
+        <button class="btn btn-primary" onclick="populateFormFromPreview()">Add This Recipe</button>
+      `;
+      previewDiv.style.display = 'block';
+    }
+
+    // Populate form from preview
+    function populateFormFromPreview() {
+      if (!previewRecipe) return;
+      
+      const recipe = previewRecipe;
+      
+      // Switch to manual entry
+      switchExtractionMethod('manual');
+      
+      // Populate form fields
+      document.getElementById('recipe-title').value = recipe.title || '';
+      document.getElementById('recipe-ingredients').value = (recipe.ingredients || []).join('\n');
+      document.getElementById('recipe-directions').value = (recipe.directions || []).join('\n');
+      
+      if (recipe.protein_source) {
+        document.getElementById('recipe-protein-source').value = recipe.protein_source;
+      }
+      if (recipe.meal_type) {
+        document.getElementById('recipe-meal-type').value = recipe.meal_type;
+      }
+      if (recipe.rating) {
+        document.getElementById('recipe-rating').value = recipe.rating;
+      }
+      if (recipe.protein) {
+        document.getElementById('recipe-protein').value = recipe.protein;
+      }
+      if (recipe.calories) {
+        document.getElementById('recipe-calories').value = recipe.calories;
+      }
+      if (recipe.desc) {
+        document.getElementById('recipe-desc').value = recipe.desc;
+      }
+      if (recipe.categories && recipe.categories.length > 0) {
+        document.getElementById('recipe-tags').value = recipe.categories.join(', ');
+      }
+      
+      // Scroll to form
+      document.getElementById('recipe-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.populateFormFromPreview = populateFormFromPreview;
+
+    // Helper function to show messages
+    function showMessage(messageDiv, message, type) {
+      messageDiv.textContent = message;
+      messageDiv.className = `message ${type}`;
+      messageDiv.style.display = 'block';
+    }
 
     // ============================================================================
     // MULTI-USER AUTHENTICATION (COMMENTED OUT - Enable when ready)
