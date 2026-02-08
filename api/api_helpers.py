@@ -236,30 +236,21 @@ def add_recipe_to_db(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     Uses the local db_layer.py in the api/ directory.
     """
     try:
-        import sys
         import importlib.util
         from pathlib import Path
-        # Ensure api directory is in path
-        api_dir = Path(__file__).parent.absolute()
-        if str(api_dir) not in sys.path:
-            sys.path.insert(0, str(api_dir))
         
-        # Try multiple import strategies
-        try:
-            from api.db_layer import add_recipe as db_add_recipe
-        except ImportError:
-            try:
-                from db_layer import add_recipe as db_add_recipe
-            except ImportError:
-                # Last resort: import directly
-                db_layer_path = api_dir / 'db_layer.py'
-                if db_layer_path.exists():
-                    spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
-                    db_layer = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(db_layer)
-                    db_add_recipe = db_layer.add_recipe
-                else:
-                    raise ImportError("Could not find db_layer.py")
+        # Get the api directory
+        api_dir = Path(__file__).parent.absolute()
+        
+        # Import db_layer directly from file (most reliable for Vercel)
+        db_layer_path = api_dir / 'db_layer.py'
+        if not db_layer_path.exists():
+            raise ImportError(f"Could not find db_layer.py at {db_layer_path}")
+        
+        spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
+        db_layer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(db_layer)
+        db_add_recipe = db_layer.add_recipe
         
         return db_add_recipe(recipe)
     except ImportError as e:

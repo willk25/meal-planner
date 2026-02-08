@@ -10,33 +10,17 @@ import os
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler
 
-# Add api directory to path for imports (Vercel-specific path handling)
+# Import db_layer from the same directory (most reliable for Vercel)
+import importlib.util
 api_dir = Path(__file__).parent.absolute()
-if str(api_dir) not in sys.path:
-    sys.path.insert(0, str(api_dir))
+db_layer_path = api_dir / 'db_layer.py'
+if not db_layer_path.exists():
+    raise ImportError(f"Could not find db_layer.py at {db_layer_path}")
 
-# Also try adding parent directory in case Vercel structures it differently
-parent_dir = api_dir.parent.absolute()
-if str(parent_dir) not in sys.path:
-    sys.path.insert(0, str(parent_dir))
-
-# Try importing - handle both possible locations
-try:
-    from api.db_layer import load_recipes
-except ImportError:
-    try:
-        from db_layer import load_recipes
-    except ImportError:
-        # Last resort: import directly
-        import importlib.util
-        db_layer_path = api_dir / 'db_layer.py'
-        if db_layer_path.exists():
-            spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
-            db_layer = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(db_layer)
-            load_recipes = db_layer.load_recipes
-        else:
-            raise ImportError("Could not find db_layer.py")
+spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
+db_layer = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(db_layer)
+load_recipes = db_layer.load_recipes
 
 
 class handler(BaseHTTPRequestHandler):
