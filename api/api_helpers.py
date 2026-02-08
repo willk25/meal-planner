@@ -237,13 +237,30 @@ def add_recipe_to_db(recipe: Dict[str, Any]) -> Tuple[bool, str]:
     """
     try:
         import sys
+        import importlib.util
         from pathlib import Path
         # Ensure api directory is in path
-        api_dir = Path(__file__).parent
+        api_dir = Path(__file__).parent.absolute()
         if str(api_dir) not in sys.path:
             sys.path.insert(0, str(api_dir))
         
-        from db_layer import add_recipe as db_add_recipe
+        # Try multiple import strategies
+        try:
+            from api.db_layer import add_recipe as db_add_recipe
+        except ImportError:
+            try:
+                from db_layer import add_recipe as db_add_recipe
+            except ImportError:
+                # Last resort: import directly
+                db_layer_path = api_dir / 'db_layer.py'
+                if db_layer_path.exists():
+                    spec = importlib.util.spec_from_file_location("db_layer", db_layer_path)
+                    db_layer = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(db_layer)
+                    db_add_recipe = db_layer.add_recipe
+                else:
+                    raise ImportError("Could not find db_layer.py")
+        
         return db_add_recipe(recipe)
     except ImportError as e:
         return (False, f"Database layer not available: {str(e)}")
