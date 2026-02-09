@@ -27,9 +27,9 @@ requirements.txt
 !api/requirements.txt
 
 # Exclude root Python files that aren't needed for API
-add_*.py
-curate_*.py
-recipe_bot.py
-auth_service.py
-db_layer.py
-upload_recipe.py
+/add_*.py
+/curate_*.py
+/recipe_bot.py
+/auth_service.py
+/db_layer.py
+/upload_recipe.py
