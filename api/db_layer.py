@@ -66,13 +66,33 @@ def load_recipes() -> List[Dict[str, Any]]:
     
     try:
         print("DEBUG: Querying Supabase for recipes...")
-        response = supabase_client.table('recipes').select('*').execute()
-        print(f"DEBUG: Supabase response received, data length: {len(response.data) if response.data else 0}")
+        # Supabase/PostgREST defaults to 1000 rows per request, so paginate.
+        page_size = 1000
+        offset = 0
+        all_records = []
         
-        if response.data:
+        while True:
+            response = supabase_client.table('recipes').select('*').range(offset, offset + page_size - 1).execute()
+            batch = response.data or []
+            print(f"DEBUG: Fetched batch offset={offset}, size={len(batch)}")
+            
+            if not batch:
+                break
+            
+            all_records.extend(batch)
+            
+            # If we got less than a full page, we're done.
+            if len(batch) < page_size:
+                break
+            
+            offset += page_size
+        
+        print(f"DEBUG: Supabase response received, total rows: {len(all_records)}")
+        
+        if all_records:
             # Convert Supabase records to recipe format (remove id, created_at, updated_at)
             recipes = []
-            for record in response.data:
+            for record in all_records:
                 recipe = {k: v for k, v in record.items() 
                          if k not in ['id', 'created_at', 'updated_at']}
                 recipes.append(recipe)
