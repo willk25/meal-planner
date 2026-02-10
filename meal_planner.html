@@ -1447,6 +1447,141 @@
     #text-preview .preview-field .preview-value {
       color: var(--text-primary);
     }
+
+    .auth-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.03);
+      flex-wrap: wrap;
+    }
+
+    .auth-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .auth-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    .auth-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .auth-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .auth-status-pill {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(78, 205, 196, 0.35);
+      background: rgba(78, 205, 196, 0.15);
+      color: var(--accent-teal);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .favorites-cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 1px dashed rgba(232, 185, 35, 0.5);
+      background: rgba(232, 185, 35, 0.08);
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .auth-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 999;
+      padding: 1.5rem;
+    }
+
+    .auth-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .auth-modal-content {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 420px;
+      width: 100%;
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .auth-modal-icon {
+      font-size: 2.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .auth-modal-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .auth-modal-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .auth-error {
+      min-height: 1.2rem;
+      font-size: 0.85rem;
+      color: var(--accent-coral);
+      margin-bottom: 0.8rem;
+    }
+
+    .auth-modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -1464,6 +1599,16 @@
       <h1>🍽️ Weekly Meal Planner</h1>
       <p class="subtitle">Generate a week of delicious, high-protein meals</p>
     </header>
+      <div class="auth-bar" id="auth-bar">
+        <div class="auth-info">
+          <div class="auth-title" id="auth-title">Preview mode</div>
+          <div class="auth-subtitle" id="auth-subtitle">Pick a username to sync favorites across devices.</div>
+        </div>
+        <div class="auth-actions">
+          <span class="auth-status-pill" id="auth-status-pill" style="display: none;">Favorites synced</span>
+          <button class="btn btn-small btn-primary" id="open-auth-modal-btn">Set Username</button>
+        </div>
+      </div>
       <div class="stats-bar" id="stats">
         <div class="stat">
           <div class="stat-value" id="total-recipes">-</div>
@@ -1598,6 +1743,10 @@
         <h2>❤️ My Favorites</h2>
         <p class="favorites-desc">Your saved recipes to pull from when nothing generated looks good</p>
         <button class="btn btn-small btn-secondary" id="clear-favorites-btn">Clear All</button>
+      </div>
+      <div class="favorites-cta" id="favorites-cta" style="display: none;">
+        <div>Set a username to save favorites across devices.</div>
+        <button class="btn btn-small btn-primary" id="favorites-auth-btn">Set Username</button>
       </div>
       <div class="favorites-grid" id="favorites-grid">
         <div class="favorites-empty">No favorites yet. Click ❤️ on meals you love!</div>
@@ -1842,6 +1991,22 @@
     </div>
   </div>
 
+  <!-- Username Modal -->
+  <div class="auth-modal" id="auth-modal">
+    <div class="auth-modal-content">
+      <div class="auth-modal-icon">👤</div>
+      <h3 class="auth-modal-title">Choose a username</h3>
+      <p class="auth-modal-subtitle">No password needed. This syncs favorites across devices.</p>
+      <input class="auth-input" id="auth-username-input" type="text" maxlength="24" placeholder="e.g., chefwill" autocomplete="nickname">
+      <div class="auth-error" id="auth-error"></div>
+      <div class="auth-modal-buttons">
+        <button class="btn btn-secondary" id="auth-skip-btn">Preview for now</button>
+        <button class="btn btn-primary" id="auth-save-btn">Save Username</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     let allRecipes = [];
     let entrees = [];
@@ -1852,8 +2017,22 @@
     // SHORTLIST: This week's meals I'm actually cooking
     let shortlist = JSON.parse(localStorage.getItem('weekShortlist') || '[]');
     
-    // FAVORITES: Long-term saved recipes to pull from
-    let favorites = JSON.parse(localStorage.getItem('mealFavorites') || '[]');
+    const AUTH_PROMPT_DISMISSED_KEY = 'mealplanner_username_prompt_dismissed';
+    // Optional override: define window.SUPABASE_URL and window.SUPABASE_ANON_KEY before this script.
+    const DEFAULT_SUPABASE_URL = 'https://dtavyealoifnyqkanovx.supabase.co';
+    const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0YXZ5ZWFsb2lmbnlxa2Fub3Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwODgyMDIsImV4cCI6MjA4NTY2NDIwMn0._jLnINmj8expMf90KKH0FTwBPba3P4RSrnJeo_KO9IQ';
+    const SUPABASE_URL = window.SUPABASE_URL || DEFAULT_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+    const supabaseClient = (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY)
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    let authUser = null;
+    let userProfile = null;
+    let favorites = [];
+    let favoriteRecipeIds = new Set();
+    let favoriteRecordByRecipeId = new Map();
+    let pendingFavoriteRecipeId = null;
     
     // PANTRY: Ingredients on hand
     let pantry = JSON.parse(localStorage.getItem('myPantry') || '[]');
@@ -1865,7 +2044,9 @@
 
     // Load recipes on page load
     document.addEventListener('DOMContentLoaded', async () => {
+      initAuthUI();
       await loadRecipes();
+      await hydrateAuthState();
       updateFavoritesCount();
       updatePantryCount();
       updateGroceryCount();
@@ -1910,6 +2091,406 @@
       const regenerateGroceryBtn = document.getElementById('regenerate-grocery-btn');
       if (regenerateGroceryBtn) regenerateGroceryBtn.addEventListener('click', regenerateGroceryList);
     });
+
+    function initAuthUI() {
+      const openAuthBtn = document.getElementById('open-auth-modal-btn');
+      if (openAuthBtn) openAuthBtn.addEventListener('click', () => openAuthModal());
+
+      const favoritesAuthBtn = document.getElementById('favorites-auth-btn');
+      if (favoritesAuthBtn) favoritesAuthBtn.addEventListener('click', () => openAuthModal());
+
+      const saveBtn = document.getElementById('auth-save-btn');
+      if (saveBtn) saveBtn.addEventListener('click', saveUsername);
+
+      const skipBtn = document.getElementById('auth-skip-btn');
+      if (skipBtn) skipBtn.addEventListener('click', () => {
+        localStorage.setItem(AUTH_PROMPT_DISMISSED_KEY, new Date().toISOString());
+        closeAuthModal();
+      });
+
+      const input = document.getElementById('auth-username-input');
+      if (input) input.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          saveUsername();
+        }
+      });
+
+      const modal = document.getElementById('auth-modal');
+      if (modal) {
+        modal.addEventListener('click', (event) => {
+          if (event.target.id === 'auth-modal') closeAuthModal();
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && document.getElementById('auth-modal')?.classList.contains('show')) {
+          closeAuthModal();
+        }
+      });
+    }
+
+    async function hydrateAuthState() {
+      if (!supabaseClient) {
+        updateAuthUI();
+        return;
+      }
+
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      authUser = sessionData?.session?.user || null;
+
+      if (authUser) {
+        await loadUserProfile();
+        if (userProfile?.username) {
+          await loadFavoritesFromSupabase();
+        }
+      }
+
+      if (!userProfile?.username) {
+        const dismissed = localStorage.getItem(AUTH_PROMPT_DISMISSED_KEY);
+        if (!dismissed) {
+          openAuthModal();
+        }
+      }
+
+      updateAuthUI();
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        authUser = session?.user || null;
+      });
+    }
+
+    function updateAuthUI() {
+      const titleEl = document.getElementById('auth-title');
+      const subtitleEl = document.getElementById('auth-subtitle');
+      const statusPill = document.getElementById('auth-status-pill');
+      const actionBtn = document.getElementById('open-auth-modal-btn');
+      const favoritesCta = document.getElementById('favorites-cta');
+      const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
+
+      if (!titleEl || !subtitleEl || !statusPill || !actionBtn) return;
+
+      if (!supabaseClient) {
+        titleEl.textContent = 'Favorites offline';
+        subtitleEl.textContent = 'Supabase is not configured, so favorites are disabled.';
+        statusPill.style.display = 'none';
+        actionBtn.style.display = 'none';
+        if (favoritesCta) favoritesCta.style.display = 'none';
+        if (clearFavoritesBtn) clearFavoritesBtn.disabled = true;
+        return;
+      }
+
+      if (userProfile?.username) {
+        titleEl.textContent = `Signed in as ${userProfile.username}`;
+        subtitleEl.textContent = 'Favorites are synced across devices.';
+        statusPill.style.display = 'inline-flex';
+        statusPill.textContent = 'Favorites synced';
+        actionBtn.textContent = 'Change username';
+        if (favoritesCta) favoritesCta.style.display = 'none';
+        if (clearFavoritesBtn) clearFavoritesBtn.disabled = false;
+      } else {
+        titleEl.textContent = 'Preview mode';
+        subtitleEl.textContent = 'Pick a username to sync favorites across devices.';
+        statusPill.style.display = 'none';
+        actionBtn.textContent = 'Set Username';
+        if (favoritesCta) favoritesCta.style.display = 'flex';
+        if (clearFavoritesBtn) clearFavoritesBtn.disabled = true;
+      }
+    }
+
+    function openAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      const errorEl = document.getElementById('auth-error');
+      if (errorEl) errorEl.textContent = '';
+      if (modal) modal.classList.add('show');
+      const input = document.getElementById('auth-username-input');
+      if (input) {
+        input.value = userProfile?.username || '';
+        setTimeout(() => input.focus(), 50);
+      }
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      if (modal) modal.classList.remove('show');
+    }
+
+    async function loadUserProfile() {
+      if (!authUser || !supabaseClient) return null;
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('id, username')
+        .eq('id', authUser.id)
+        .maybeSingle();
+
+      if (!error && data) {
+        userProfile = data;
+        return data;
+      }
+      userProfile = null;
+      return null;
+    }
+
+    async function ensureSignedIn() {
+      if (!supabaseClient) return { ok: false, error: 'Supabase not configured' };
+
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      if (sessionData?.session?.user) {
+        authUser = sessionData.session.user;
+        return { ok: true, user: authUser };
+      }
+
+      const { data, error } = await supabaseClient.auth.signInAnonymously();
+      if (error || !data?.user) {
+        return { ok: false, error: error?.message || 'Unable to sign in' };
+      }
+      authUser = data.user;
+      return { ok: true, user: authUser };
+    }
+
+    function setAuthError(message) {
+      const errorEl = document.getElementById('auth-error');
+      if (errorEl) errorEl.textContent = message || '';
+    }
+
+    async function saveUsername() {
+      const input = document.getElementById('auth-username-input');
+      if (!input) return;
+      const raw = input.value.trim();
+      const username = raw.replace(/\s+/g, '');
+
+      if (username.length < 2) {
+        setAuthError('Username must be at least 2 characters.');
+        return;
+      }
+
+      if (username.length > 24) {
+        setAuthError('Username must be 24 characters or less.');
+        return;
+      }
+
+      setAuthError('');
+
+      const signInResult = await ensureSignedIn();
+      if (!signInResult.ok) {
+        setAuthError(signInResult.error || 'Unable to sign in.');
+        return;
+      }
+
+      const currentProfile = await loadUserProfile();
+      let error = null;
+
+      if (currentProfile?.id) {
+        const updateResult = await supabaseClient
+          .from('profiles')
+          .update({ username })
+          .eq('id', authUser.id);
+        error = updateResult.error;
+      } else {
+        const insertResult = await supabaseClient
+          .from('profiles')
+          .insert({ id: authUser.id, username })
+          .select()
+          .single();
+        error = insertResult.error;
+        if (!error && insertResult.data) {
+          userProfile = insertResult.data;
+        }
+      }
+
+      if (error) {
+        const message = error.message?.toLowerCase() || '';
+        if (error.code === '23505' || message.includes('duplicate')) {
+          setAuthError('That username is already taken.');
+        } else {
+          setAuthError(`Could not save username: ${error.message}`);
+        }
+        return;
+      }
+
+      await loadUserProfile();
+      await loadFavoritesFromSupabase();
+      updateFavoritesCount();
+      renderFavorites();
+      updateAuthUI();
+      closeAuthModal();
+
+      if (pendingFavoriteRecipeId) {
+        const pendingId = pendingFavoriteRecipeId;
+        pendingFavoriteRecipeId = null;
+        await addFavoriteByRecipeId(pendingId);
+      }
+    }
+
+    function resetFavorites() {
+      favorites = [];
+      favoriteRecipeIds = new Set();
+      favoriteRecordByRecipeId = new Map();
+    }
+
+    function applyFavoriteRecords(records) {
+      resetFavorites();
+      if (!records) return;
+
+      records.forEach(record => {
+        const normalizedId = normalizeRecipeId(record.recipe_id);
+        if (!normalizedId) return;
+        favoriteRecordByRecipeId.set(normalizedId, record.id);
+        favoriteRecipeIds.add(normalizedId);
+        const recipe = allRecipes.find(r => normalizeRecipeId(r.id) === normalizedId);
+        if (recipe) {
+          favorites.push({
+            ...recipe,
+            favoriteId: record.id,
+            addedDate: record.created_at
+          });
+        }
+      });
+    }
+
+    async function loadFavoritesFromSupabase() {
+      if (!supabaseClient || !authUser) return;
+      const { data, error } = await supabaseClient
+        .from('favorites')
+        .select('id, recipe_id, created_at')
+        .eq('user_id', authUser.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Failed to load favorites:', error);
+        showToast('❌', 'Could not load favorites.');
+        return;
+      }
+
+      applyFavoriteRecords(data || []);
+    }
+
+    function isFavoritesReady() {
+      return Boolean(supabaseClient && userProfile?.username && authUser);
+    }
+
+    function normalizeRecipeId(id) {
+      if (id === null || id === undefined) return null;
+      return String(id);
+    }
+
+    function getRecipeId(meal) {
+      if (!meal) return null;
+      return normalizeRecipeId(meal.id || meal.recipe_id || meal.recipeId || null);
+    }
+
+    async function addFavoriteByRecipeId(recipeId) {
+      if (!supabaseClient) {
+        showToast('❌', 'Favorites are unavailable (Supabase not configured).');
+        return;
+      }
+
+      const normalizedId = normalizeRecipeId(recipeId);
+      if (!normalizedId) {
+        showToast('❌', 'This recipe is missing an ID.');
+        return;
+      }
+
+      if (!isFavoritesReady()) {
+        pendingFavoriteRecipeId = normalizedId;
+        openAuthModal();
+        showToast('👤', 'Set a username to save favorites.');
+        return;
+      }
+
+      if (favoriteRecipeIds.has(normalizedId)) {
+        showToast('ℹ️', 'Already in favorites!');
+        return;
+      }
+
+      const recipeIdValue = Number.isNaN(Number(normalizedId)) ? normalizedId : Number(normalizedId);
+
+      const { error } = await supabaseClient
+        .from('favorites')
+        .insert({ user_id: authUser.id, recipe_id: recipeIdValue })
+        .select('id, recipe_id, created_at')
+        .single();
+
+      if (error) {
+        const message = error.message?.toLowerCase() || '';
+        if (error.code === '23505' || message.includes('duplicate')) {
+          showToast('ℹ️', 'Already in favorites!');
+          return;
+        }
+        showToast('❌', 'Could not save favorite.');
+        return;
+      }
+
+      await loadFavoritesFromSupabase();
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('❤️', 'Added to favorites!');
+    }
+
+    async function removeFavoriteByRecipeId(recipeId, favoriteId) {
+      if (!supabaseClient) {
+        showToast('❌', 'Favorites are unavailable (Supabase not configured).');
+        return;
+      }
+
+      const normalizedId = normalizeRecipeId(recipeId);
+      if (!normalizedId) return;
+
+      if (!isFavoritesReady()) {
+        openAuthModal();
+        showToast('👤', 'Set a username to manage favorites.');
+        return;
+      }
+
+      let query = supabaseClient.from('favorites').delete();
+      if (favoriteId) {
+        query = query.eq('id', favoriteId);
+      } else {
+        const recipeIdValue = Number.isNaN(Number(normalizedId)) ? normalizedId : Number(normalizedId);
+        query = query.eq('user_id', authUser.id).eq('recipe_id', recipeIdValue);
+      }
+
+      const { error } = await query;
+      if (error) {
+        showToast('❌', 'Could not remove favorite.');
+        return;
+      }
+
+      favoriteRecipeIds.delete(normalizedId);
+      favoriteRecordByRecipeId.delete(normalizedId);
+      favorites = favorites.filter(f => normalizeRecipeId(f.id) !== normalizedId);
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('🗑️', 'Removed from favorites');
+    }
+
+    async function clearAllFavorites() {
+      if (!supabaseClient) {
+        showToast('❌', 'Favorites are unavailable (Supabase not configured).');
+        return;
+      }
+
+      if (!isFavoritesReady()) {
+        openAuthModal();
+        showToast('👤', 'Set a username to manage favorites.');
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from('favorites')
+        .delete()
+        .eq('user_id', authUser.id);
+
+      if (error) {
+        showToast('❌', 'Could not clear favorites.');
+        return;
+      }
+
+      resetFavorites();
+      updateFavoritesCount();
+      renderFavorites();
+      showToast('🗑️', 'Favorites cleared');
+    }
 
     async function loadRecipes() {
       try {
@@ -2360,21 +2941,13 @@
       else if (type === 'appetizer') meal = currentWeek.appetizers[index];
       else meal = currentWeek.desserts[index];
 
-      if (favorites.some(f => f.title === meal.title)) {
-        showToast('ℹ️', 'Already in favorites!');
+      const recipeId = getRecipeId(meal);
+      if (!recipeId) {
+        showToast('❌', 'This recipe is missing an ID.');
         return;
       }
 
-      favorites.push({
-        ...meal,
-        mealType: type,
-        addedDate: new Date().toISOString()
-      });
-      
-      saveFavorites();
-      updateFavoritesCount();
-      renderFavorites();
-      showToast('❤️', 'Added to favorites!');
+      addFavoriteByRecipeId(recipeId);
     }
     window.addToFavorites = addToFavorites;
 
@@ -2407,33 +2980,30 @@
         'Remove from Favorites?',
         `Are you sure you want to remove "${meal.title}" from your favorites?`,
         '❤️',
-        () => {
-          favorites.splice(index, 1);
-          saveFavorites();
-          updateFavoritesCount();
-          renderFavorites();
-          showToast('🗑️', 'Removed from favorites');
-        }
+        () => removeFavoriteByRecipeId(meal.id, meal.favoriteId)
       );
     }
 
     function clearFavorites() {
+      if (!supabaseClient) {
+        showToast('❌', 'Favorites are unavailable (Supabase not configured).');
+        return;
+      }
+
+      if (!isFavoritesReady()) {
+        openAuthModal();
+        showToast('👤', 'Set a username to manage favorites.');
+        return;
+      }
       if (confirm('Clear all favorites? This cannot be undone.')) {
-        favorites = [];
-        saveFavorites();
-        updateFavoritesCount();
-        renderFavorites();
-        showToast('🗑️', 'Favorites cleared');
+        clearAllFavorites();
       }
     }
     window.clearFavorites = clearFavorites;
 
-    function saveFavorites() {
-      localStorage.setItem('mealFavorites', JSON.stringify(favorites));
-    }
-
     function updateFavoritesCount() {
-      document.getElementById('favorites-count').textContent = favorites.length;
+      const count = favoriteRecipeIds.size || 0;
+      document.getElementById('favorites-count').textContent = count;
     }
 
     function toggleFavorites() {
@@ -2445,7 +3015,16 @@
 
     function renderFavorites() {
       const grid = document.getElementById('favorites-grid');
-      
+      if (!supabaseClient) {
+        grid.innerHTML = '<div class="favorites-empty">Favorites are unavailable (Supabase not configured).</div>';
+        return;
+      }
+
+      if (!isFavoritesReady()) {
+        grid.innerHTML = '<div class="favorites-empty">Set a username to save favorites.</div>';
+        return;
+      }
+
       if (favorites.length === 0) {
         grid.innerHTML = '<div class="favorites-empty">No favorites yet. Click ❤️ on meals you love!</div>';
         return;
@@ -2906,7 +3485,7 @@
         return;
       }
       
-      const favoritesSet = new Set(favorites.map(f => f.title));
+      const favoritesSet = favoriteRecipeIds;
       
       const results = allRecipes.filter(recipe => {
         const title = (recipe.title || '').toLowerCase();
@@ -2933,7 +3512,7 @@
           const tagMatch = Array.isArray(recipe.categories) && recipe.categories.some(tag => tag === filters.tag);
           if (!tagMatch) return false;
         }
-        if (filters.favoritesOnly && !favoritesSet.has(recipe.title)) return false;
+        if (filters.favoritesOnly && !favoritesSet.has(normalizeRecipeId(recipe.id))) return false;
         
         if (filters.minMatch) {
           if (!pantry.length) return false;
@@ -3049,22 +3628,14 @@
     function addSearchResultToFavorites(index) {
       const recipe = window.currentSearchResults[index];
       if (!recipe) return;
-      
-      if (favorites.some(f => f.title === recipe.title)) {
-        showToast('ℹ️', 'Already in favorites!');
+
+      const recipeId = getRecipeId(recipe);
+      if (!recipeId) {
+        showToast('❌', 'This recipe is missing an ID.');
         return;
       }
-      
-      favorites.push({
-        ...recipe,
-        mealType: recipe.meal_type || 'entree',
-        addedDate: new Date().toISOString()
-      });
-      
-      saveFavorites();
-      updateFavoritesCount();
-      renderFavorites();
-      showToast('❤️', 'Added to favorites!');
+
+      addFavoriteByRecipeId(recipeId);
     }
     
     // Close search results when clicking outside

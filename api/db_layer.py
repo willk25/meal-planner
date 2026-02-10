@@ -90,11 +90,11 @@ def load_recipes() -> List[Dict[str, Any]]:
         print(f"DEBUG: Supabase response received, total rows: {len(all_records)}")
         
         if all_records:
-            # Convert Supabase records to recipe format (remove id, created_at, updated_at)
+            # Convert Supabase records to recipe format (keep id, drop timestamps)
             recipes = []
             for record in all_records:
                 recipe = {k: v for k, v in record.items() 
-                         if k not in ['id', 'created_at', 'updated_at']}
+                         if k not in ['created_at', 'updated_at']}
                 recipes.append(recipe)
             print(f"DEBUG: Returning {len(recipes)} recipes")
             return recipes
