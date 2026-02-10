@@ -75,106 +75,165 @@ def get_difficulty(recipe: Dict[str, Any]) -> str:
 
 def parse_text_recipe(text: str) -> Dict[str, Any]:
     """
-    Parse a simple text format recipe.
-    
-    Expected format:
-    Title: Recipe Name
-    Ingredients:
-    - ingredient 1
-    - ingredient 2
-    Directions:
-    1. Step 1
-    2. Step 2
+    Parse messy or structured recipe text.
+    Supports optional Title/Ingredients/Directions headings, but will also
+    infer sections from bullets and step numbers.
     """
-    recipe = {}
-    lines = text.strip().split('\n')
-    
-    current_section = None
-    ingredients = []
-    directions = []
-    
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
+    recipe: Dict[str, Any] = {}
+    lines = [line.strip() for line in text.strip().split('\n')]
+
+    ingredients: List[str] = []
+    directions: List[str] = []
+    current_section: str = ''
+
+    ingredient_heading_re = re.compile(r'^(ingredients?|ingredient list|what you\'?ll need)\s*:?\s*$', re.I)
+    direction_heading_re = re.compile(r'^(directions?|instructions?|method|preparation|steps?)\s*:?\s*$', re.I)
+    step_line_re = re.compile(r'^(step\s*\d+|\d+\s*[.)-])\s*', re.I)
+    ingredient_line_re = re.compile(
+        r'^(?:[-•*]\s*)?(?:\d+\s*(?:/\d+)?\s*)?(?:\d+\s*/\s*\d+\s*)?'
+        r'(?:cup|cups|tbsp|tablespoons?|tsp|teaspoons?|oz|ounces?|lb|lbs|pounds?|g|kg|ml|l|'
+        r'pinch|dash|clove|cloves|slice|slices|can|cans|package|packages|bunch|bunches)\b',
+        re.I
+    )
+
+    def is_step_line(line: str) -> bool:
+        return bool(step_line_re.match(line))
+
+    def is_ingredient_line(line: str) -> bool:
+        if line.startswith(('-', '•', '*')):
+            return True
+        if ' to taste' in line.lower():
+            return True
+        return bool(ingredient_line_re.match(line))
+
+    def split_bullets(line: str) -> List[str]:
+        if '•' in line:
+            return [part.strip() for part in line.split('•') if part.strip()]
+        if ';' in line:
+            return [part.strip() for part in line.split(';') if part.strip()]
+        return [line]
+
+    def split_steps(line: str) -> List[str]:
+        # If multiple "Step X" tokens in one line, split them out.
+        if re.search(r'\bstep\s*\d+\b', line, re.I) and not line.lower().startswith('step'):
+            parts = re.split(r'(?=\bstep\s*\d+\b)', line, flags=re.I)
+            return [p.strip() for p in parts if p.strip()]
+        # If multiple numbered steps in one line, split them out.
+        matches = re.findall(r'\b\d+\s*[.)]', line)
+        if len(matches) > 1:
+            parts = re.split(r'(?=\b\d+\s*[.)])', line)
+            return [p.strip() for p in parts if p.strip()]
+        return [line]
+
+    def clean_ingredient(line: str) -> str:
+        cleaned = re.sub(r'^[-•*]\s*', '', line).strip()
+        return cleaned
+
+    def clean_step(line: str) -> str:
+        cleaned = step_line_re.sub('', line).strip()
+        return cleaned
+
+    for line in lines:
         if not line:
-            i += 1
             continue
-        
+
+        lower = line.lower()
+
         # Title
-        if line.lower().startswith('title:'):
+        if lower.startswith('title:'):
             recipe['title'] = line.split(':', 1)[1].strip()
-            i += 1
             continue
-        
-        # Ingredients section
-        if line.lower().startswith('ingredients:'):
+
+        # Section headers
+        if ingredient_heading_re.match(line):
             current_section = 'ingredients'
-            i += 1
             continue
-        
-        # Directions section
-        if line.lower().startswith('directions:'):
+        if direction_heading_re.match(line):
             current_section = 'directions'
-            i += 1
             continue
-        
-        # Optional fields
-        if ':' in line and current_section is None:
+
+        # Optional fields (only when not inside a section)
+        if ':' in line and not current_section:
             key, value = line.split(':', 1)
             key = key.strip().lower()
             value = value.strip()
-            
-            # Map common variations
+
             if key in ['protein source', 'protein_source']:
                 recipe['protein_source'] = value.lower()
-            elif key in ['meal type', 'meal_type']:
+                continue
+            if key in ['meal type', 'meal_type']:
                 recipe['meal_type'] = value.lower()
-            elif key in ['difficulty']:
+                continue
+            if key in ['difficulty']:
                 recipe['difficulty'] = value.lower()
-            elif key in ['rating']:
+                continue
+            if key in ['rating']:
                 try:
                     recipe['rating'] = float(value)
                 except ValueError:
                     pass
-            elif key in ['protein', 'protein (g)']:
+                continue
+            if key in ['protein', 'protein (g)']:
                 try:
                     recipe['protein'] = float(value)
                 except ValueError:
                     pass
-            elif key in ['calories']:
+                continue
+            if key in ['calories']:
                 try:
                     recipe['calories'] = float(value)
                 except ValueError:
                     pass
-            elif key in ['description', 'desc']:
+                continue
+            if key in ['description', 'desc']:
                 recipe['desc'] = value
-            elif key in ['source']:
+                continue
+            if key in ['source']:
                 recipe['source'] = value
-            i += 1
-            continue
-        
+                continue
+
+        # Infer section if not set
+        if not current_section:
+            if is_step_line(line):
+                current_section = 'directions'
+            elif is_ingredient_line(line):
+                current_section = 'ingredients'
+
         # Collect ingredients
         if current_section == 'ingredients':
-            # Remove bullet points and numbering
-            ingredient = re.sub(r'^[-•*]\s*', '', line)
-            ingredient = re.sub(r'^\d+\.\s*', '', ingredient)
-            if ingredient.strip():
-                ingredients.append(ingredient.strip())
-        
+            for part in split_bullets(line):
+                ingredient = clean_ingredient(part)
+                if ingredient:
+                    ingredients.append(ingredient)
+            continue
+
         # Collect directions
-        elif current_section == 'directions':
-            # Remove numbering if present
-            direction = re.sub(r'^\d+\.\s*', '', line)
-            if direction.strip():
-                directions.append(direction.strip())
-        
-        i += 1
-    
+        if current_section == 'directions':
+            for part in split_steps(line):
+                direction = clean_step(part)
+                if direction:
+                    directions.append(direction)
+            continue
+
+    # Guess title if missing
+    if 'title' not in recipe:
+        for line in lines:
+            if not line:
+                continue
+            if ingredient_heading_re.match(line) or direction_heading_re.match(line):
+                continue
+            if is_step_line(line) or is_ingredient_line(line):
+                continue
+            recipe['title'] = line.strip()
+            break
+        if 'title' not in recipe:
+            recipe['title'] = 'Untitled Recipe'
+
     if ingredients:
         recipe['ingredients'] = ingredients
     if directions:
         recipe['directions'] = directions
-    
+
     return recipe
 
 
