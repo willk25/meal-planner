@@ -443,9 +443,9 @@
     }
 
     .shortlist-meals {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
     }
 
     .shortlist-meal {
@@ -725,9 +725,9 @@
     }
 
     .history-week-meals {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
     }
 
     .history-meal {
@@ -1439,6 +1439,44 @@
       font-family: 'Inter', sans-serif;
     }
 
+    .tag-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .tag-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .tag-option input {
+      cursor: pointer;
+      accent-color: var(--accent-gold);
+    }
+
+    .tag-option:hover {
+      border-color: var(--accent-gold);
+      background: rgba(232, 185, 35, 0.08);
+    }
+
+    .tag-hint {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
     .message {
       padding: 1rem;
       border-radius: 8px;
@@ -1747,31 +1785,29 @@
               </div>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="recipe-rating">Rating (0-5)</label>
-                <input type="number" id="recipe-rating" min="0" max="5" step="0.1" placeholder="4.5">
-              </div>
-
-              <div class="form-group">
-                <label for="recipe-protein">Protein (g)</label>
-                <input type="number" id="recipe-protein" min="0" step="0.1" placeholder="35">
-              </div>
-
-              <div class="form-group">
-                <label for="recipe-calories">Calories</label>
-                <input type="number" id="recipe-calories" min="0" step="0.1" placeholder="426">
-              </div>
-            </div>
-
             <div class="form-group">
               <label for="recipe-desc">Description</label>
               <textarea id="recipe-desc" placeholder="Optional recipe description" rows="2"></textarea>
             </div>
 
             <div class="form-group">
-              <label for="recipe-tags">Tags (comma-separated)</label>
-              <input type="text" id="recipe-tags" placeholder="e.g. NYT Recipe, Family Recipe, Barefoot Contessa">
+              <label>Tags</label>
+              <div class="tag-options">
+                <label class="tag-option">
+                  <input type="checkbox" name="recipe-tag" value="NYT Recipe">
+                  <span>NYT Recipe</span>
+                </label>
+                <label class="tag-option">
+                  <input type="checkbox" name="recipe-tag" value="Barefoot Contessa">
+                  <span>Barefoot Contessa</span>
+                </label>
+                <label class="tag-option">
+                  <input type="checkbox" name="recipe-tag" value="Family Recipe">
+                  <span>Family Recipe</span>
+                </label>
+              </div>
+              <input type="text" id="recipe-tags" placeholder="Add new tags (comma-separated)">
+              <div class="tag-hint">Select existing tags above or add your own.</div>
             </div>
 
             <div id="recipe-message" class="message" style="display: none;"></div>
@@ -2081,16 +2117,15 @@
       document.getElementById('week-plan').innerHTML = html;
     }
 
-    function renderMealCard(meal, type, index) {
+    function buildMealCardMarkup(meal, cardId, options = {}) {
       const isFamily = meal.is_family_recipe;
       const rating = meal.rating ? `${meal.rating.toFixed(1)}⭐` : '';
       const protein = meal.protein ? `${meal.protein.toFixed(0)}g` : '';
       const difficulty = meal.difficulty || 'medium';
       const proteinSource = meal.protein_source;
-      const cardId = `${type}-${index}`;
-      
-      // Check if this meal is already in the shortlist (this week's meals)
-      const isInShortlist = shortlist.some(m => m.title === meal.title);
+      const description = meal.desc || meal.description || '';
+      const inShortlist = options.inShortlist === true;
+      const showShortlistBadge = options.showShortlistBadge !== false;
       
       // Get ingredients - handle both array and string formats
       let ingredients = meal.ingredients || [];
@@ -2104,25 +2139,31 @@
         directions = directions.split('\n').filter(d => d.trim());
       }
       
-      // Get description
-      const description = meal.desc || meal.description || '';
-      
       // Calculate ingredient match
       const matchInfo = calculateIngredientMatch(ingredients);
       const matchClass = matchInfo.percentage >= 70 ? 'high' : matchInfo.percentage >= 40 ? 'medium' : 'low';
       
+      const actionsHtml = options.actionsHtml
+        ? `<div class="meal-actions">${options.actionsHtml}</div>`
+        : '';
+      
+      const shortlistButton = options.showAddToShortlist ? `
+        <button class="add-to-shortlist-btn ${inShortlist ? 'added' : ''}" onclick="${options.addToShortlistHandler || ''}" ${inShortlist ? 'disabled' : ''}>
+          ${inShortlist ? '✓ In Shortlist' : '➕ Add to shortlist'}
+        </button>
+      ` : '';
+      
+      const cardClasses = [
+        'meal-card',
+        isFamily ? 'family' : '',
+        inShortlist && showShortlistBadge ? 'in-shortlist' : ''
+      ].filter(Boolean).join(' ');
+      
       return `
-        <div class="meal-card ${isFamily ? 'family' : ''} ${isInShortlist ? 'in-shortlist' : ''}">
+        <div class="${cardClasses}">
           <div class="meal-card-header">
             <div class="meal-title">${meal.title}</div>
-            <div class="meal-actions">
-              <button class="btn btn-icon" onclick="swapMeal('${type}', ${index})" title="Swap this meal">
-                🔄
-              </button>
-              <button class="btn btn-icon" onclick="addToFavorites('${type}', ${index})" title="Add to favorites (long-term)">
-                ❤️
-              </button>
-            </div>
+            ${actionsHtml}
           </div>
           <div class="meal-meta">
             ${rating ? `<span>${rating}</span>` : ''}
@@ -2142,9 +2183,7 @@
             <div class="missing-count">${matchInfo.have}/${ingredients.length} ingredients on hand • ${matchInfo.missing} to buy</div>
           ` : ''}
           
-          <button class="add-to-shortlist-btn ${isInShortlist ? 'added' : ''}" onclick="toggleShortlist('${type}', ${index})">
-            ${isInShortlist ? '✓ In Shortlist' : '➕ Add to shortlist'}
-          </button>
+          ${shortlistButton}
           
           <div class="meal-details-toggle" onclick="toggleDetails('${cardId}')">
             <span class="arrow">▼</span>
@@ -2175,6 +2214,26 @@
           </div>
         </div>
       `;
+    }
+
+    function renderMealCard(meal, type, index) {
+      const cardId = `${type}-${index}`;
+      const isInShortlist = shortlist.some(m => m.title === meal.title);
+      const actionsHtml = `
+        <button class="btn btn-icon" onclick="swapMeal('${type}', ${index})" title="Swap this meal">
+          🔄
+        </button>
+        <button class="btn btn-icon" onclick="addToFavorites('${type}', ${index})" title="Add to favorites (long-term)">
+          ❤️
+        </button>
+      `;
+      
+      return buildMealCardMarkup(meal, cardId, {
+        actionsHtml,
+        showAddToShortlist: true,
+        addToShortlistHandler: `toggleShortlist('${type}', ${index})`,
+        inShortlist: isInShortlist
+      });
     }
     
     function toggleDetails(cardId) {
@@ -2269,15 +2328,19 @@
         return;
       }
       
-      mealsContainer.innerHTML = shortlist.map((meal, i) => `
-        <div class="shortlist-meal">
-          <div>
-            <div>${meal.title}</div>
-            <div class="shortlist-meal-type">${meal.mealType || 'meal'}</div>
-          </div>
-          <button class="shortlist-remove" onclick="removeFromShortlist(${i})" title="Remove">✕</button>
-        </div>
-      `).join('');
+      mealsContainer.innerHTML = shortlist.map((meal, i) => {
+        const actionsHtml = `
+          <button class="btn btn-icon" onclick="removeFromShortlist(${i})" title="Remove from shortlist">
+            ✕
+          </button>
+        `;
+        return buildMealCardMarkup(meal, `shortlist-${i}`, {
+          actionsHtml,
+          showAddToShortlist: false,
+          inShortlist: true,
+          showShortlistBadge: false
+        });
+      }).join('');
     }
     
     // Accept entire generated week into shortlist
@@ -2435,25 +2498,17 @@
 
       grid.innerHTML = favorites.map((meal, i) => {
         const isInShortlist = shortlist.some(s => s.title === meal.title);
-        return `
-          <div class="favorites-item">
-            <div>
-              <div class="favorites-item-title">${meal.title}</div>
-              <div class="favorites-item-type">${meal.mealType || 'meal'}</div>
-            </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              ${isInShortlist ? 
-                '<span style="color: var(--accent-teal); font-size: 0.75rem;">✓ In shortlist</span>' :
-                `<button class="add-from-fav" onclick="addFavoriteToShortlist(${i})" title="Add to this week">
-                  + This Week
-                </button>`
-              }
-              <button class="btn btn-icon" onclick="removeFromFavorites(${i})" title="Remove from favorites">
-                ✕
-              </button>
-            </div>
-          </div>
+        const actionsHtml = `
+          <button class="btn btn-icon" onclick="removeFromFavorites(${i})" title="Remove from favorites">
+            ✕
+          </button>
         `;
+        return buildMealCardMarkup(meal, `favorite-${i}`, {
+          actionsHtml,
+          showAddToShortlist: true,
+          addToShortlistHandler: `addFavoriteToShortlist(${i})`,
+          inShortlist: isInShortlist
+        });
       }).join('');
     }
 
@@ -3059,26 +3114,50 @@
             </div>
           </div>
           <div class="history-week-meals">
-            ${week.meals.map((meal, mealIndex) => `
-              <div class="history-meal">
-                <div>
-                  <div>${meal.title}</div>
-                  <div class="history-meal-type">${meal.mealType || 'meal'}</div>
-                </div>
-                <div class="history-meal-actions">
-                  <button class="history-add-btn" onclick="addHistoryMealToFavorites(${weekIndex}, ${mealIndex})" title="Add to favorites">
-                    ❤️
-                  </button>
-                  <button class="history-delete-btn" onclick="removeFromHistory(${weekIndex}, ${mealIndex})" title="Remove from history">
-                    ✕
-                  </button>
-                </div>
-              </div>
-            `).join('')}
+            ${week.meals.map((meal, mealIndex) => {
+              const isInShortlist = shortlist.some(s => s.title === meal.title);
+              const actionsHtml = `
+                <button class="btn btn-icon" onclick="addHistoryMealToFavorites(${weekIndex}, ${mealIndex})" title="Add to favorites">
+                  ❤️
+                </button>
+                <button class="btn btn-icon" onclick="removeFromHistory(${weekIndex}, ${mealIndex})" title="Remove from history">
+                  ✕
+                </button>
+              `;
+              return buildMealCardMarkup(meal, `history-${weekIndex}-${mealIndex}`, {
+                actionsHtml,
+                showAddToShortlist: true,
+                addToShortlistHandler: `addHistoryMealToShortlist(${weekIndex}, ${mealIndex})`,
+                inShortlist: isInShortlist
+              });
+            }).join('')}
           </div>
         </div>
       `).join('');
     }
+
+    function addHistoryMealToShortlist(weekIndex, mealIndex) {
+      const meal = history[weekIndex]?.meals[mealIndex];
+      if (!meal) return;
+      
+      if (shortlist.some(s => s.title === meal.title)) {
+        showToast('ℹ️', 'Already in this week\'s shortlist!');
+        return;
+      }
+
+      shortlist.push({
+        ...meal,
+        addedDate: new Date().toISOString()
+      });
+      
+      saveShortlist();
+      renderShortlist();
+      renderHistory();
+      renderWeek();
+      updateGroceryCount();
+      showToast('📋', 'Added to this week\'s shortlist!');
+    }
+    window.addHistoryMealToShortlist = addHistoryMealToShortlist;
     
     function addHistoryMealToFavorites(weekIndex, mealIndex) {
       const meal = history[weekIndex]?.meals[mealIndex];
@@ -3249,6 +3328,33 @@
     window.switchExtractionMethod = switchExtractionMethod;
 
     // Form submission
+    const PRESET_TAGS = ['NYT Recipe', 'Barefoot Contessa', 'Family Recipe'];
+
+    function getSelectedTags() {
+      const selected = Array.from(document.querySelectorAll('input[name="recipe-tag"]:checked'))
+        .map(input => input.value.trim())
+        .filter(Boolean);
+      
+      const customRaw = document.getElementById('recipe-tags').value.trim();
+      const custom = customRaw
+        ? customRaw.split(',').map(tag => tag.trim()).filter(Boolean)
+        : [];
+      
+      return Array.from(new Set([...selected, ...custom]));
+    }
+
+    function setTagSelections(tags) {
+      const tagList = (tags || []).map(tag => tag.trim()).filter(Boolean);
+      const tagSet = new Set(tagList);
+      
+      document.querySelectorAll('input[name="recipe-tag"]').forEach(input => {
+        input.checked = tagSet.has(input.value);
+      });
+      
+      const custom = tagList.filter(tag => !PRESET_TAGS.includes(tag));
+      document.getElementById('recipe-tags').value = custom.join(', ');
+    }
+
     async function handleSubmit(event) {
       event.preventDefault();
       
@@ -3283,21 +3389,12 @@
       const mealType = document.getElementById('recipe-meal-type').value;
       if (mealType) recipe.meal_type = mealType;
       
-      const rating = document.getElementById('recipe-rating').value;
-      if (rating) recipe.rating = parseFloat(rating);
-      
-      const protein = document.getElementById('recipe-protein').value;
-      if (protein) recipe.protein = parseFloat(protein);
-      
-      const calories = document.getElementById('recipe-calories').value;
-      if (calories) recipe.calories = parseFloat(calories);
-      
       const desc = document.getElementById('recipe-desc').value.trim();
       if (desc) recipe.desc = desc;
       
-      const tags = document.getElementById('recipe-tags').value.trim();
-      if (tags) {
-        recipe.categories = tags.split(',').map(t => t.trim()).filter(t => t);
+      const tags = getSelectedTags();
+      if (tags.length > 0) {
+        recipe.categories = tags;
       }
       
       // Disable submit button
@@ -3455,20 +3552,13 @@
       if (recipe.meal_type) {
         document.getElementById('recipe-meal-type').value = recipe.meal_type;
       }
-      if (recipe.rating) {
-        document.getElementById('recipe-rating').value = recipe.rating;
-      }
-      if (recipe.protein) {
-        document.getElementById('recipe-protein').value = recipe.protein;
-      }
-      if (recipe.calories) {
-        document.getElementById('recipe-calories').value = recipe.calories;
-      }
       if (recipe.desc) {
         document.getElementById('recipe-desc').value = recipe.desc;
       }
       if (recipe.categories && recipe.categories.length > 0) {
-        document.getElementById('recipe-tags').value = recipe.categories.join(', ');
+        setTagSelections(recipe.categories);
+      } else {
+        setTagSelections([]);
       }
       
       // Scroll to form
@@ -3628,5 +3718,3 @@
   </script>
 </body>
 </html>
-
-
