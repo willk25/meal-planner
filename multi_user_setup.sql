@@ -14,6 +14,10 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   created_at timestamptz DEFAULT now()
 );
 
+-- If profiles table already exists without a unique constraint, add a unique index.
+-- Note: this will fail if you have duplicate usernames; clean them up first.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_profiles_username ON public.profiles(username);
+
 -- 3) Favorites table (per-user)
 CREATE TABLE IF NOT EXISTS public.favorites (
   id bigserial PRIMARY KEY,

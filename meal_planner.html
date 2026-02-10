@@ -1576,6 +1576,17 @@
       margin-bottom: 0.8rem;
     }
 
+    .auth-status {
+      min-height: 1.2rem;
+      font-size: 0.85rem;
+      color: var(--accent-teal);
+      margin-top: 0.5rem;
+    }
+
+    .auth-step {
+      margin-bottom: 1rem;
+    }
+
     .auth-modal-buttons {
       display: flex;
       justify-content: center;
@@ -1745,7 +1756,7 @@
         <button class="btn btn-small btn-secondary" id="clear-favorites-btn">Clear All</button>
       </div>
       <div class="favorites-cta" id="favorites-cta" style="display: none;">
-        <div>Set a username to save favorites across devices.</div>
+        <div>Sign in to save favorites across devices.</div>
         <button class="btn btn-small btn-primary" id="favorites-auth-btn">Set Username</button>
       </div>
       <div class="favorites-grid" id="favorites-grid">
@@ -1995,13 +2006,24 @@
   <div class="auth-modal" id="auth-modal">
     <div class="auth-modal-content">
       <div class="auth-modal-icon">👤</div>
-      <h3 class="auth-modal-title">Choose a username</h3>
-      <p class="auth-modal-subtitle">No password needed. This syncs favorites across devices.</p>
-      <input class="auth-input" id="auth-username-input" type="text" maxlength="24" placeholder="e.g., chefwill" autocomplete="nickname">
-      <div class="auth-error" id="auth-error"></div>
+      <h3 class="auth-modal-title" id="auth-modal-title">Sign in</h3>
+      <p class="auth-modal-subtitle" id="auth-modal-subtitle">Use a magic link to sync favorites across devices.</p>
+
+      <div class="auth-step" id="auth-step-email">
+        <input class="auth-input" id="auth-email-input" type="email" placeholder="you@email.com" autocomplete="email">
+        <div class="auth-error" id="auth-email-error"></div>
+        <button class="btn btn-primary" id="auth-send-link-btn">Send Magic Link</button>
+        <div class="auth-status" id="auth-email-status"></div>
+      </div>
+
+      <div class="auth-step" id="auth-step-username" style="display: none;">
+        <input class="auth-input" id="auth-username-input" type="text" maxlength="24" placeholder="Choose a username" autocomplete="nickname">
+        <div class="auth-error" id="auth-username-error"></div>
+        <button class="btn btn-primary" id="auth-save-btn">Save Username</button>
+      </div>
+
       <div class="auth-modal-buttons">
         <button class="btn btn-secondary" id="auth-skip-btn">Preview for now</button>
-        <button class="btn btn-primary" id="auth-save-btn">Save Username</button>
       </div>
     </div>
   </div>
@@ -2102,17 +2124,28 @@
       const saveBtn = document.getElementById('auth-save-btn');
       if (saveBtn) saveBtn.addEventListener('click', saveUsername);
 
+      const sendLinkBtn = document.getElementById('auth-send-link-btn');
+      if (sendLinkBtn) sendLinkBtn.addEventListener('click', sendMagicLink);
+
       const skipBtn = document.getElementById('auth-skip-btn');
       if (skipBtn) skipBtn.addEventListener('click', () => {
         localStorage.setItem(AUTH_PROMPT_DISMISSED_KEY, new Date().toISOString());
         closeAuthModal();
       });
 
-      const input = document.getElementById('auth-username-input');
-      if (input) input.addEventListener('keypress', (event) => {
+      const usernameInput = document.getElementById('auth-username-input');
+      if (usernameInput) usernameInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
           saveUsername();
+        }
+      });
+
+      const emailInput = document.getElementById('auth-email-input');
+      if (emailInput) emailInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          sendMagicLink();
         }
       });
 
@@ -2139,12 +2172,17 @@
       const { data: sessionData } = await supabaseClient.auth.getSession();
       authUser = sessionData?.session?.user || null;
 
-      if (authUser) {
+      if (authUser && !isAnonymousUser()) {
         await loadUserProfile();
         if (userProfile?.username) {
           await loadFavoritesFromSupabase();
         }
+      } else {
+        userProfile = null;
+        resetFavorites();
       }
+
+      updateAuthUI();
 
       if (!userProfile?.username) {
         const dismissed = localStorage.getItem(AUTH_PROMPT_DISMISSED_KEY);
@@ -2153,10 +2191,27 @@
         }
       }
 
-      updateAuthUI();
-
-      supabaseClient.auth.onAuthStateChange((_event, session) => {
+      supabaseClient.auth.onAuthStateChange(async (_event, session) => {
         authUser = session?.user || null;
+        if (authUser && !isAnonymousUser()) {
+          await loadUserProfile();
+          if (userProfile?.username) {
+            await loadFavoritesFromSupabase();
+          }
+          if (!userProfile?.username) {
+            openAuthModal('username');
+          } else if (pendingFavoriteRecipeId) {
+            const pendingId = pendingFavoriteRecipeId;
+            pendingFavoriteRecipeId = null;
+            await addFavoriteByRecipeId(pendingId);
+          }
+        } else {
+          userProfile = null;
+          resetFavorites();
+        }
+        updateFavoritesCount();
+        renderFavorites();
+        updateAuthUI();
       });
     }
 
@@ -2167,6 +2222,8 @@
       const actionBtn = document.getElementById('open-auth-modal-btn');
       const favoritesCta = document.getElementById('favorites-cta');
       const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
+      const favoritesAuthBtn = document.getElementById('favorites-auth-btn');
+      const hasEmailSession = authUser && !isAnonymousUser() && authUser.email;
 
       if (!titleEl || !subtitleEl || !statusPill || !actionBtn) return;
 
@@ -2189,24 +2246,57 @@
         if (favoritesCta) favoritesCta.style.display = 'none';
         if (clearFavoritesBtn) clearFavoritesBtn.disabled = false;
       } else {
-        titleEl.textContent = 'Preview mode';
-        subtitleEl.textContent = 'Pick a username to sync favorites across devices.';
+        titleEl.textContent = hasEmailSession ? `Signed in as ${authUser.email}` : 'Preview mode';
+        subtitleEl.textContent = hasEmailSession
+          ? 'Choose a username to finish setup.'
+          : 'Sign in to sync favorites across devices.';
         statusPill.style.display = 'none';
-        actionBtn.textContent = 'Set Username';
+        actionBtn.textContent = hasEmailSession ? 'Set Username' : 'Sign In';
         if (favoritesCta) favoritesCta.style.display = 'flex';
+        if (favoritesAuthBtn) favoritesAuthBtn.textContent = hasEmailSession ? 'Set Username' : 'Sign In';
         if (clearFavoritesBtn) clearFavoritesBtn.disabled = true;
       }
     }
 
-    function openAuthModal() {
+    function setAuthStep(step) {
+      const titleEl = document.getElementById('auth-modal-title');
+      const subtitleEl = document.getElementById('auth-modal-subtitle');
+      const emailStep = document.getElementById('auth-step-email');
+      const usernameStep = document.getElementById('auth-step-username');
+
+      if (step === 'username') {
+        if (titleEl) titleEl.textContent = 'Choose a username';
+        if (subtitleEl) subtitleEl.textContent = 'No password needed. This syncs favorites across devices.';
+        if (emailStep) emailStep.style.display = 'none';
+        if (usernameStep) usernameStep.style.display = 'block';
+      } else {
+        if (titleEl) titleEl.textContent = 'Sign in';
+        if (subtitleEl) subtitleEl.textContent = 'Use a magic link to sync favorites across devices.';
+        if (emailStep) emailStep.style.display = 'block';
+        if (usernameStep) usernameStep.style.display = 'none';
+      }
+    }
+
+    function openAuthModal(step) {
       const modal = document.getElementById('auth-modal');
-      const errorEl = document.getElementById('auth-error');
-      if (errorEl) errorEl.textContent = '';
+      const emailError = document.getElementById('auth-email-error');
+      const usernameError = document.getElementById('auth-username-error');
+      const statusEl = document.getElementById('auth-email-status');
+      if (emailError) emailError.textContent = '';
+      if (usernameError) usernameError.textContent = '';
+      if (statusEl) statusEl.textContent = '';
       if (modal) modal.classList.add('show');
-      const input = document.getElementById('auth-username-input');
-      if (input) {
-        input.value = userProfile?.username || '';
-        setTimeout(() => input.focus(), 50);
+      const targetStep = step || (authUser && !isAnonymousUser() ? 'username' : 'email');
+      setAuthStep(targetStep);
+      if (targetStep === 'username') {
+        const input = document.getElementById('auth-username-input');
+        if (input) {
+          input.value = userProfile?.username || '';
+          setTimeout(() => input.focus(), 50);
+        }
+      } else {
+        const emailInput = document.getElementById('auth-email-input');
+        if (emailInput) setTimeout(() => emailInput.focus(), 50);
       }
     }
 
@@ -2231,26 +2321,45 @@
       return null;
     }
 
-    async function ensureSignedIn() {
-      if (!supabaseClient) return { ok: false, error: 'Supabase not configured' };
-
-      const { data: sessionData } = await supabaseClient.auth.getSession();
-      if (sessionData?.session?.user) {
-        authUser = sessionData.session.user;
-        return { ok: true, user: authUser };
-      }
-
-      const { data, error } = await supabaseClient.auth.signInAnonymously();
-      if (error || !data?.user) {
-        return { ok: false, error: error?.message || 'Unable to sign in' };
-      }
-      authUser = data.user;
-      return { ok: true, user: authUser };
+    function setAuthError(target, message) {
+      const errorEl = document.getElementById(target);
+      if (errorEl) errorEl.textContent = message || '';
     }
 
-    function setAuthError(message) {
-      const errorEl = document.getElementById('auth-error');
-      if (errorEl) errorEl.textContent = message || '';
+    async function sendMagicLink() {
+      if (!supabaseClient) {
+        setAuthError('auth-email-error', 'Supabase not configured.');
+        return;
+      }
+
+      const emailInput = document.getElementById('auth-email-input');
+      const statusEl = document.getElementById('auth-email-status');
+      if (!emailInput) return;
+      const email = emailInput.value.trim().toLowerCase();
+
+      if (!email || !email.includes('@')) {
+        setAuthError('auth-email-error', 'Enter a valid email address.');
+        return;
+      }
+
+      setAuthError('auth-email-error', '');
+      if (statusEl) statusEl.textContent = 'Sending magic link...';
+
+      const redirectTo = `${window.location.origin}${window.location.pathname}`;
+      const { error } = await supabaseClient.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: redirectTo }
+      });
+
+      if (error) {
+        if (statusEl) statusEl.textContent = '';
+        setAuthError('auth-email-error', `Could not send link: ${error.message}`);
+        return;
+      }
+
+      if (statusEl) {
+        statusEl.textContent = 'Magic link sent! Check your inbox and return here.';
+      }
     }
 
     async function saveUsername() {
@@ -2260,20 +2369,20 @@
       const username = raw.replace(/\s+/g, '');
 
       if (username.length < 2) {
-        setAuthError('Username must be at least 2 characters.');
+        setAuthError('auth-username-error', 'Username must be at least 2 characters.');
         return;
       }
 
       if (username.length > 24) {
-        setAuthError('Username must be 24 characters or less.');
+        setAuthError('auth-username-error', 'Username must be 24 characters or less.');
         return;
       }
 
-      setAuthError('');
+      setAuthError('auth-username-error', '');
 
-      const signInResult = await ensureSignedIn();
-      if (!signInResult.ok) {
-        setAuthError(signInResult.error || 'Unable to sign in.');
+      if (!authUser || isAnonymousUser()) {
+        setAuthError('auth-username-error', 'Please sign in with email first.');
+        openAuthModal('email');
         return;
       }
 
@@ -2301,9 +2410,9 @@
       if (error) {
         const message = error.message?.toLowerCase() || '';
         if (error.code === '23505' || message.includes('duplicate')) {
-          setAuthError('That username is already taken.');
+          setAuthError('auth-username-error', 'That username is already taken.');
         } else {
-          setAuthError(`Could not save username: ${error.message}`);
+          setAuthError('auth-username-error', `Could not save username: ${error.message}`);
         }
         return;
       }
@@ -2366,7 +2475,14 @@
     }
 
     function isFavoritesReady() {
-      return Boolean(supabaseClient && userProfile?.username && authUser);
+      return Boolean(supabaseClient && userProfile?.username && authUser && !isAnonymousUser());
+    }
+
+    function isAnonymousUser() {
+      if (!authUser) return false;
+      if (authUser.is_anonymous === true) return true;
+      const provider = authUser.app_metadata?.provider;
+      return provider === 'anonymous';
     }
 
     function normalizeRecipeId(id) {
@@ -2394,7 +2510,8 @@
       if (!isFavoritesReady()) {
         pendingFavoriteRecipeId = normalizedId;
         openAuthModal();
-        showToast('👤', 'Set a username to save favorites.');
+        const needsSignIn = !authUser || isAnonymousUser();
+        showToast('👤', needsSignIn ? 'Sign in to save favorites.' : 'Set a username to save favorites.');
         return;
       }
 
@@ -2438,7 +2555,8 @@
 
       if (!isFavoritesReady()) {
         openAuthModal();
-        showToast('👤', 'Set a username to manage favorites.');
+        const needsSignIn = !authUser || isAnonymousUser();
+        showToast('👤', needsSignIn ? 'Sign in to manage favorites.' : 'Set a username to manage favorites.');
         return;
       }
 
@@ -2472,7 +2590,8 @@
 
       if (!isFavoritesReady()) {
         openAuthModal();
-        showToast('👤', 'Set a username to manage favorites.');
+        const needsSignIn = !authUser || isAnonymousUser();
+        showToast('👤', needsSignIn ? 'Sign in to manage favorites.' : 'Set a username to manage favorites.');
         return;
       }
 
@@ -2992,7 +3111,8 @@
 
       if (!isFavoritesReady()) {
         openAuthModal();
-        showToast('👤', 'Set a username to manage favorites.');
+        const needsSignIn = !authUser || isAnonymousUser();
+        showToast('👤', needsSignIn ? 'Sign in to manage favorites.' : 'Set a username to manage favorites.');
         return;
       }
       if (confirm('Clear all favorites? This cannot be undone.')) {
@@ -3021,7 +3141,8 @@
       }
 
       if (!isFavoritesReady()) {
-        grid.innerHTML = '<div class="favorites-empty">Set a username to save favorites.</div>';
+        const needsSignIn = !authUser || isAnonymousUser();
+        grid.innerHTML = `<div class="favorites-empty">${needsSignIn ? 'Sign in to save favorites.' : 'Set a username to save favorites.'}</div>`;
         return;
       }
 

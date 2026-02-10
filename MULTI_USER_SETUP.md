@@ -1,21 +1,21 @@
 # Multi-User Authentication Setup Guide
 
-This guide explains how to enable username-based, passwordless auth so favorites can sync across devices. Recipes remain public/shared.
+This guide explains how to enable passwordless **email magic links** plus a username so favorites can sync across devices. Recipes remain public/shared.
 
 ## Current State
 
 - All recipes are shared (no user filtering)
 - Shortlist and pantry stay local (browser storage)
-- Favorites are wired to Supabase but require a username to save/sync
-- Preview mode works without sign-in
+- Favorites are wired to Supabase but require sign-in + username to save/sync
+- Preview mode works without sign-in (favorites disabled)
 
 ## When You're Ready to Enable
 
 ### Step 1: Enable Supabase Authentication
 
 1. Go to Supabase Dashboard → **Authentication** → **Providers**
-2. Enable **Anonymous** provider (no password required)
-3. (Optional) Keep Email provider enabled if you want future upgrades
+2. Enable **Email** provider (Magic Link / OTP)
+3. Add your deployed URLs under **Redirect URLs** (Auth settings)
 
 ### Step 2: Run Database Migration
 
@@ -40,10 +40,10 @@ No additional code changes are required for the username + favorites flow.
 ### Step 4: Test
 
 1. Open `meal_planner.html`
-2. Click **Set Username** and choose a username
-3. Add a few favorites and refresh the page
-4. Verify favorites persist and the favorites count matches
-5. Test with a different browser/device to confirm sync
+2. Click **Sign In** and send yourself a magic link
+3. Return to the app and choose a username
+4. Add a few favorites and refresh the page
+5. Test on a second device by signing in with the same email
 
 Recipes should still load publicly without sign-in.
 
@@ -91,11 +91,11 @@ print(f"✅ Migrated {len(recipes)} recipes to user {user_id}")
 ### Data Flow
 
 ```
-User Chooses Username
+User signs in via email magic link
     ↓
-Supabase Anonymous Auth creates a session
+Supabase Auth creates a session
     ↓
-profiles row is created/updated
+profiles row is created/updated with username
     ↓
 Favorites are stored in `favorites` with `user_id`
     ↓
@@ -116,13 +116,41 @@ If a user skips the username prompt, the planner still works. Favorites will be 
 ## Troubleshooting
 
 ### "User not authenticated" error
-- Make sure Anonymous Auth is enabled in Supabase
+- Make sure Email provider + Magic Link are enabled in Supabase
+- Verify your Redirect URLs include your deployed domain
 - Verify `SUPABASE_URL` and `SUPABASE_KEY` are correct
 
 ### Favorites not showing up
 - Ensure `multi_user_setup.sql` has been run
 - Verify RLS policies were created
 - Check that the username was saved successfully
+
+## Fix Duplicate Usernames (One-Time Cleanup)
+
+If you see duplicate usernames in `profiles`, run this to keep the most recent row per username:
+
+```sql
+-- Remove duplicates (keeps the most recent profile per username)
+WITH ranked AS (
+  SELECT id, username,
+         ROW_NUMBER() OVER (
+           PARTITION BY username
+           ORDER BY updated_at DESC NULLS LAST, created_at DESC NULLS LAST, id
+         ) AS rn
+  FROM profiles
+)
+DELETE FROM profiles
+USING ranked
+WHERE profiles.id = ranked.id
+  AND ranked.rn > 1;
+```
+
+Then (re)apply the unique constraint if needed:
+
+```sql
+ALTER TABLE profiles
+  ADD CONSTRAINT profiles_username_unique UNIQUE (username);
+```
 
 ### RLS blocking queries
 - Verify RLS policies are created correctly
