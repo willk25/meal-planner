@@ -583,6 +583,41 @@
       margin-right: auto;
     }
 
+    .search-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem auto 0.75rem;
+      max-width: 1100px;
+    }
+
+    .search-filter label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .search-filter select {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    .search-filter select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px rgba(232, 185, 35, 0.15);
+    }
+
     .search-input-wrapper {
       position: relative;
       display: flex;
@@ -675,99 +710,6 @@
       border-bottom: 1px solid var(--border-subtle);
     }
 
-    /* HISTORY SECTION */
-    .history-section {
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(168, 85, 247, 0.03));
-      border-radius: 16px;
-      padding: 1.5rem;
-      border: 2px solid rgba(168, 85, 247, 0.4);
-      margin-top: 2rem;
-    }
-
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .history-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--accent-purple);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .history-week {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(168, 85, 247, 0.2);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .history-week-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .history-week-date {
-      font-weight: 600;
-      color: var(--accent-purple);
-    }
-
-    .history-week-meals {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-
-    .history-meal {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .history-meal-type {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-
-    .history-add-btn {
-      background: none;
-      border: none;
-      color: var(--accent-coral);
-      cursor: pointer;
-      font-size: 0.9rem;
-      padding: 0.2rem;
-      transition: transform 0.2s;
-    }
-
-    .history-add-btn:hover {
-      transform: scale(1.2);
-    }
-
-    .history-empty {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
 
     /* PANTRY SECTION */
     .pantry-section {
@@ -1267,29 +1209,6 @@
       box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
     }
 
-    /* Delete button for history items */
-    .history-delete-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.9rem;
-      padding: 0.2rem;
-      transition: color 0.2s;
-      opacity: 0.6;
-    }
-
-    .history-delete-btn:hover {
-      color: var(--accent-coral);
-      opacity: 1;
-    }
-
-    .history-meal-actions {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
-    }
-
     @media (max-width: 768px) {
       body { padding: 1rem; }
       h1 { font-size: 2rem; }
@@ -1535,6 +1454,7 @@
     <!-- Tab Navigation -->
     <div class="tab-navigation">
       <button class="tab-btn-nav active" onclick="switchTab('planner')">🍽️ Meal Planner</button>
+      <button class="tab-btn-nav" onclick="switchTab('pantry')">🥫 Pantry</button>
       <button class="tab-btn-nav" onclick="switchTab('adder')">➕ Add Recipe</button>
     </div>
 
@@ -1570,63 +1490,77 @@
       <button class="btn btn-success" id="accept-btn" disabled>
         ✅ Accept This Week → Shortlist
       </button>
-      <button class="btn btn-secondary" id="toggle-pantry-btn">
-        🥫 My Pantry (<span id="pantry-count">0</span>)
-      </button>
       <button class="btn btn-secondary" id="toggle-grocery-btn">
         🛒 Grocery List (<span id="grocery-count">0</span>)
       </button>
       <button class="btn btn-secondary" id="toggle-favorites-btn">
         ❤️ My Favorites (<span id="favorites-count">0</span>)
       </button>
-      <button class="btn btn-secondary" id="toggle-history-btn">
-        📜 History (<span id="history-count">0</span>)
-      </button>
     </div>
 
-    <!-- PANTRY: What ingredients you have on hand -->
-    <div class="pantry-section" id="pantry-section">
-      <div class="pantry-header">
-        <h2>🥫 My Pantry</h2>
-        <button class="btn btn-small btn-secondary" id="clear-pantry-btn">Clear All</button>
+    <!-- SEARCH & FILTERS -->
+    <div class="search-filters">
+      <div class="search-filter">
+        <label for="filter-protein">Protein</label>
+        <select id="filter-protein">
+          <option value="">All</option>
+          <option value="chicken">Chicken</option>
+          <option value="beef">Beef</option>
+          <option value="pork">Pork</option>
+          <option value="seafood">Seafood</option>
+          <option value="turkey">Turkey</option>
+          <option value="lamb">Lamb</option>
+          <option value="eggs">Eggs</option>
+          <option value="other">Other</option>
+        </select>
       </div>
-      <p class="pantry-desc">Add ingredients you have on hand. Meals will show how many ingredients you already have!</p>
-      
-      <div class="pantry-input-area">
-        <input type="text" class="pantry-input" id="pantry-input" placeholder="Type an ingredient (e.g., chicken, olive oil, garlic)...">
-        <button class="btn btn-small btn-primary" id="add-pantry-btn">Add</button>
+      <div class="search-filter">
+        <label for="filter-difficulty">Ease</label>
+        <select id="filter-difficulty">
+          <option value="">All</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="involved">Involved</option>
+        </select>
       </div>
-      
-      <div class="pantry-tags" id="pantry-tags">
-        <span style="color: var(--text-muted); font-style: italic;">No ingredients added yet</span>
+      <div class="search-filter">
+        <label for="filter-meal-type">Meal Type</label>
+        <select id="filter-meal-type">
+          <option value="">All</option>
+          <option value="entree">Entree</option>
+          <option value="appetizer">Appetizer</option>
+          <option value="dessert">Dessert</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="soup">Soup</option>
+          <option value="salad">Salad</option>
+          <option value="side">Side</option>
+        </select>
       </div>
-      
-      <div class="pantry-suggestions">
-        <div class="pantry-suggestions-label">Quick add common ingredients:</div>
-        <div class="suggestion-chips">
-          <span class="suggestion-chip" onclick="addPantryItemDirect('chicken')">chicken</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('beef')">beef</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('salmon')">salmon</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('eggs')">eggs</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('rice')">rice</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('pasta')">pasta</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('olive oil')">olive oil</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('butter')">butter</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('garlic')">garlic</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('onion')">onion</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('salt')">salt</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('pepper')">pepper</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('tomatoes')">tomatoes</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('cheese')">cheese</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('milk')">milk</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('flour')">flour</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('sugar')">sugar</span>
-          <span class="suggestion-chip" onclick="addPantryItemDirect('lemon')">lemon</span>
-        </div>
+      <div class="search-filter">
+        <label for="filter-match">Ingredients On Hand</label>
+        <select id="filter-match">
+          <option value="">Any</option>
+          <option value="25">25%+ on hand</option>
+          <option value="50">50%+ on hand</option>
+          <option value="75">75%+ on hand</option>
+          <option value="100">All on hand</option>
+        </select>
+      </div>
+      <div class="search-filter">
+        <label for="filter-favorites">Favorites</label>
+        <select id="filter-favorites">
+          <option value="">All</option>
+          <option value="favorites">Favorites only</option>
+        </select>
+      </div>
+      <div class="search-filter">
+        <label for="filter-tags">Tag</label>
+        <select id="filter-tags">
+          <option value="">All tags</option>
+        </select>
       </div>
     </div>
 
-    <!-- SEARCH BAR -->
     <div class="search-container">
       <div class="search-input-wrapper">
         <span class="search-icon">🔍</span>
@@ -1670,18 +1604,6 @@
       </div>
     </div>
 
-    <!-- HISTORY: Past weekly meal plans -->
-    <div class="history-section" id="history-section">
-      <div class="history-header">
-        <h2>📜 Meal History</h2>
-        <p class="favorites-desc">Past weeks' meals - add any to your favorites!</p>
-        <button class="btn btn-small btn-secondary" id="clear-history-btn">Clear History</button>
-      </div>
-      <div class="history-weeks" id="history-weeks">
-        <div class="history-empty">No history yet. When you clear your shortlist or start a new week, meals will be saved here.</div>
-      </div>
-    </div>
-
     <!-- GROCERY LIST: Missing ingredients from shortlisted meals -->
     <div class="grocery-section" id="grocery-section">
       <div class="grocery-header">
@@ -1718,6 +1640,54 @@
       </div>
     </div>
     <!-- End Meal Planner Tab -->
+
+    <!-- Pantry Tab -->
+    <div id="pantry-tab" class="tab-content" style="display: none;">
+      <header>
+        <h1>🥫 My Pantry</h1>
+        <p class="subtitle">Track what you already have on hand</p>
+      </header>
+      <div class="pantry-section" id="pantry-section">
+        <div class="pantry-header">
+          <h2>🥫 My Pantry (<span id="pantry-count">0</span>)</h2>
+          <button class="btn btn-small btn-secondary" id="clear-pantry-btn">Clear All</button>
+        </div>
+        <p class="pantry-desc">Add ingredients you have on hand. Meals will show how many ingredients you already have!</p>
+        
+        <div class="pantry-input-area">
+          <input type="text" class="pantry-input" id="pantry-input" placeholder="Type an ingredient (e.g., chicken, olive oil, garlic)...">
+          <button class="btn btn-small btn-primary" id="add-pantry-btn">Add</button>
+        </div>
+        
+        <div class="pantry-tags" id="pantry-tags">
+          <span style="color: var(--text-muted); font-style: italic;">No ingredients added yet</span>
+        </div>
+        
+        <div class="pantry-suggestions">
+          <div class="pantry-suggestions-label">Quick add common ingredients:</div>
+          <div class="suggestion-chips">
+            <span class="suggestion-chip" onclick="addPantryItemDirect('chicken')">chicken</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('beef')">beef</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('salmon')">salmon</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('eggs')">eggs</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('rice')">rice</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('pasta')">pasta</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('olive oil')">olive oil</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('butter')">butter</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('garlic')">garlic</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('onion')">onion</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('salt')">salt</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('pepper')">pepper</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('tomatoes')">tomatoes</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('cheese')">cheese</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('milk')">milk</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('flour')">flour</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('sugar')">sugar</span>
+            <span class="suggestion-chip" onclick="addPantryItemDirect('lemon')">lemon</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Recipe Adder Tab -->
     <div id="adder-tab" class="tab-content" style="display: none;">
@@ -1885,9 +1855,6 @@
     // FAVORITES: Long-term saved recipes to pull from
     let favorites = JSON.parse(localStorage.getItem('mealFavorites') || '[]');
     
-    // HISTORY: Past weekly meal plans
-    let history = JSON.parse(localStorage.getItem('mealHistory') || '[]');
-    
     // PANTRY: Ingredients on hand
     let pantry = JSON.parse(localStorage.getItem('myPantry') || '[]');
     
@@ -1900,14 +1867,14 @@
     document.addEventListener('DOMContentLoaded', async () => {
       await loadRecipes();
       updateFavoritesCount();
-      updateHistoryCount();
       updatePantryCount();
       updateGroceryCount();
       renderFavorites();
       renderShortlist();
-      renderHistory();
       renderPantry();
       generateGroceryList();
+      populateFilterOptions();
+      attachFilterListeners();
       
       // Attach event listeners to buttons
       const generateWeekBtn = document.getElementById('generate-week-btn');
@@ -1916,17 +1883,11 @@
       const acceptBtn = document.getElementById('accept-btn');
       if (acceptBtn) acceptBtn.addEventListener('click', acceptWeek);
       
-      const togglePantryBtn = document.getElementById('toggle-pantry-btn');
-      if (togglePantryBtn) togglePantryBtn.addEventListener('click', togglePantry);
-      
       const toggleGroceryBtn = document.getElementById('toggle-grocery-btn');
       if (toggleGroceryBtn) toggleGroceryBtn.addEventListener('click', toggleGroceryList);
       
       const toggleFavoritesBtn = document.getElementById('toggle-favorites-btn');
       if (toggleFavoritesBtn) toggleFavoritesBtn.addEventListener('click', toggleFavorites);
-      
-      const toggleHistoryBtn = document.getElementById('toggle-history-btn');
-      if (toggleHistoryBtn) toggleHistoryBtn.addEventListener('click', toggleHistory);
       
       const clearPantryBtn = document.getElementById('clear-pantry-btn');
       if (clearPantryBtn) clearPantryBtn.addEventListener('click', clearPantry);
@@ -1939,9 +1900,6 @@
       
       const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
       if (clearFavoritesBtn) clearFavoritesBtn.addEventListener('click', clearFavorites);
-      
-      const clearHistoryBtn = document.getElementById('clear-history-btn');
-      if (clearHistoryBtn) clearHistoryBtn.addEventListener('click', clearHistory);
       
       const copyGroceryBtn = document.getElementById('copy-grocery-btn');
       if (copyGroceryBtn) copyGroceryBtn.addEventListener('click', copyGroceryList);
@@ -2282,9 +2240,7 @@
     }
 
     function clearShortlist() {
-      if (confirm('Clear this week\'s shortlist? (Meals will be saved to history)')) {
-        // Save to history before clearing
-        saveToHistory();
+      if (confirm('Clear this week\'s shortlist?')) {
         shortlist = [];
         saveShortlist();
         renderShortlist();
@@ -2292,7 +2248,7 @@
         updateGroceryCount();
         groceryChecked = []; // Clear checked items for new week
         localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
-        showToast('🗑️', 'Shortlist cleared and saved to history');
+        showToast('🗑️', 'Shortlist cleared');
       }
     }
     
@@ -2301,7 +2257,6 @@
         showToast('ℹ️', 'No meals in shortlist to mark as done');
         return;
       }
-      saveToHistory();
       shortlist = [];
       saveShortlist();
       renderShortlist();
@@ -2309,7 +2264,7 @@
       updateGroceryCount();
       groceryChecked = []; // Clear checked items for new week
       localStorage.setItem('groceryChecked', JSON.stringify(groceryChecked));
-      showToast('✅', 'Week marked as done! Meals saved to history.');
+      showToast('✅', 'Week marked as done!');
     }
 
     function saveShortlist() {
@@ -2515,9 +2470,11 @@
     // PANTRY FUNCTIONS
     
     function togglePantry() {
+      switchTab('pantry');
       const section = document.getElementById('pantry-section');
-      section.style.display = 'block';
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     window.togglePantry = togglePantry;
     
@@ -2904,45 +2861,128 @@
     
     let searchTimeout = null;
     
-    function handleSearch(event) {
-      const query = event.target.value.trim().toLowerCase();
-      const resultsEl = document.getElementById('search-results');
-      
-      // Clear previous timeout
+    function handleSearch() {
+      scheduleSearch();
+    }
+
+    function scheduleSearch() {
       if (searchTimeout) clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        applySearchFilters();
+      }, 200);
+    }
+
+    function getSearchFilters() {
+      const query = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+      const protein = document.getElementById('filter-protein')?.value || '';
+      const difficulty = document.getElementById('filter-difficulty')?.value || '';
+      const mealType = document.getElementById('filter-meal-type')?.value || '';
+      const minMatch = parseInt(document.getElementById('filter-match')?.value || '', 10) || 0;
+      const favoritesOnly = document.getElementById('filter-favorites')?.value === 'favorites';
+      const tag = document.getElementById('filter-tags')?.value || '';
       
-      if (query.length < 2) {
+      return { query, protein, difficulty, mealType, minMatch, favoritesOnly, tag };
+    }
+
+    function hasActiveFilters(filters) {
+      return Boolean(
+        filters.protein ||
+        filters.difficulty ||
+        filters.mealType ||
+        filters.minMatch ||
+        filters.favoritesOnly ||
+        filters.tag
+      );
+    }
+
+    function applySearchFilters() {
+      const resultsEl = document.getElementById('search-results');
+      const filters = getSearchFilters();
+      const hasQuery = filters.query.length >= 2;
+      const hasFilters = hasActiveFilters(filters);
+      
+      if (!hasQuery && !hasFilters) {
         resultsEl.classList.remove('show');
         return;
       }
       
-      // Debounce search
-      searchTimeout = setTimeout(() => {
-        const results = allRecipes.filter(recipe => {
-          const title = (recipe.title || '').toLowerCase();
-          const ingredients = Array.isArray(recipe.ingredients) 
-            ? recipe.ingredients.join(' ').toLowerCase() 
-            : (recipe.ingredients || '').toLowerCase();
-          const proteinSource = (recipe.protein_source || '').toLowerCase();
-          const categories = Array.isArray(recipe.categories)
-            ? recipe.categories.join(' ').toLowerCase()
-            : '';
-          
-          return title.includes(query) || 
-                 ingredients.includes(query) || 
-                 proteinSource.includes(query) ||
-                 categories.includes(query);
-        }).slice(0, 20); // Limit to 20 results
+      const favoritesSet = new Set(favorites.map(f => f.title));
+      
+      const results = allRecipes.filter(recipe => {
+        const title = (recipe.title || '').toLowerCase();
+        const ingredients = Array.isArray(recipe.ingredients) 
+          ? recipe.ingredients.join(' ').toLowerCase() 
+          : (recipe.ingredients || '').toLowerCase();
+        const proteinSource = (recipe.protein_source || '').toLowerCase();
+        const categories = Array.isArray(recipe.categories)
+          ? recipe.categories.join(' ').toLowerCase()
+          : '';
         
-        renderSearchResults(results, query);
-      }, 200);
+        if (hasQuery) {
+          const matchesQuery = title.includes(filters.query) || 
+            ingredients.includes(filters.query) || 
+            proteinSource.includes(filters.query) ||
+            categories.includes(filters.query);
+          if (!matchesQuery) return false;
+        }
+        
+        if (filters.protein && proteinSource !== filters.protein) return false;
+        if (filters.difficulty && (recipe.difficulty || '').toLowerCase() !== filters.difficulty) return false;
+        if (filters.mealType && (recipe.meal_type || '').toLowerCase() !== filters.mealType) return false;
+        if (filters.tag) {
+          const tagMatch = Array.isArray(recipe.categories) && recipe.categories.some(tag => tag === filters.tag);
+          if (!tagMatch) return false;
+        }
+        if (filters.favoritesOnly && !favoritesSet.has(recipe.title)) return false;
+        
+        if (filters.minMatch) {
+          if (!pantry.length) return false;
+          let ingredientList = recipe.ingredients || [];
+          if (typeof ingredientList === 'string') {
+            ingredientList = ingredientList.split('\n').filter(i => i.trim());
+          }
+          const matchInfo = calculateIngredientMatch(ingredientList);
+          if (matchInfo.percentage < filters.minMatch) return false;
+        }
+        
+        return true;
+      }).slice(0, 50);
+      
+      renderSearchResults(results, filters.query, hasFilters);
+    }
+
+    function attachFilterListeners() {
+      ['filter-protein', 'filter-difficulty', 'filter-meal-type', 'filter-match', 'filter-favorites', 'filter-tags']
+        .forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.addEventListener('change', scheduleSearch);
+        });
+    }
+
+    function populateFilterOptions() {
+      const tagSelect = document.getElementById('filter-tags');
+      if (!tagSelect) return;
+      
+      const tags = new Set();
+      allRecipes.forEach(recipe => {
+        if (Array.isArray(recipe.categories)) {
+          recipe.categories.forEach(tag => {
+            if (tag && typeof tag === 'string') tags.add(tag);
+          });
+        }
+      });
+      
+      const sortedTags = Array.from(tags).sort((a, b) => a.localeCompare(b));
+      tagSelect.innerHTML = `<option value="">All tags</option>` +
+        sortedTags.map(tag => `<option value="${tag}">${tag}</option>`).join('');
     }
     
-    function renderSearchResults(results, query) {
+    function renderSearchResults(results, query, hasFilters = false) {
       const resultsEl = document.getElementById('search-results');
       
       if (results.length === 0) {
-        resultsEl.innerHTML = `<div class="search-count">No recipes found for "${query}"</div>`;
+        const label = query ? `for "${query}"` : 'with selected filters';
+        resultsEl.innerHTML = `<div class="search-count">No recipes found ${label}</div>`;
         resultsEl.classList.add('show');
         return;
       }
@@ -3035,159 +3075,6 @@
       }
     });
 
-    // HISTORY FUNCTIONS
-    
-    function saveToHistory() {
-      if (shortlist.length === 0) return;
-      
-      const weekEntry = {
-        date: new Date().toISOString(),
-        weekLabel: getWeekLabel(new Date()),
-        meals: [...shortlist]
-      };
-      
-      // Don't add duplicate entries for same week
-      const existingIndex = history.findIndex(h => h.weekLabel === weekEntry.weekLabel);
-      if (existingIndex >= 0) {
-        // Merge meals into existing week
-        weekEntry.meals.forEach(meal => {
-          if (!history[existingIndex].meals.some(m => m.title === meal.title)) {
-            history[existingIndex].meals.push(meal);
-          }
-        });
-      } else {
-        history.unshift(weekEntry); // Add to beginning
-      }
-      
-      // Keep only last 12 weeks
-      if (history.length > 12) {
-        history = history.slice(0, 12);
-      }
-      
-      saveHistory();
-      updateHistoryCount();
-      renderHistory();
-    }
-    
-    function getWeekLabel(date) {
-      const startOfWeek = new Date(date);
-      startOfWeek.setDate(date.getDate() - date.getDay());
-      const options = { month: 'short', day: 'numeric' };
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
-      return `${startOfWeek.toLocaleDateString('en-US', options)} - ${endOfWeek.toLocaleDateString('en-US', options)}`;
-    }
-    
-    function saveHistory() {
-      localStorage.setItem('mealHistory', JSON.stringify(history));
-    }
-    
-    function updateHistoryCount() {
-      const totalMeals = history.reduce((sum, week) => sum + week.meals.length, 0);
-      document.getElementById('history-count').textContent = totalMeals;
-    }
-    
-    function toggleHistory() {
-      const section = document.getElementById('history-section');
-      section.style.display = 'block';
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    window.toggleHistory = toggleHistory;
-    
-    function renderHistory() {
-      const container = document.getElementById('history-weeks');
-      
-      if (history.length === 0) {
-        container.innerHTML = '<div class="history-empty">No history yet. When you clear your shortlist or start a new week, meals will be saved here.</div>';
-        return;
-      }
-      
-      container.innerHTML = history.map((week, weekIndex) => `
-        <div class="history-week">
-          <div class="history-week-header">
-            <span class="history-week-date">📅 ${week.weekLabel}</span>
-            <div style="display: flex; gap: 0.75rem; align-items: center;">
-              <span style="color: var(--text-muted); font-size: 0.85rem;">${week.meals.length} meal${week.meals.length !== 1 ? 's' : ''}</span>
-              <button class="history-delete-btn" onclick="removeWeekFromHistory(${weekIndex})" title="Delete entire week">
-                🗑️
-              </button>
-            </div>
-          </div>
-          <div class="history-week-meals">
-            ${week.meals.map((meal, mealIndex) => {
-              const isInShortlist = shortlist.some(s => s.title === meal.title);
-              const actionsHtml = `
-                <button class="btn btn-icon" onclick="addHistoryMealToFavorites(${weekIndex}, ${mealIndex})" title="Add to favorites">
-                  ❤️
-                </button>
-                <button class="btn btn-icon" onclick="removeFromHistory(${weekIndex}, ${mealIndex})" title="Remove from history">
-                  ✕
-                </button>
-              `;
-              return buildMealCardMarkup(meal, `history-${weekIndex}-${mealIndex}`, {
-                actionsHtml,
-                showAddToShortlist: true,
-                addToShortlistHandler: `addHistoryMealToShortlist(${weekIndex}, ${mealIndex})`,
-                inShortlist: isInShortlist
-              });
-            }).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function addHistoryMealToShortlist(weekIndex, mealIndex) {
-      const meal = history[weekIndex]?.meals[mealIndex];
-      if (!meal) return;
-      
-      if (shortlist.some(s => s.title === meal.title)) {
-        showToast('ℹ️', 'Already in this week\'s shortlist!');
-        return;
-      }
-
-      shortlist.push({
-        ...meal,
-        addedDate: new Date().toISOString()
-      });
-      
-      saveShortlist();
-      renderShortlist();
-      renderHistory();
-      renderWeek();
-      updateGroceryCount();
-      showToast('📋', 'Added to this week\'s shortlist!');
-    }
-    window.addHistoryMealToShortlist = addHistoryMealToShortlist;
-    
-    function addHistoryMealToFavorites(weekIndex, mealIndex) {
-      const meal = history[weekIndex]?.meals[mealIndex];
-      if (!meal) return;
-      
-      if (favorites.some(f => f.title === meal.title)) {
-        showToast('ℹ️', 'Already in favorites!');
-        return;
-      }
-      
-      favorites.push({
-        ...meal,
-        addedDate: new Date().toISOString()
-      });
-      
-      saveFavorites();
-      updateFavoritesCount();
-      renderFavorites();
-      showToast('❤️', 'Added to favorites from history!');
-    }
-    
-    function clearHistory() {
-      if (confirm('Clear all meal history? This cannot be undone.')) {
-        history = [];
-        saveHistory();
-        updateHistoryCount();
-        renderHistory();
-        showToast('🗑️', 'History cleared');
-      }
-    }
 
     function showToast(icon, message) {
       const toast = document.getElementById('toast');
@@ -3234,51 +3121,6 @@
       }
     });
 
-    // DELETE FROM HISTORY FUNCTION
-    function removeFromHistory(weekIndex, mealIndex) {
-      const meal = history[weekIndex]?.meals[mealIndex];
-      if (!meal) return;
-
-      showConfirmModal(
-        'Remove from History?',
-        `Are you sure you want to remove "${meal.title}" from your meal history?`,
-        '📜',
-        () => {
-          history[weekIndex].meals.splice(mealIndex, 1);
-          
-          // If week has no more meals, remove the week
-          if (history[weekIndex].meals.length === 0) {
-            history.splice(weekIndex, 1);
-          }
-          
-          saveHistory();
-          updateHistoryCount();
-          renderHistory();
-          showToast('🗑️', 'Removed from history');
-        }
-      );
-    }
-
-    // DELETE ENTIRE WEEK FROM HISTORY
-    function removeWeekFromHistory(weekIndex) {
-      const week = history[weekIndex];
-      if (!week) return;
-
-      showConfirmModal(
-        'Remove Entire Week?',
-        `Are you sure you want to remove the week of "${week.weekLabel}" and all ${week.meals.length} meals from your history?`,
-        '📅',
-        () => {
-          history.splice(weekIndex, 1);
-          saveHistory();
-          updateHistoryCount();
-          renderHistory();
-          showToast('🗑️', 'Week removed from history');
-        }
-      );
-    }
-    window.removeWeekFromHistory = removeWeekFromHistory;
-
     // ============================================================================
     // RECIPE ADDER FUNCTIONALITY
     // ============================================================================
@@ -3287,6 +3129,7 @@
     function switchTab(tabName) {
       // Hide all tabs
       document.getElementById('planner-tab').style.display = 'none';
+      document.getElementById('pantry-tab').style.display = 'none';
       document.getElementById('adder-tab').style.display = 'none';
       
       // Remove active class from all tab buttons
@@ -3296,6 +3139,9 @@
       if (tabName === 'planner') {
         document.getElementById('planner-tab').style.display = 'block';
         document.querySelector('.tab-btn-nav[onclick*="planner"]').classList.add('active');
+      } else if (tabName === 'pantry') {
+        document.getElementById('pantry-tab').style.display = 'block';
+        document.querySelector('.tab-btn-nav[onclick*="pantry"]').classList.add('active');
       } else if (tabName === 'adder') {
         document.getElementById('adder-tab').style.display = 'block';
         document.querySelector('.tab-btn-nav[onclick*="adder"]').classList.add('active');
