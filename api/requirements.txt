@@ -7,6 +7,9 @@ supabase>=2.0.0
 # Environment variables
 python-dotenv>=1.0.0
 
-# Lightweight recipe scraping (replaces heavy recipe-scrapers)
+# Lightweight recipe scraping helpers
 beautifulsoup4>=4.14.0
 requests>=2.31.0
+
+# Site-specific scraping for NYT, Allrecipes, Serious Eats, Bon Appétit
+recipe-scrapers>=15.0.0
